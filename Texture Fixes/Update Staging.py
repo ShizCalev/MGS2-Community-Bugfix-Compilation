@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -64,6 +66,68 @@ STAGING_ROOTS: list[Path] = [
 # Self Remade Finalized folder and output CSV name
 SELF_REMADE_FINALIZED_DIR = BUGFIX_ROOT / "Self Remade" / "Finalized"
 SELF_REMADE_MODIFIED_DATES_CSV_NAME = "self_remade_modified_dates.csv"
+
+# ==========================================================
+# BUILD_DIST_FOLDERS.py FILE SYNC
+# ==========================================================
+BUILD_DIST_SOURCE = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Build_Dist_Folders.py")
+
+BUILD_DIST_COPIES: list[Path] = [
+    Path(r"C:\Development\Git\MGS2-Demastered-Substance-Edition\Build_Dist_Folders.py"),
+    Path(r"C:\Development\Git\MGS2-Upscaled-UI-Textures\Build_Dist_Folders.py"),
+    # Add more targets here
+]
+
+
+def _sha1_file(path: Path) -> str:
+    h = hashlib.sha1()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def sync_build_dist_files() -> None:
+    """
+    Copy Build_Dist_Folders.py from BUILD_DIST_SOURCE to each path in BUILD_DIST_COPIES
+    if missing or if sha1 differs.
+    """
+    if not BUILD_DIST_SOURCE.is_file():
+        print(f"[ERROR] Build_Dist_Folders.py source missing: {BUILD_DIST_SOURCE}")
+        sys.exit(1)
+
+    try:
+        src_hash = _sha1_file(BUILD_DIST_SOURCE)
+    except OSError as e:
+        print(f"[ERROR] Failed to hash source Build_Dist_Folders.py: {BUILD_DIST_SOURCE} ({e})")
+        sys.exit(1)
+
+    for dst in BUILD_DIST_COPIES:
+        try:
+            dst.parent.mkdir(parents=True, exist_ok=True)
+        except OSError as e:
+            print(f"[ERROR] Failed creating folder {dst.parent}: {e}")
+            sys.exit(1)
+
+        if dst.is_file():
+            try:
+                dst_hash = _sha1_file(dst)
+            except OSError:
+                dst_hash = None
+
+            if dst_hash == src_hash:
+                print(f"[INFO] Build_Dist_Folders.py already up to date: {dst}")
+                continue
+        elif dst.exists():
+            print(f"[ERROR] Destination exists but is not a file: {dst}")
+            sys.exit(1)
+
+        try:
+            shutil.copy2(BUILD_DIST_SOURCE, dst)
+            print(f"[INFO] Synced Build_Dist_Folders.py -> {dst}")
+        except OSError as e:
+            print(f"[ERROR] Copy failed {BUILD_DIST_SOURCE} -> {dst}: {e}")
+            sys.exit(1)
 
 
 # ==========================================================
@@ -719,6 +783,9 @@ def write_self_remade_modified_dates() -> None:
 # MAIN
 # ==========================================================
 def main() -> None:
+    # Ensure Build_Dist_Folders.py is synced into sibling repos
+    sync_build_dist_files()
+
     # Very first step: sync 2x folders_to_process with 4x for all projects
     sync_2x_folders_txt_with_4x()
 

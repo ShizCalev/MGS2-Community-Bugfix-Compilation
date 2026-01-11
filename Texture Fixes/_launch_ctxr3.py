@@ -414,7 +414,7 @@ def main() -> int:
 
             # Preserve any existing "upscaled" field if already present, otherwise leave blank
             if "upscaled" not in row:
-                row["upscaled"] = row.get("upscaled", "")
+                row["upscaled"] = row.get("upscaled", "false")
 
             rows[s] = row
 

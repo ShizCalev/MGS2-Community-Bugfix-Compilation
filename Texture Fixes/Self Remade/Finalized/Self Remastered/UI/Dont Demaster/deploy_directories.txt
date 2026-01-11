@@ -1,1 +1,2 @@
 C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Staging\textures\flatlist\ovr_stm\ovr_eu\_win
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Staging\textures\flatlist\ovr_stm\ovr_jp\_win
