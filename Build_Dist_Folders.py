@@ -594,14 +594,30 @@ def process_mapping(
     prune_empty_dirs(origin_abs)
 
 
+def verify_origin_paths(mappings: list[tuple[int, Path, Path, bool]]) -> None:
+    missing: list[tuple[int, Path]] = []
+
+    for idx, origin_abs, _, _ in mappings:
+        if not origin_abs.exists():
+            missing.append((idx, origin_abs))
+
+    if not missing:
+        return
+
+    print("\n[ERROR] One or more origin_path entries do not exist:\n")
+    for idx, path in missing:
+        print(f"  Row {idx}: {path}")
+
+    print("\nFix Release_Structure.csv and try again.")
+    input("Press Enter to exit...")
+    sys.exit(1)
+
+
 def main() -> None:
     global GIT_ROOT
 
     git_root = find_git_root()
     GIT_ROOT = git_root
-
-    # Build git mtime index once, up front
-    build_git_mtime_index(git_root)
 
     csv_path = git_root / "Release_Structure.csv"
 
@@ -642,6 +658,12 @@ def main() -> None:
         print("[INFO] No valid mappings found in CSV.")
         print("\n[INFO] Done.")
         return
+
+    # Fail fast if any origin paths are missing
+    verify_origin_paths(mappings)
+
+    # Build git mtime index once, only after paths are validated
+    build_git_mtime_index(git_root)
 
     any_pruned = any(prune_flag for (_, _, _, prune_flag) in mappings)
     if any_pruned:
