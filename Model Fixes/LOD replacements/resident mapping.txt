@@ -1,0 +1,28 @@
+r_plt0 plant - normal gameplay
+r_plt1 plant - divesuit
+r_plt2 plant - naked
+r_plt3
+r_plt4
+r_plt5
+r_plt6
+r_plt7
+r_plt8
+r_plt9
+r_plt10
+r_plt11
+r_plt12
+r_plt13
+r_plt_s
+r_rai_b
+r_sna_b
+r_tnk0 - tanker (normal gameplay)
+r_tnk_r
+r_vr_1 vr - snake (mgs1)
+r_vr_b vr - raiden (ninja)
+r_vr_p vr - pliskin
+r_vr_r vr - raiden (normal)
+r_vr_rp vr - raiden (photo)
+r_vr_sp vr - snake (photo)
+r_vr_s vr - snake (normal)
+r_vr_t vr - snake (tuxedo)
+r_vr_x vr - raiden (naked)

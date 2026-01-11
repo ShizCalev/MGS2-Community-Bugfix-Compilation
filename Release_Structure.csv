@@ -8,6 +8,17 @@ SDT Fixes\Music and Decensor Restoration\Guard rush - after,dist\us\demo\_bp,fal
 SDT Fixes\Music and Decensor Restoration\Peter Shell 2 core,dist\us\demo\_bp,false
 SDT Fixes\Music and Decensor Restoration\Vamp vs Seals,dist\us\demo\_bp,false
 
-Model Fixes\assets,dist\assets,false
-Model Fixes\eu,dist\eu,false
 Model Fixes\HH60 Fix,dist\assets\kms\us\_win,false
+
+Model Fixes\LOD replacements\Ames,dist\assets\kms\us,false
+Model Fixes\LOD replacements\Hostages,dist\assets\kms\us,false
+Model Fixes\LOD replacements\Marines,dist\assets\kms\us,false
+Model Fixes\LOD replacements\Pliskin,dist\assets\kms\us,false
+Model Fixes\LOD replacements\Raiden,dist\assets\kms\us,false
+Model Fixes\LOD replacements\Snake\BP_Assest,dist\eu\stage,false
+Model Fixes\LOD replacements\Snake\KMS,dist\assets\kms\us,false
+Model Fixes\LOD replacements\Snake - MGS1,dist\eu\stage,false
+Model Fixes\LOD replacements\Snake - Tuxedo,dist\assets\kms\us,false
+Model Fixes\LOD replacements\Weapon - M9,dist\assets\kms\us,false
+
+Model Fixes\Texture Corrections\Strut F - Emma blood,dist\eu\stage,false
