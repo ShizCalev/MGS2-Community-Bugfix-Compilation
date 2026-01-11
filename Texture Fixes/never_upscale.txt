@@ -7,6 +7,9 @@ kcej_logo_alp_ovl.bmp
 00fcb7ac
 00696652
 title_logo_mono_alp_ovl.bmp
+0077fe1a
+0076fe1a
+logo_konami.bmp
 
 liqmix water stuff
 drop01_alp2_mod1021.bmp

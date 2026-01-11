@@ -613,6 +613,96 @@ def verify_origin_paths(mappings: list[tuple[int, Path, Path, bool]]) -> None:
     sys.exit(1)
 
 
+def _dest_key(path: Path) -> str:
+    # Treat destination as case-insensitive (Windows semantics) for conflict detection.
+    # Use forward slashes and lowercase.
+    return str(path.resolve()).replace("\\", "/").lower()
+
+
+def detect_destination_conflicts(mappings: list[tuple[int, Path, Path, bool]]) -> None:
+    """
+    Before moving anything, detect whether any two source files would end up at the same
+    destination path (and thus overwrite each other).
+
+    We expand each mapping into the set of destination file paths it would create:
+      - origin is file: exactly destination_path (unless prune_non_ctxr excludes it)
+      - origin is dir:
+          - prune_non_ctxr == False: all files under origin
+          - prune_non_ctxr == True: only *.ctxr under origin
+        destination file path is dest_root / relative_path_under_origin
+
+    If any destination appears more than once (from different sources), we error out.
+    """
+    print("[INFO] Preflight: scanning for destination overwrite conflicts...")
+
+    dest_to_sources: dict[str, list[tuple[int, Path, Path]]] = {}
+    lock = Lock()
+
+    def scan_one(mapping: tuple[int, Path, Path, bool]) -> None:
+        idx, origin_abs, dest_abs, prune_flag = mapping
+
+        if origin_abs.is_file():
+            if prune_flag and origin_abs.suffix.lower() != ".ctxr":
+                return
+
+            key = _dest_key(dest_abs)
+            with lock:
+                dest_to_sources.setdefault(key, []).append((idx, origin_abs, dest_abs))
+            return
+
+        if not origin_abs.is_dir():
+            return
+
+        if prune_flag:
+            it = origin_abs.rglob("*.ctxr")
+        else:
+            it = origin_abs.rglob("*")
+
+        for src in it:
+            if not src.is_file():
+                continue
+
+            rel = src.relative_to(origin_abs)
+            dst = dest_abs / rel
+
+            key = _dest_key(dst)
+            with lock:
+                dest_to_sources.setdefault(key, []).append((idx, src, dst))
+
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = [executor.submit(scan_one, m) for m in mappings]
+        for future in as_completed(futures):
+            try:
+                future.result()
+            except Exception as exc:
+                print(f"[ERROR] Conflict scan task raised an exception: {exc}")
+                input("Press Enter to exit...")
+                sys.exit(1)
+
+    conflicts = [(k, v) for (k, v) in dest_to_sources.items() if len(v) > 1]
+    if not conflicts:
+        print("[INFO] Preflight: no destination conflicts found.")
+        return
+
+    # Deterministic output order
+    conflicts.sort(key=lambda kv: kv[0])
+
+    print("\n[ERROR] Conflicting destinations detected. These files would overwrite one another:\n")
+    for dest_k, entries in conflicts:
+        # All entries share the same destination; show the first's concrete dst path for readability
+        _, _, dst_path = entries[0]
+        print(f"DEST: {dst_path}")
+        # Sort sources for stable listing
+        entries_sorted = sorted(entries, key=lambda t: (t[0], str(t[1]).lower()))
+        for idx, src_path, _ in entries_sorted:
+            print(f"  - Row {idx}: {src_path}")
+        print()
+
+    print("[ERROR] Fix Release_Structure.csv so destinations do not collide, then try again.")
+    input("Press Enter to exit...")
+    sys.exit(1)
+
+
 def main() -> None:
     global GIT_ROOT
 
@@ -662,7 +752,10 @@ def main() -> None:
     # Fail fast if any origin paths are missing
     verify_origin_paths(mappings)
 
-    # Build git mtime index once, only after paths are validated
+    # Preflight conflict scan (before building git index or moving anything)
+    detect_destination_conflicts(mappings)
+
+    # Build git mtime index once, only after paths are validated and conflicts are cleared
     build_git_mtime_index(git_root)
 
     any_pruned = any(prune_flag for (_, _, _, prune_flag) in mappings)
