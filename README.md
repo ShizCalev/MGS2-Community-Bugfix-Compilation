@@ -160,13 +160,15 @@ Recommended Mod Load Order (from first to last):
 
 - Corrected typos on item-box text popups. (ibox_tx_all_alp.bmp) [2001 SoL]
 
-- Fixed various corruption issues on numerous typos NOT related to NPOT's. (w00a_blc_t1.bmp_7f11fc01c0e5875532e7dd318d7c9e68, w03c_rfc00a_mog.bmp_23f594b4ce6d874272c3a003c35f7740) [2001 SoL]
+- Fixed various corruption issues on numerous textures NOT related to NPOT's. (w00a_blc_t1.bmp_7f11fc01c0e5875532e7dd318d7c9e68, w03c_rfc00a_mog.bmp_23f594b4ce6d874272c3a003c35f7740) [2001 SoL]
 
 - Replaced a poorly upscaled power generator texture with its higher-quality PS2 version. [2011 HDC]
 
 - Fixed a hole in the top of the HH-60 Helicopters used by the SEALS during the Plant intro. [2001 SoL] Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
 
 - Fixed rogue black pixel on Shell 1 Core doors. (door_b00.bmp) [2011 HDC]
+
+- Fixed the EU PS1 MGS1 Special Missions CD being shown instead of the US MGS1 VR Missions disc. [2011 HDC]
 
 <br>
 
