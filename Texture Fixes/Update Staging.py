@@ -162,6 +162,50 @@ def get_git_root() -> Path:
 
     return root
 
+def _normalize_newlines(b: bytes) -> bytes:
+    # Treat CRLF/LF as equivalent so Windows newline differences don't force rewrites
+    return b.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
+def _write_bytes_if_changed(path: Path, new_bytes: bytes) -> bool:
+    """
+    Write file only if content differs (ignoring newline style).
+    Returns True if written, False if skipped.
+    """
+    try:
+        if path.is_file():
+            old_bytes = path.read_bytes()
+            if _normalize_newlines(old_bytes) == _normalize_newlines(new_bytes):
+                return False
+    except OSError:
+        # If we can't read it, fall back to rewriting
+        pass
+
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    try:
+        tmp.write_bytes(new_bytes)
+        os.replace(tmp, path)  # atomic replace on Windows too
+        return True
+    finally:
+        try:
+            if tmp.exists():
+                tmp.unlink()
+        except OSError:
+            pass
+
+
+def _build_csv_bytes(rows: list[list[str]]) -> bytes:
+    """
+    Build CSV bytes deterministically using LF.
+    """
+    import io
+
+    buf = io.StringIO(newline="\n")
+    w = csv.writer(buf, lineterminator="\n")
+    for r in rows:
+        w.writerow(r)
+    return buf.getvalue().encode("utf-8")
+
 
 def load_dimensions_names(dimensions_csv: Path) -> dict[str, str]:
     """
@@ -305,6 +349,9 @@ def write_not_in_folder_csv(
             filename,full_path
       - Also write unprocessed_folders.csv listing unique parent folders of
         entries that DO have a non-empty full_path.
+
+    Optimization:
+      - Only rewrite the CSVs if the content actually changes (newline-insensitive).
     """
     conversion_csv = job_dir / CONVERSION_CSV_NAME
     if not conversion_csv.is_file():
@@ -315,6 +362,43 @@ def write_not_in_folder_csv(
     if not dim_names:
         print(f"[INFO] No dimension names loaded, skipping not_in_folder for {job_dir}")
         return
+
+    output_csv = job_dir / NOT_IN_FOLDER_CSV_NAME
+    output_folders_csv = job_dir / UNPROCESSED_FOLDERS_CSV_NAME
+
+    def _normalize_newlines(b: bytes) -> bytes:
+        return b.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+    def _write_bytes_if_changed(path: Path, new_bytes: bytes) -> bool:
+        try:
+            if path.is_file():
+                old_bytes = path.read_bytes()
+                if _normalize_newlines(old_bytes) == _normalize_newlines(new_bytes):
+                    return False
+        except OSError:
+            # If we can't read it, fall back to rewriting
+            pass
+
+        tmp = path.with_suffix(path.suffix + ".tmp")
+        try:
+            tmp.write_bytes(new_bytes)
+            os.replace(tmp, path)  # atomic on Windows too
+            return True
+        finally:
+            try:
+                if tmp.exists():
+                    tmp.unlink()
+            except OSError:
+                pass
+
+    def _build_csv_bytes(table: list[list[str]]) -> bytes:
+        import io
+
+        buf = io.StringIO(newline="\n")
+        writer = csv.writer(buf, lineterminator="\n")
+        for r in table:
+            writer.writerow(r)
+        return buf.getvalue().encode("utf-8")
 
     rows: list[tuple[str, str]] = []
 
@@ -337,64 +421,58 @@ def write_not_in_folder_csv(
         if tex_path is not None:
             full_path_str = str(tex_path)
         else:
-            # No corresponding TGA/PNG in ps2 textures folder, but we still
-            # want this filename to appear in not_in_folder.csv
             full_path_str = ""
 
         rows.append((original_name, full_path_str))
 
-    output_csv = job_dir / NOT_IN_FOLDER_CSV_NAME
-    output_folders_csv = job_dir / UNPROCESSED_FOLDERS_CSV_NAME
+    # Build not_in_folder.csv (always at least header)
+    not_in_rows: list[list[str]] = [["filename", "full_path"]]
+    for filename, full_path in rows:
+        not_in_rows.append([filename, full_path])
 
-    if not rows:
-        # No missing textures for this job. Still create CSVs with headers so it is explicit.
-        try:
-            with output_csv.open("w", encoding="utf-8", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow(["filename", "full_path"])
-            print(f"[INFO] No missing textures for job, wrote empty {output_csv}")
-        except OSError as e:
-            print(f"[ERROR] Failed to write empty {output_csv}: {e}")
+    not_in_bytes = _build_csv_bytes(not_in_rows)
 
-        try:
-            with output_folders_csv.open("w", encoding="utf-8", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow(["folder"])
-            print(f"[INFO] No missing textures for job, wrote empty {output_folders_csv}")
-        except OSError as e:
-            print(f"[ERROR] Failed to write empty {output_folders_csv}: {e}")
-        return
-
-    # Write not_in_folder.csv
-    try:
-        with output_csv.open("w", encoding="utf-8", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(["filename", "full_path"])
-            for filename, full_path in rows:
-                writer.writerow([filename, full_path])
-        print(f"[INFO] Wrote {len(rows)} missing entries to {output_csv}")
-    except OSError as e:
-        print(f"[ERROR] Failed to write {output_csv}: {e}")
-
-    # Derive unique folders from full_path column and write unprocessed_folders.csv.
-    # Only entries with a non-empty full_path are considered here.
+    # Build unprocessed_folders.csv (always at least header)
     folder_set: set[str] = set()
     for _, full_path in rows:
         if not full_path:
             continue
         folder_set.add(str(Path(full_path).parent))
 
-    sorted_folders = sorted(folder_set)
+    folders_rows: list[list[str]] = [["folder"]]
+    for folder in sorted(folder_set):
+        folders_rows.append([folder])
 
-    try:
-        with output_folders_csv.open("w", encoding="utf-8", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(["folder"])
-            for folder in sorted_folders:
-                writer.writerow([folder])
-        print(f"[INFO] Wrote {len(sorted_folders)} folders to {output_folders_csv}")
-    except OSError as e:
-        print(f"[ERROR] Failed to write {output_folders_csv}: {e}")
+    folders_bytes = _build_csv_bytes(folders_rows)
+
+    # Write only if changed
+    wrote_not_in = _write_bytes_if_changed(output_csv, not_in_bytes)
+    wrote_folders = _write_bytes_if_changed(output_folders_csv, folders_bytes)
+
+    if not rows:
+        # Match your old “explicit empty output” behavior, but without rewriting if unchanged
+        if wrote_not_in:
+            print(f"[INFO] No missing textures for job, updated empty {output_csv}")
+        else:
+            print(f"[INFO] No missing textures for job, {output_csv} already up to date")
+
+        if wrote_folders:
+            print(f"[INFO] No missing textures for job, updated empty {output_folders_csv}")
+        else:
+            print(f"[INFO] No missing textures for job, {output_folders_csv} already up to date")
+        return
+
+    # Non-empty case logs
+    if wrote_not_in:
+        print(f"[INFO] Wrote {len(rows)} missing entries to {output_csv}")
+    else:
+        print(f"[INFO] Skipped unchanged {output_csv} ({len(rows)} missing entries)")
+
+    if wrote_folders:
+        print(f"[INFO] Wrote {len(folder_set)} folders to {output_folders_csv}")
+    else:
+        print(f"[INFO] Skipped unchanged {output_folders_csv} ({len(folder_set)} folders)")
+
 
 
 # ==========================================================
