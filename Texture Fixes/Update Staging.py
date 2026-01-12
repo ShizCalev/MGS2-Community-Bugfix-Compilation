@@ -54,9 +54,9 @@ STAGING_ROOTS: list[Path] = [
     DEMASTER_ROOT / "Staging - 2x Upscaled",
     DEMASTER_ROOT / "Staging - 4x Upscaled",
 
-    #DEMASTER_ROOT / "Staging - UI",
-    #DEMASTER_ROOT / "Staging - UI - 2x Upscaled",
-    #DEMASTER_ROOT / "Staging - UI - 4x Upscaled",
+    DEMASTER_ROOT / "Staging - UI",
+    DEMASTER_ROOT / "Staging - UI - 2x Upscaled",
+    DEMASTER_ROOT / "Staging - UI - 4x Upscaled",
 
     # Upscaled UI pack (2x / 4x only)
     UPSCALED_UI_ROOT / "Staging - 2x Upscaled",

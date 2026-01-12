@@ -379,6 +379,7 @@ def build_ps2_textures_map_or_die(root: Path) -> dict[str, Path]:
 
 def remap_demastered_self_remade_to_ps2(image_files: list[Path]) -> list[Path]:
     """
+    Demastered handling:
     For Demastered staging runs:
       If an image path:
         - contains 'self remade' and
@@ -386,42 +387,70 @@ def remap_demastered_self_remade_to_ps2(image_files: list[Path]) -> list[Path]:
       then use the matching .png/.tga under PS2_TEXTURES_ROOT instead,
       matched by stem (case insensitive).
 
+    - Self Remade images without a PS2 match are skipped
+    - A log file is written next to conversion_hashes.csv (STAGING_FOLDER)
+    
     The returned list is the same length as image_files but with overridden Paths
     for the cases described above.
 
     All subsequent logic (hashing, origin, opacity, nvtt input) uses the PS2 path.
+    
+
     """
+
     if not image_files:
         return image_files
 
     ps2_map = build_ps2_textures_map_or_die(PS2_TEXTURES_ROOT)
 
     remapped: list[Path] = []
-    missing_in_ps2: list[Path] = []
+    skipped: list[Path] = []
 
     for img in image_files:
         path_lower = str(img).lower()
+
         if path_contains_self_remade(img) and "demaster fixed" not in path_lower:
             stem_lower = img.stem.lower()
             ps2_path = ps2_map.get(stem_lower)
-            if ps2_path is None:
-                missing_in_ps2.append(img)
-                remapped.append(img)
-            else:
-                log(f"[DEMASTERED] Using PS2 texture as source for self remade image:")
-                log(f"             staging: {img}")
-                log(f"             ps2 src: {ps2_path}")
-                remapped.append(ps2_path)
-        else:
-            remapped.append(img)
 
-    if missing_in_ps2:
-        log("[FATAL] One or more Demastered self remade images have no matching PS2 source by stem:")
-        for p in missing_in_ps2:
-            log(f"  {p}")
-        raise RuntimeError("Missing PS2 source for Demastered self remade images")
+            if ps2_path is None:
+                skipped.append(img)
+                log(f"[DEMASTERED SKIP] No PS2 source by stem, skipping: {img}")
+                continue
+
+            log(f"[DEMASTERED] Using PS2 texture as source for self remade image:")
+            log(f"             staging: {img}")
+            log(f"             ps2 src: {ps2_path}")
+            remapped.append(ps2_path)
+            continue
+
+        remapped.append(img)
+
+    # Write single log in staging folder next to conversion_hashes.csv
+    if skipped:
+        try:
+            out_path = STAGING_FOLDER / "demastered_missing_ps2_sources.txt"
+
+            header = [
+                "# Demastered run: missing PS2 source by stem",
+                "# These Self Remade textures had no matching file under PS2_TEXTURES_ROOT.",
+                "# They were skipped and not processed in this run.",
+                "",
+            ]
+
+            lines = sorted({p.name.lower() for p in skipped})
+
+            out_path.write_text(
+                "\n".join(header + lines) + ("\n" if lines else ""),
+                encoding="utf8",
+            )
+
+            log(f"[DEMASTERED] Wrote skip log: {out_path}")
+        except Exception as e:
+            log(f"[DEMASTERED WARN] Failed writing skip log: {e}")
 
     return remapped
+
 
 
 # ==========================================================
