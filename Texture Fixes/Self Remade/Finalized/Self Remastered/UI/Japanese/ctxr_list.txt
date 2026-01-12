@@ -1,1 +1,1 @@
-mgs2/textures/flatlist/_win/<act_telop5_alp_ovl.bmp.ctxr|pkg1_eng_alp_ovl.bmp.ctxr>
+mgs2/textures/flatlist/_win/<berrazano_alp_ovl.bmp.ctxr|bigshell_alp_ovl.bmp.ctxr>
