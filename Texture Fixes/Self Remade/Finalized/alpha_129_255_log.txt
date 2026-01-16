@@ -1,0 +1,41 @@
+# Files with alpha >=129 detected
+# Root: C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized
+# Total scanned: 157
+# Hits: 9
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Dont demaster\00180189.png
+  hit_levels: 129
+  all_levels: 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Dont demaster\003f0404.png
+  hit_levels: 129
+  all_levels: 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Dont demaster\007a0189.png
+  hit_levels: 129
+  all_levels: 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Dont demaster\00e103ff.png
+  hit_levels: 129
+  all_levels: 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Not Demaster Fixed\UI\Japanese\00fb5e0d_a4c6847d4b922f6cd44f7d23a8727f2c.png
+  hit_levels: 129
+  all_levels: 0, 8, 9, 14, 15, 19, 20, 26, 27, 33, 39, 40, 47, 48, 55, 56, 63, 64, 72, 73, 80, 81, 89, 90, 99, 100, 108, 109, 119, 120, 128, 129
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster\title_logo_blue_alp_ovl.bmp.png
+  hit_levels: 130
+  all_levels: 0, 8, 9, 16, 17, 24, 26, 33, 35, 41, 43, 49, 52, 57, 61, 65, 69, 73, 78, 82, 87, 90, 95, 98, 104, 106, 113, 114, 121, 122, 130
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster\title_logo_mono_alp_ovl.bmp.png
+  hit_levels: 130
+  all_levels: 0, 8, 9, 16, 17, 24, 26, 33, 34, 35, 41, 43, 49, 51, 52, 57, 60, 61, 65, 68, 69, 73, 77, 78, 82, 85, 87, 90, 94, 95, 98, 102, 104, 106, 111, 113, 114, 119, 121, 122, 128, 130
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster\title_mgs2_alp_ovl.bmp.png
+  hit_levels: 130
+  all_levels: 0, 8, 9, 16, 17, 24, 26, 33, 35, 41, 43, 49, 52, 57, 61, 65, 69, 73, 78, 82, 87, 90, 95, 98, 104, 106, 113, 114, 121, 122, 130
+
+C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster\title_sol_alp_ovl.bmp.png
+  hit_levels: 130
+  all_levels: 0, 8, 9, 16, 17, 24, 26, 33, 35, 41, 43, 49, 52, 57, 61, 65, 69, 73, 78, 82, 87, 90, 95, 98, 104, 106, 113, 114, 121, 122, 130
+

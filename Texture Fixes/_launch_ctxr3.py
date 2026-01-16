@@ -426,8 +426,30 @@ def main() -> int:
     # Cleanup only the ctxr files we processed from CWD
     delete_ctxrs(processed_ctxr_files)
 
+    # ==========================================================
+    # RUN ALPHA VERIFICATION SCRIPT AFTER EVERYTHING ELSE
+    # ==========================================================
+    if not VERIFY_ALPHA_SCRIPT.is_file():
+        log(f"ERROR: verify alpha script not found:\n{VERIFY_ALPHA_SCRIPT}")
+        return pause_and_exit(1)
+
+    log("\nLaunching verify alpha levels script...")
+    proc = subprocess.Popen(
+        ["python", str(VERIFY_ALPHA_SCRIPT)],
+        cwd=VERIFY_ALPHA_SCRIPT.parent,
+        shell=False
+    )
+    exit_code = proc.wait()
+
+    log(f"verify alpha levels script exited with code: {exit_code}")
+
+    if exit_code != 0:
+        log("ERROR: verify alpha levels script reported failure.")
+        return pause_and_exit(exit_code)
+
     log("\nDone.")
     return 0
+
 
 
 if __name__ == "__main__":
