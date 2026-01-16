@@ -1,4 +1,4 @@
-# verify_delete_and_prune_csv.py
+# _staging_main.py
 
 from __future__ import annotations
 
@@ -466,6 +466,33 @@ def remove_error_log_if_exists(path: Path) -> None:
     try:
         if path.is_file():
             path.unlink()
+    except Exception:
+        pass
+
+# ==========================================================
+# "NOT YET CONVERTED" (SELF-REMADE NOMIPS) LOG HELPERS
+# ==========================================================
+NOT_YET_CONVERTED_TXT = "not yet converted.txt"
+
+
+def write_not_yet_converted_txt(staging_folder: Path, missing_paths: list[Path]) -> None:
+    """
+    Write full paths (one per line) for Self Remade NO-MIPS files that do not yet
+    have a staged CTXR alongside folders to process.txt.
+    """
+    out_path = staging_folder / NOT_YET_CONVERTED_TXT
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Full paths, de-duped, stable ordering
+    lines = sorted({str(p) for p in missing_paths}, key=lambda s: s.lower())
+    out_path.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf8")
+
+
+def remove_not_yet_converted_txt_if_exists(staging_folder: Path) -> None:
+    out_path = staging_folder / NOT_YET_CONVERTED_TXT
+    try:
+        if out_path.is_file():
+            out_path.unlink()
     except Exception:
         pass
 
@@ -1100,6 +1127,7 @@ def run_nvtt_exports_or_die(
     # ==========================================================
     missing: list[Path] = []
     skipped_self_remade_nomips: list[Path] = []
+    not_yet_converted_paths: list[Path] = []
 
     for img in image_files:
         name = img.stem.lower()
@@ -1114,9 +1142,23 @@ def run_nvtt_exports_or_die(
 
         if not upscaled_expected and path_contains_self_remade(img) and used_nomips:
             skipped_self_remade_nomips.append(img)
+
+            # If there's not already a staged CTXR for it, track it for "not yet converted.txt"
+            staged_ctxr = STAGING_FOLDER / f"{name}.ctxr"
+            if not staged_ctxr.is_file():
+                not_yet_converted_paths.append(img)
+
             continue
 
         missing.append(img)
+
+    # Write or remove "not yet converted.txt" based on what remains unconverted
+    if not_yet_converted_paths:
+        write_not_yet_converted_txt(STAGING_FOLDER, not_yet_converted_paths)
+        log(f"[PARAM] Wrote {NOT_YET_CONVERTED_TXT} with {len(not_yet_converted_paths)} path(s)")
+    else:
+        remove_not_yet_converted_txt_if_exists(STAGING_FOLDER)
+
 
     if skipped_self_remade_nomips:
         log(
