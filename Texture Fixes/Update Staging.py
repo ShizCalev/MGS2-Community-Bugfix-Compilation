@@ -527,9 +527,11 @@ def run_staging_main(job_dir: Path) -> None:
 
 def run_tier(root: Path) -> list[Path]:
     """
-    Run all jobs under a single staging root sequentially.
-    Abort immediately if any job fails.
-    Return the list of job directories processed.
+    Run all jobs under a single staging root.
+
+    - Sequential execution if root contains '2x upscaled' or '4x upscaled'
+    - Parallel execution otherwise
+    - Abort immediately if any job fails
     """
     jobs = find_jobs(root)
 
@@ -537,22 +539,58 @@ def run_tier(root: Path) -> list[Path]:
         print(f"[INFO] No '{FOLDERS_TXT_NAME}' found under {root}")
         return []
 
-    print(f"[INFO] Found {len(jobs)} job(s) under {root}")
-    print("[INFO] Running jobs sequentially")
+    root_lower = str(root).lower()
+    sequential = ("2x upscaled" in root_lower) or ("4x upscaled" in root_lower)
 
-    for idx, job_dir in enumerate(jobs, start=1):
-        try:
-            run_staging_main(job_dir)
-            print(f"[INFO] Completed ({idx}/{len(jobs)}): {job_dir}")
-        except SystemExit as e:
-            print(f"[ERROR] Job failed in {job_dir}: {e}")
-            pause_and_exit(1)
-        except Exception as e:
-            print(f"[ERROR] Unexpected error in {job_dir}: {e}")
-            pause_and_exit(1)
+    print(f"[INFO] Found {len(jobs)} job(s) under {root}")
+
+    # ======================================================
+    # SEQUENTIAL MODE (2x / 4x)
+    # ======================================================
+    if sequential:
+        print("[INFO] Running jobs sequentially (2x/4x tier)")
+
+        for idx, job_dir in enumerate(jobs, start=1):
+            try:
+                run_staging_main(job_dir)
+                print(f"[INFO] Completed ({idx}/{len(jobs)}): {job_dir}")
+            except SystemExit as e:
+                print(f"[ERROR] Job failed in {job_dir}: {e}")
+                pause_and_exit(1)
+            except Exception as e:
+                print(f"[ERROR] Unexpected error in {job_dir}: {e}")
+                pause_and_exit(1)
+
+        print(f"[INFO] Finished all jobs under {root}")
+        return jobs
+
+    # ======================================================
+    # PARALLEL MODE (everything else)
+    # ======================================================
+    workers = min(max(1, THREADS_PER_TIER), len(jobs))
+    print(f"[INFO] Running up to {workers} job(s) in parallel")
+
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        future_map = {
+            executor.submit(run_staging_main, job_dir): job_dir
+            for job_dir in jobs
+        }
+
+        for idx, future in enumerate(as_completed(future_map), start=1):
+            job_dir = future_map[future]
+            try:
+                future.result()
+                print(f"[INFO] Completed ({idx}/{len(jobs)}): {job_dir}")
+            except SystemExit as e:
+                print(f"[ERROR] Job failed in {job_dir}: {e}")
+                pause_and_exit(1)
+            except Exception as e:
+                print(f"[ERROR] Unexpected error in {job_dir}: {e}")
+                pause_and_exit(1)
 
     print(f"[INFO] Finished all jobs under {root}")
     return jobs
+
 
 
 
