@@ -78,6 +78,12 @@ BUILD_DIST_COPIES: list[Path] = [
     # Add more targets here
 ]
 
+def pause_and_exit(code: int = 1) -> int:
+    try:
+        input("\nPress ENTER to exit...")
+    except KeyboardInterrupt:
+        pass
+    return code
 
 def _sha1_file(path: Path) -> str:
     h = hashlib.sha1()
@@ -94,20 +100,20 @@ def sync_build_dist_files() -> None:
     """
     if not BUILD_DIST_SOURCE.is_file():
         print(f"[ERROR] Build_Dist_Folders.py source missing: {BUILD_DIST_SOURCE}")
-        sys.exit(1)
+        pause_and_exit(1)
 
     try:
         src_hash = _sha1_file(BUILD_DIST_SOURCE)
     except OSError as e:
         print(f"[ERROR] Failed to hash source Build_Dist_Folders.py: {BUILD_DIST_SOURCE} ({e})")
-        sys.exit(1)
+        pause_and_exit(1)
 
     for dst in BUILD_DIST_COPIES:
         try:
             dst.parent.mkdir(parents=True, exist_ok=True)
         except OSError as e:
             print(f"[ERROR] Failed creating folder {dst.parent}: {e}")
-            sys.exit(1)
+            pause_and_exit(1)
 
         if dst.is_file():
             try:
@@ -120,14 +126,14 @@ def sync_build_dist_files() -> None:
                 continue
         elif dst.exists():
             print(f"[ERROR] Destination exists but is not a file: {dst}")
-            sys.exit(1)
+            pause_and_exit(1)
 
         try:
             shutil.copy2(BUILD_DIST_SOURCE, dst)
             print(f"[INFO] Synced Build_Dist_Folders.py -> {dst}")
         except OSError as e:
             print(f"[ERROR] Copy failed {BUILD_DIST_SOURCE} -> {dst}: {e}")
-            sys.exit(1)
+            pause_and_exit(1)
 
 
 # ==========================================================
@@ -146,19 +152,19 @@ def get_git_root() -> Path:
         )
     except FileNotFoundError:
         print("ERROR: git is not installed or not on PATH.")
-        sys.exit(1)
+        pause_and_exit(1)
 
     if result.returncode != 0:
         print("ERROR: Not inside a git repository.")
         stderr = result.stderr.strip()
         if stderr:
             print(stderr)
-        sys.exit(1)
+        pause_and_exit(1)
 
     root = Path(result.stdout.strip()).resolve()
     if not root.is_dir():
         print(f"ERROR: Git root reported by git does not exist: {root}")
-        sys.exit(1)
+        pause_and_exit(1)
 
     return root
 
@@ -218,14 +224,14 @@ def load_dimensions_names(dimensions_csv: Path) -> dict[str, str]:
     """
     if not dimensions_csv.is_file():
         print(f"ERROR: Dimensions CSV not found at: {dimensions_csv}")
-        sys.exit(1)
+        pause_and_exit(1)
 
     names: dict[str, str] = {}
     with dimensions_csv.open("r", encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
         if "texture_name" not in reader.fieldnames:
             print(f"ERROR: 'texture_name' column not found in {dimensions_csv}")
-            sys.exit(1)
+            pause_and_exit(1)
 
         for row in reader:
             name = (row.get("texture_name") or "").strip()
@@ -521,8 +527,8 @@ def run_staging_main(job_dir: Path) -> None:
 
 def run_tier(root: Path) -> list[Path]:
     """
-    Run all jobs under a single staging root in parallel.
-    Wait for all jobs in this tier to finish before returning.
+    Run all jobs under a single staging root sequentially.
+    Abort immediately if any job fails.
     Return the list of job directories processed.
     """
     jobs = find_jobs(root)
@@ -532,37 +538,28 @@ def run_tier(root: Path) -> list[Path]:
         return []
 
     print(f"[INFO] Found {len(jobs)} job(s) under {root}")
+    print("[INFO] Running jobs sequentially")
 
-    workers = min(max(1, THREADS_PER_TIER), len(jobs))
-    print(f"[INFO] Running up to {workers} job(s) in parallel")
-
-    with ThreadPoolExecutor(max_workers=workers) as executor:
-        future_map = {
-            executor.submit(run_staging_main, job_dir): job_dir
-            for job_dir in jobs
-        }
-
-        for idx, future in enumerate(as_completed(future_map), start=1):
-            job_dir = future_map[future]
-            try:
-                future.result()
-                print(f"[INFO] Completed ({idx}/{len(jobs)}): {job_dir}")
-            except SystemExit as e:
-                print(f"[ERROR] Job failed in {job_dir}: {e}")
-                # Kill the whole run if any job fails
-                sys.exit(1)
-            except Exception as e:
-                print(f"[ERROR] Unexpected error in {job_dir}: {e}")
-                sys.exit(1)
+    for idx, job_dir in enumerate(jobs, start=1):
+        try:
+            run_staging_main(job_dir)
+            print(f"[INFO] Completed ({idx}/{len(jobs)}): {job_dir}")
+        except SystemExit as e:
+            print(f"[ERROR] Job failed in {job_dir}: {e}")
+            pause_and_exit(1)
+        except Exception as e:
+            print(f"[ERROR] Unexpected error in {job_dir}: {e}")
+            pause_and_exit(1)
 
     print(f"[INFO] Finished all jobs under {root}")
     return jobs
 
 
+
 def run_set_ctxr_dates() -> None:
     if not SET_CTXR_DATES_PATH.is_file():
         print(f"ERROR: Could not find {SET_CTXR_DATES_NAME} at: {SET_CTXR_DATES_PATH}")
-        sys.exit(1)
+        pause_and_exit(1)
 
     print()
     print("#################################################")
@@ -872,7 +869,7 @@ def main() -> None:
 
     if not STAGING_MAIN_PATH.is_file():
         print(f"ERROR: _staging_main.py not found at: {STAGING_MAIN_PATH}")
-        sys.exit(1)
+        pause_and_exit(1)
 
     # Set up git root and PS2 data
     git_root = get_git_root()

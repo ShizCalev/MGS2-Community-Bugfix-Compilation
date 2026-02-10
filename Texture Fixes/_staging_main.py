@@ -1054,9 +1054,12 @@ def _dims_within_factor_wiggle(before: tuple[int, int], after: tuple[int, int], 
     if bw <= 0 or bh <= 0 or aw <= 0 or ah <= 0:
         return False
 
+    # Hard requirement: must actually upscale, cannot be same size (or smaller).
+    # This prevents tiny textures from passing due to wide wiggle.
+    if aw <= bw or ah <= bh:
+        return False
+
     # Allow small rounding/NPOT wiggle.
-    # For small textures, absolute px wiggle dominates.
-    # For large textures, allow a small percent wiggle.
     abs_wiggle = 4
     pct_wiggle = 0.03
 
@@ -1066,12 +1069,18 @@ def _dims_within_factor_wiggle(before: tuple[int, int], after: tuple[int, int], 
     wig_w = max(abs_wiggle, int(round(exp_w * pct_wiggle)))
     wig_h = max(abs_wiggle, int(round(exp_h * pct_wiggle)))
 
-    if aw < exp_w - wig_w or aw > exp_w + wig_w:
+    min_w = exp_w - wig_w
+    max_w = exp_w + wig_w
+    min_h = exp_h - wig_h
+    max_h = exp_h + wig_h
+
+    if aw < min_w or aw > max_w:
         return False
-    if ah < exp_h - wig_h or ah > exp_h + wig_h:
+    if ah < min_h or ah > max_h:
         return False
 
     return True
+
 
 
 def run_nvtt_exports_or_die(
