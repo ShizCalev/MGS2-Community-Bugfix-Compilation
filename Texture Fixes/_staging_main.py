@@ -58,7 +58,6 @@ PRINT_LOCK = Lock()
 
 
 def _clear_progress_line() -> None:
-    # Clear the current terminal line so progress text does not overlap with logs
     try:
         width = shutil.get_terminal_size(fallback=(120, 24)).columns
     except Exception:
@@ -87,12 +86,6 @@ def pause_and_exit(code: int = 1) -> int:
 # UPSCALED MODE DETECTION (BOOLEAN)
 # ==========================================================
 def get_staging_upscaled_bool() -> bool:
-    """
-    True if the staging folder path contains:
-      - "Staging - 2x Upscaled"
-      - "Staging - 4x Upscaled"
-    anywhere in its full path.
-    """
     path_lower = str(STAGING_FOLDER).lower()
     if " - 2x upscaled" in path_lower:
         return True
@@ -101,23 +94,30 @@ def get_staging_upscaled_bool() -> bool:
     return False
 
 
+def get_staging_upscale_factor_or_one() -> int:
+    path_lower = str(STAGING_FOLDER).lower()
+    if " - 2x upscaled" in path_lower:
+        return 2
+    if " - 4x upscaled" in path_lower:
+        return 4
+    return 1
+
+
 def staging_folder_is_demastered() -> bool:
-    """
-    True if STAGING_FOLDER path contains "Demastered" (case insensitive).
-    """
     return "demastered" in str(STAGING_FOLDER).lower()
 
 
 def get_chainner_project_for_staging() -> Path:
-    """
-    Pick the chaiNNer project based on the staging folder path:
-      - If path contains "Staging - 2x Upscaled" use the 2x project.
-      - Otherwise default to the 4x project.
-    """
     path_lower = str(STAGING_FOLDER).lower()
     if " - 2x upscaled" in path_lower:
         return CHAINNER_PROJECT_2X
     return CHAINNER_PROJECT_4X
+
+
+def get_current_upscaler_metadata_for_run(is_upscaled_run: bool) -> tuple[str, str]:
+    if is_upscaled_run:
+        return ("1", "remarci_4x")
+    return ("0", "none")
 
 
 # ==========================================================
@@ -317,9 +317,6 @@ def path_contains_self_remade(path: Path) -> bool:
 
 
 def image_is_fully_opaque_or_no_alpha(path: Path) -> bool:
-    """
-    True if the image has no alpha channel, OR it has alpha but all pixels are fully opaque (alpha == 255).
-    """
     try:
         with Image.open(path) as im:
             if "A" not in im.getbands():
@@ -337,12 +334,6 @@ def image_is_fully_opaque_or_no_alpha(path: Path) -> bool:
 # DEMASTERED PS2 SOURCE REMAP HELPERS
 # ==========================================================
 def build_ps2_textures_map_or_die(root: Path) -> dict[str, Path]:
-    """
-    Recursively scan PS2_TEXTURES_ROOT for .png and .tga files and build a map:
-      stem_lower -> unique file path
-
-    If duplicates are found for a stem (across any extension), it is treated as fatal.
-    """
     if not root.is_dir():
         raise RuntimeError(f"PS2 textures root does not exist or is not a directory: {root}")
 
@@ -378,26 +369,6 @@ def build_ps2_textures_map_or_die(root: Path) -> dict[str, Path]:
 
 
 def remap_demastered_self_remade_to_ps2(image_files: list[Path]) -> list[Path]:
-    """
-    Demastered handling:
-    For Demastered staging runs:
-      If an image path:
-        - contains 'self remade' and
-        - does not contain 'demaster fixed'
-      then use the matching .png/.tga under PS2_TEXTURES_ROOT instead,
-      matched by stem (case insensitive).
-
-    - Self Remade images without a PS2 match are skipped
-    - A log file is written next to conversion_hashes.csv (STAGING_FOLDER)
-    
-    The returned list is the same length as image_files but with overridden Paths
-    for the cases described above.
-
-    All subsequent logic (hashing, origin, opacity, nvtt input) uses the PS2 path.
-    
-
-    """
-
     if not image_files:
         return image_files
 
@@ -426,7 +397,6 @@ def remap_demastered_self_remade_to_ps2(image_files: list[Path]) -> list[Path]:
 
         remapped.append(img)
 
-    # Write single log in staging folder next to conversion_hashes.csv
     if skipped:
         try:
             out_path = STAGING_FOLDER / "demastered_missing_ps2_sources.txt"
@@ -452,7 +422,6 @@ def remap_demastered_self_remade_to_ps2(image_files: list[Path]) -> list[Path]:
     return remapped
 
 
-
 # ==========================================================
 # ERROR LOG HELPERS
 # ==========================================================
@@ -469,6 +438,7 @@ def remove_error_log_if_exists(path: Path) -> None:
     except Exception:
         pass
 
+
 # ==========================================================
 # "NOT YET CONVERTED" (SELF-REMADE NOMIPS) LOG HELPERS
 # ==========================================================
@@ -476,14 +446,9 @@ NOT_YET_CONVERTED_TXT = "not yet converted.txt"
 
 
 def write_not_yet_converted_txt(staging_folder: Path, missing_paths: list[Path]) -> None:
-    """
-    Write full paths (one per line) for Self Remade NO-MIPS files that do not yet
-    have a staged CTXR alongside folders to process.txt.
-    """
     out_path = staging_folder / NOT_YET_CONVERTED_TXT
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Full paths, de-duped, stable ordering
     lines = sorted({str(p) for p in missing_paths}, key=lambda s: s.lower())
     out_path.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf8")
 
@@ -571,13 +536,19 @@ def origin_relative_to_required_subpath_or_die(image_path: Path) -> str:
 # ==========================================================
 # LOAD / MAP CSV
 # mapping entry:
-# (before_hash, ctxr_hash, used_nomips_bool, origin_folder_string, opacity_stripped_bool, upscaled_bool)
+# (before_hash, ctxr_hash, used_nomips_bool, origin_folder_string, opacity_stripped_bool, upscaled_bool,
+#  upscaler_version_str, upscaler_type_str, upscaler_meta_present_bool)
 #
 # NOTE: CSV mipmaps column means "has mipmaps". Internally we track "used_nomips".
 # ==========================================================
 def load_conversion_csv_unique_or_die(
     csv_path: Path,
-) -> tuple[dict[str, tuple[str, str, bool, str, bool, bool]], list[dict[str, str]], list[str]]:
+) -> tuple[
+    dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool]],
+    list[dict[str, str]],
+    list[str],
+    bool,
+]:
     if not csv_path.is_file():
         raise FileNotFoundError(f'Missing "{CONVERSION_CSV}" at {csv_path}')
 
@@ -586,7 +557,6 @@ def load_conversion_csv_unique_or_die(
         if rdr.fieldnames is None:
             raise RuntimeError(f"{CONVERSION_CSV} has no header row")
 
-        # Do NOT require "upscaled" here so old CSVs still load.
         required = ["filename", "before_hash", "ctxr_hash", "mipmaps", "origin_folder", "opacity_stripped"]
         header_lower = [h.strip().lower() for h in rdr.fieldnames]
         for col in required:
@@ -594,22 +564,19 @@ def load_conversion_csv_unique_or_die(
                 raise RuntimeError(f'{CONVERSION_CSV} missing required column "{col}"')
 
         header = rdr.fieldnames
+        header_has_upscaler_cols = ("upscaler_version" in header_lower) and ("upscaler_type" in header_lower)
 
         rows: list[dict[str, str]] = []
-        mapping: dict[str, tuple[str, str, bool, str, bool, bool]] = {}
+        mapping: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool]] = {}
         duplicates: list[str] = []
 
         for row in rdr:
             filename = (row.get("filename") or row.get("Filename") or row.get("FILENAME") or "").strip()
-            before_hash = (
-                row.get("before_hash") or row.get("Before_hash") or row.get("BEFORE_HASH") or ""
-            ).strip().lower()
+            before_hash = (row.get("before_hash") or row.get("Before_hash") or row.get("BEFORE_HASH") or "").strip().lower()
             ctxr_hash = (row.get("ctxr_hash") or row.get("Ctxr_hash") or row.get("CTXR_HASH") or "").strip().lower()
 
             mipmaps_raw = (row.get("mipmaps") or row.get("Mipmaps") or row.get("MIPMAPS") or "").strip()
-            origin_folder = (
-                row.get("origin_folder") or row.get("Origin_folder") or row.get("ORIGIN_FOLDER") or ""
-            ).strip()
+            origin_folder = (row.get("origin_folder") or row.get("Origin_folder") or row.get("ORIGIN_FOLDER") or "").strip()
 
             opacity_raw = (
                 row.get("opacity_stripped")
@@ -617,7 +584,11 @@ def load_conversion_csv_unique_or_die(
                 or row.get("OPACITY_STRIPPED")
                 or ""
             ).strip()
+
             upscaled_raw = (row.get("upscaled") or row.get("Upscaled") or row.get("UPSCALED") or "").strip().lower()
+
+            upscaler_version_raw = (row.get("upscaler_version") or row.get("Upscaler_version") or row.get("UPSCALER_VERSION") or "").strip()
+            upscaler_type_raw = (row.get("upscaler_type") or row.get("Upscaler_type") or row.get("UPSCALER_TYPE") or "").strip()
 
             if not filename:
                 continue
@@ -631,11 +602,24 @@ def load_conversion_csv_unique_or_die(
             else:
                 upscaled = get_staging_upscaled_bool()
 
+            # Meta present means: header had both cols AND row had non-empty values for both.
+            upscaler_meta_present = bool(header_has_upscaler_cols and upscaler_version_raw and upscaler_type_raw)
+
             name = filename.lower()
             if name in mapping:
                 duplicates.append(filename)
             else:
-                mapping[name] = (before_hash, ctxr_hash, used_nomips, origin_folder, opacity_stripped, upscaled)
+                mapping[name] = (
+                    before_hash,
+                    ctxr_hash,
+                    used_nomips,
+                    origin_folder,
+                    opacity_stripped,
+                    upscaled,
+                    upscaler_version_raw,
+                    upscaler_type_raw,
+                    upscaler_meta_present,
+                )
 
             rows.append(row)
 
@@ -646,14 +630,11 @@ def load_conversion_csv_unique_or_die(
             raise RuntimeError("conversion_hashes.csv filenames must be unique")
 
     log(f"[INFO] Loaded {len(mapping)} unique entries from {CONVERSION_CSV}\n")
-    return mapping, rows, header
+    return mapping, rows, header, header_has_upscaler_cols
 
 
 # ==========================================================
 # IMAGE HASH + ORIGIN + OPACITY STRIPPED EXPECTATION (UNIQUENESS ENFORCED)
-# opacity_stripped expectation:
-# - True if path contains "opaque"
-# - OR (only when path contains "self remade") the image has no alpha or is fully opaque
 # ==========================================================
 def hash_images_unique_or_die(
     image_files: list[Path],
@@ -842,6 +823,19 @@ def make_temp_rgb_only_copy_or_die(src: Path, tmp_dir: Path) -> Path:
     return tmp_path
 
 
+def make_rgb_only_copy_named_or_die(src: Path, dst_png: Path) -> None:
+    dst_png.parent.mkdir(parents=True, exist_ok=True)
+
+    with Image.open(src) as im:
+        rgba = im.convert("RGBA")
+        r, g, b, _a = rgba.split()
+        rgb = Image.merge("RGB", (r, g, b))
+        rgb.save(dst_png, format="PNG", optimize=False)
+
+    if not dst_png.is_file():
+        raise RuntimeError(f"Failed creating RGB-only PNG: {dst_png}")
+
+
 def hash_ctxr_files_with_progress(ctxr_files: list[Path], workers: int, label: str) -> dict[Path, str]:
     ctxr_hash_by_path: dict[Path, str] = {}
     if not ctxr_files:
@@ -866,9 +860,6 @@ def hash_ctxr_files_with_progress(ctxr_files: list[Path], workers: int, label: s
 
 
 def delete_upscale_staging_dir_if_exists(path: Path) -> None:
-    """
-    Hard delete the upscaling staging directory (and its contents) if it exists.
-    """
     if not path.exists():
         return
 
@@ -883,12 +874,6 @@ def delete_upscale_staging_dir_if_exists(path: Path) -> None:
 
 
 def delete_upscaled_image_pair_if_exists(path: Path) -> None:
-    """
-    Given a path inside the _upscaling folder, delete both .tga and .png
-    variants for the same stem in that directory if they exist.
-
-    Used to make sure chaiNNer-created PNGs do not linger when we clean up.
-    """
     parent = path.parent
     stem = path.stem
 
@@ -902,10 +887,6 @@ def delete_upscaled_image_pair_if_exists(path: Path) -> None:
 
 
 def copy_images_for_upscaling_or_die(images: list[Path]) -> dict[Path, Path]:
-    """
-    Copy each image into UPSCALE_STAGING_DIR.
-    Returns mapping original_path -> upscaling_copy_path.
-    """
     mapping: dict[Path, Path] = {}
 
     if not images:
@@ -934,9 +915,6 @@ def copy_images_for_upscaling_or_die(images: list[Path]) -> dict[Path, Path]:
 
 
 def _is_chainner_running() -> bool:
-    """
-    Check via 'tasklist' whether any chaiNNer.exe processes are running.
-    """
     try:
         out = subprocess.check_output(
             ["tasklist", "/FI", "IMAGENAME eq chaiNNer.exe"],
@@ -1009,15 +987,6 @@ def _next_power_of_two(n: int) -> int:
 
 
 def resave_images_to_pot_or_die(image_paths: list[Path]) -> None:
-    """
-    For each image:
-      - Open with PIL
-      - Resize to ceil power-of-two per dimension
-      - Resave in-place (PNG/TGA), PNG with optimize=False
-
-    This DOES NOT touch any hash maps. before_hash remains
-    the hash of the original staging image, by design.
-    """
     if not image_paths:
         return
 
@@ -1054,16 +1023,6 @@ def resave_images_to_pot_or_die(image_paths: list[Path]) -> None:
 
 
 def remap_chainner_tgas_to_png(mapping: dict[Path, Path]) -> None:
-    """
-    After chaiNNer runs, it will have re-saved TGA inputs as PNGs in the same
-    folder, same stem.
-
-    This walks the upscaling mapping (orig -> upscaled_path) and, for any entry
-    still pointing at a .tga, switches it to the .png output and deletes the
-    obsolete .tga file.
-
-    The mapping is updated in-place.
-    """
     switched = 0
 
     for orig, ups in list(mapping.items()):
@@ -1072,11 +1031,8 @@ def remap_chainner_tgas_to_png(mapping: dict[Path, Path]) -> None:
 
         png = ups.with_suffix(".png")
         if not png.is_file():
-            # No PNG created, leave it as-is and let later logic treat it
-            # as a failed upscale if needed.
             continue
 
-        # Delete the old TGA if it still exists
         if ups.is_file():
             try:
                 ups.unlink()
@@ -1091,9 +1047,36 @@ def remap_chainner_tgas_to_png(mapping: dict[Path, Path]) -> None:
         log(f"[UPSCALE] Switched {switched} upscaled TGA input(s) to PNG outputs")
 
 
+def _dims_within_factor_wiggle(before: tuple[int, int], after: tuple[int, int], factor: int) -> bool:
+    bw, bh = before
+    aw, ah = after
+
+    if bw <= 0 or bh <= 0 or aw <= 0 or ah <= 0:
+        return False
+
+    # Allow small rounding/NPOT wiggle.
+    # For small textures, absolute px wiggle dominates.
+    # For large textures, allow a small percent wiggle.
+    abs_wiggle = 4
+    pct_wiggle = 0.03
+
+    exp_w = bw * factor
+    exp_h = bh * factor
+
+    wig_w = max(abs_wiggle, int(round(exp_w * pct_wiggle)))
+    wig_h = max(abs_wiggle, int(round(exp_h * pct_wiggle)))
+
+    if aw < exp_w - wig_w or aw > exp_w + wig_w:
+        return False
+    if ah < exp_h - wig_h or ah > exp_h + wig_h:
+        return False
+
+    return True
+
+
 def run_nvtt_exports_or_die(
     image_files: list[Path],
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool]],
     image_hash_by_name: dict[str, str],
     image_origin_by_name: dict[str, str],
     image_used_nomips_by_name: dict[str, bool],
@@ -1117,6 +1100,8 @@ def run_nvtt_exports_or_die(
         raise RuntimeError(f"CtxrTool.exe not found: {CTXR_TOOL_EXE}")
 
     upscaled_expected = get_staging_upscaled_bool()
+    upscale_factor = get_staging_upscale_factor_or_one()
+    upscaler_version, upscaler_type = get_current_upscaler_metadata_for_run(upscaled_expected)
 
     # ==========================================================
     # Build missing list.
@@ -1143,7 +1128,6 @@ def run_nvtt_exports_or_die(
         if not upscaled_expected and path_contains_self_remade(img) and used_nomips:
             skipped_self_remade_nomips.append(img)
 
-            # If there's not already a staged CTXR for it, track it for "not yet converted.txt"
             staged_ctxr = STAGING_FOLDER / f"{name}.ctxr"
             if not staged_ctxr.is_file():
                 not_yet_converted_paths.append(img)
@@ -1152,13 +1136,11 @@ def run_nvtt_exports_or_die(
 
         missing.append(img)
 
-    # Write or remove "not yet converted.txt" based on what remains unconverted
     if not_yet_converted_paths:
         write_not_yet_converted_txt(STAGING_FOLDER, not_yet_converted_paths)
         log(f"[PARAM] Wrote {NOT_YET_CONVERTED_TXT} with {len(not_yet_converted_paths)} path(s)")
     else:
         remove_not_yet_converted_txt_if_exists(STAGING_FOLDER)
-
 
     if skipped_self_remade_nomips:
         log(
@@ -1176,23 +1158,69 @@ def run_nvtt_exports_or_die(
         return
 
     # ==========================================================
-    # For upscaled staging folders, copy all images that are
-    # valid for conversion to the _upscaling folder and wait
-    # for chaiNNer to complete. Then:
-    #   - Verify dimensions actually changed (upscale success)
-    #   - If any did not change, skip them from nvtt/ctxr
-    #   - Continue working ONLY with the upscaled copies
-    #   - Resave remaining to POT (hash mapping NOT touched)
-    #   - Clean up both TGA and PNG for skipped/processed copies
+    # For upscaled staging folders:
+    #   - Copy missing images to _upscaling
+    #   - Opacity strip BEFORE upscaling (convert to RGB-only PNG in-place or via replace)
+    #   - Run chaiNNer and wait
+    #   - Remap any TGA -> PNG chaiNNer behavior
+    #   - Validate dims are ~2x or ~4x compared to pre-upscale dims
+    #   - Remove failures and clean up
+    #   - Resave remaining to POT
+    #   - Continue pipeline ONLY with the upscaled copies
     # ==========================================================
     if upscaled_expected:
         log("[UPSCALE] Staging folder is an upscaled variant (2x/4x).")
         log(f"[UPSCALE] Preparing {len(missing)} image(s) for external upscaling.")
 
-        # Copy originals into _upscaling and remember mapping
         mapping = copy_images_for_upscaling_or_die(missing)
 
-        # Record dimensions before chaiNNer, on the COPIES in _upscaling
+        # Opacity stripping BEFORE chaiNNer on the copied paths.
+        for orig, ups in list(mapping.items()):
+            stem_lower = orig.stem.lower()
+            opacity_expected = image_opacity_expected_by_name.get(stem_lower, False)
+            if not opacity_expected:
+                continue
+
+            rgb_dest = ups.with_suffix(".png")
+
+            try:
+                # If ups is already a PNG, writing to rgb_dest would be same path.
+                # Write to temp then replace to avoid deleting the file we need to read.
+                if rgb_dest.resolve() == ups.resolve():
+                    tmp = ups.with_name(ups.name + ".rgbtmp.png")
+                    if tmp.is_file():
+                        tmp.unlink()
+
+                    make_rgb_only_copy_named_or_die(ups, tmp)
+                    tmp.replace(ups)
+
+                    mapping[orig] = ups
+                    log(f"[UPSCALE OPACITY] Stripped alpha before upscaling (in-place PNG): {orig.name} -> {ups.name}")
+                else:
+                    if rgb_dest.is_file():
+                        rgb_dest.unlink()
+
+                    make_rgb_only_copy_named_or_die(ups, rgb_dest)
+
+                    # Remove original copy so chaiNNer sees only the RGB PNG.
+                    # Also remove any same-stem alt that might linger.
+                    for ext in (".tga", ".png"):
+                        candidate = ups.with_suffix(ext)
+                        if candidate.resolve() == rgb_dest.resolve():
+                            continue
+                        if candidate.is_file():
+                            try:
+                                candidate.unlink()
+                            except Exception as e:
+                                log(f"[UPSCALE OPACITY WARN] Failed deleting {candidate}: {e}")
+
+                    mapping[orig] = rgb_dest
+                    log(f"[UPSCALE OPACITY] Stripped alpha before upscaling: {orig.name} -> {rgb_dest.name}")
+
+            except Exception as e:
+                raise RuntimeError(f"Failed pre-upscale opacity stripping for {ups}: {e}")
+
+        # Record dimensions before chaiNNer, on the copies in _upscaling (after any opacity strip rewrite).
         dims_before: dict[Path, tuple[int, int]] = {}
         for orig, ups in mapping.items():
             try:
@@ -1201,15 +1229,12 @@ def run_nvtt_exports_or_die(
             except Exception as e:
                 raise RuntimeError(f"Failed reading dimensions before upscaling for {ups}: {e}")
 
-        # Run chaiNNer on the _upscaling folder
         run_chaiNNer_or_die()
 
-        # After chaiNNer: it may have re-saved .tga inputs as .png with the same stem.
-        # Update mapping to point at the PNG versions and delete the obsolete TGAs.
         remap_chainner_tgas_to_png(mapping)
 
-        # Check dimensions after chaiNNer, now using the possibly-updated paths
-        unchanged: list[Path] = []
+        # Validate dimensions after chaiNNer using factor wiggle.
+        failed_factor: list[Path] = []
         dims_after: dict[Path, tuple[int, int]] = {}
 
         for orig, ups in mapping.items():
@@ -1221,20 +1246,23 @@ def run_nvtt_exports_or_die(
 
             before = dims_before.get(orig)
             after = dims_after[orig]
-            if before is not None and after == before:
-                unchanged.append(orig)
+            if before is None:
+                failed_factor.append(orig)
+                continue
 
-        if unchanged:
+            if not _dims_within_factor_wiggle(before, after, upscale_factor):
+                failed_factor.append(orig)
+
+        if failed_factor:
             log(
-                "[UPSCALE WARN] The following image(s) did not change dimensions after chaiNNer (treating as failed upscales and skipping):"
+                "[UPSCALE WARN] The following image(s) failed the expected upscaling factor check and will be skipped:"
             )
-            for p in sorted(unchanged, key=lambda x: x.name.lower()):
+            for p in sorted(failed_factor, key=lambda x: x.name.lower()):
                 b = dims_before.get(p, ("?", "?"))
                 a = dims_after.get(p, ("?", "?"))
-                log(f"  {p}  ({b[0]}x{b[1]} -> {a[0]}x{a[1]})")
+                log(f"  {p}  ({b[0]}x{b[1]} -> {a[0]}x{a[1]}) expected ~{upscale_factor}x")
 
-            # Clean up their upscaled copies (both .tga and .png if present)
-            failed_set = set(unchanged)
+            failed_set = set(failed_factor)
             for orig in failed_set:
                 ups = mapping.get(orig)
                 if ups is not None:
@@ -1242,9 +1270,7 @@ def run_nvtt_exports_or_die(
 
             missing = [img for img in missing if img not in failed_set]
 
-            log(
-                f"[UPSCALE] {len(unchanged)} image(s) failed the upscaling dimension check and will be skipped from nvtt/ctxr."
-            )
+            log(f"[UPSCALE] {len(failed_factor)} image(s) failed factor check and were removed.")
 
             if not missing:
                 log("[UPSCALE] No images left after removing failed upscales; skipping nvtt_export stage.")
@@ -1269,7 +1295,17 @@ def run_nvtt_exports_or_die(
         log("[UPSCALE] Resaving upscaled images to power-of-two dimensions...")
         resave_images_to_pot_or_die(missing)
 
-    needed_cols = ["filename", "before_hash", "ctxr_hash", "mipmaps", "origin_folder", "opacity_stripped", "upscaled"]
+    needed_cols = [
+        "filename",
+        "before_hash",
+        "ctxr_hash",
+        "mipmaps",
+        "origin_folder",
+        "opacity_stripped",
+        "upscaled",
+        "upscaler_version",
+        "upscaler_type",
+    ]
     conversion_header = ensure_csv_header_has_columns(list(conversion_header), needed_cols)
 
     log(f"[PARAM] Exporting {len(missing)} missing image(s) via nvtt_export + CtxrTool\n")
@@ -1310,7 +1346,6 @@ def run_nvtt_exports_or_die(
 
         dpf_to_use = DPF_NOMIPS if used_nomips else DPF_DEFAULT
 
-        # before_hash is ALWAYS from the original staging image hash
         before_hash = image_hash_by_name.get(stem_lower, "").lower()
         if not before_hash:
             cleanup_tmp_rgb()
@@ -1667,6 +1702,9 @@ def run_nvtt_exports_or_die(
             used_nomips_local = not has_mipmaps
             opacity_stripped = bool_from_csv(r.get("opacity_stripped", ""))
             upscaled_val = bool_from_csv(r.get("upscaled", ""))
+            uv = (r.get("upscaler_version") or "").strip()
+            ut = (r.get("upscaler_type") or "").strip()
+            meta_present = bool(uv and ut)
 
             conversion_map[name] = (
                 (r.get("before_hash") or "").lower(),
@@ -1675,6 +1713,9 @@ def run_nvtt_exports_or_die(
                 (r.get("origin_folder") or ""),
                 opacity_stripped,
                 upscaled_val,
+                uv,
+                ut,
+                meta_present,
             )
 
         log(f"[CSV] Appended {len(pending_rows)} row(s)")
@@ -1702,6 +1743,8 @@ def run_nvtt_exports_or_die(
                         "origin_folder": origin_folder,
                         "opacity_stripped": bool_to_csv(opacity_expected),
                         "upscaled": bool_to_csv(upscaled_expected),
+                        "upscaler_version": upscaler_version,
+                        "upscaler_type": upscaler_type,
                     }
                 )
             else:
@@ -1740,7 +1783,7 @@ def prune_csv_entries_missing_staged_ctxr(
     conversion_csv_path: Path,
     conversion_header: list[str],
     conversion_rows: list[dict[str, str]],
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool]],
 ) -> int:
     staged_ctxr_stems: set[str] = set()
     for p in STAGING_FOLDER.iterdir():
@@ -1788,7 +1831,6 @@ def main() -> int:
     conversion_csv = STAGING_FOLDER / CONVERSION_CSV
 
     try:
-        # Always clear the upscaling staging folder at the very start
         delete_upscale_staging_dir_if_exists(UPSCALE_STAGING_DIR)
 
         log(f"[INFO] STAGING_FOLDER: {STAGING_FOLDER}")
@@ -1826,12 +1868,8 @@ def main() -> int:
                 filtered.append(img)
             image_files = filtered
             if skipped:
-                log(
-                    f"[UPSCALE] Skipped {skipped} image(s) listed in never_upscale.txt for upscaled staging run"
-                )
+                log(f"[UPSCALE] Skipped {skipped} image(s) listed in never_upscale.txt for upscaled staging run")
 
-        # Demastered override: for Demastered staging runs, redirect eligible Self Remade
-        # images to PS2_TEXTURES_ROOT sources before any hashing or metadata checks.
         if is_demastered_run:
             image_files = remap_demastered_self_remade_to_ps2(image_files)
 
@@ -1843,14 +1881,12 @@ def main() -> int:
         for img in image_files:
             stem_lower = img.stem.lower()
             if stem_lower not in image_used_nomips_by_name:
-                used_nomips = should_use_nomips(
-                    stem_lower, no_mip_regexes, manual_ui_textures
-                )
+                used_nomips = should_use_nomips(stem_lower, no_mip_regexes, manual_ui_textures)
                 if is_upscaled_run and stem_lower in manual_ui_textures:
                     used_nomips = False
                 image_used_nomips_by_name[stem_lower] = used_nomips
 
-        conversion_map, conversion_rows, conversion_header = load_conversion_csv_unique_or_die(conversion_csv)
+        conversion_map, conversion_rows, conversion_header, header_has_upscaler_cols = load_conversion_csv_unique_or_die(conversion_csv)
         if not conversion_header:
             conversion_header = [
                 "filename",
@@ -1860,13 +1896,27 @@ def main() -> int:
                 "origin_folder",
                 "opacity_stripped",
                 "upscaled",
+                "upscaler_version",
+                "upscaler_type",
             ]
 
-        needed_cols = ["filename", "before_hash", "ctxr_hash", "mipmaps", "origin_folder", "opacity_stripped", "upscaled"]
+        needed_cols = [
+            "filename",
+            "before_hash",
+            "ctxr_hash",
+            "mipmaps",
+            "origin_folder",
+            "opacity_stripped",
+            "upscaled",
+            "upscaler_version",
+            "upscaler_type",
+        ]
         conversion_header = ensure_csv_header_has_columns(list(conversion_header), needed_cols)
 
-        # If header is missing any needed column (including "upscaled"), rewrite CSV and
-        # stamp existing rows with the staging upscaled for missing values.
+        # If header is missing any needed column, rewrite CSV.
+        # IMPORTANT:
+        #   - Non-upscaled runs: fill missing upscaler fields with 0/none.
+        #   - Upscaled runs: DO NOT backfill missing upscaler fields (leave blank) so they mismatch and get regenerated.
         with conversion_csv.open("r", encoding="utf8", newline="") as f:
             rdr = csv.reader(f)
             first = next(rdr, None)
@@ -1874,12 +1924,24 @@ def main() -> int:
             raise RuntimeError(f"{CONVERSION_CSV} is empty or unreadable")
         file_header_lower = [h.strip().lower() for h in first]
         if any(col.lower() not in file_header_lower for col in needed_cols):
-            upscaled_bool = is_upscaled_run
-            for row in conversion_rows:
-                if "upscaled" not in row or not (row.get("upscaled") or "").strip():
-                    row["upscaled"] = bool_to_csv(upscaled_bool)
+            if not is_upscaled_run:
+                for row in conversion_rows:
+                    if "upscaler_version" not in row or not (row.get("upscaler_version") or "").strip():
+                        row["upscaler_version"] = "0"
+                    if "upscaler_type" not in row or not (row.get("upscaler_type") or "").strip():
+                        row["upscaler_type"] = "none"
+            else:
+                # Leave blanks so missing metadata triggers mismatches for upscaled runs.
+                for row in conversion_rows:
+                    if "upscaler_version" not in row:
+                        row["upscaler_version"] = ""
+                    if "upscaler_type" not in row:
+                        row["upscaler_type"] = ""
             write_conversion_csv_atomic(conversion_csv, conversion_header, conversion_rows)
             log(f"[CSV] Rewrote {CONVERSION_CSV} to add missing columns")
+
+            # Reload after rewrite so header_has_upscaler_cols reflects reality and mapping picks up blanks.
+            conversion_map, conversion_rows, conversion_header, header_has_upscaler_cols = load_conversion_csv_unique_or_die(conversion_csv)
 
         # ==========================================================
         # prune never_upscale entries from CSV and staged CTXR
@@ -1891,21 +1953,14 @@ def main() -> int:
             delete_failures = 0
 
             for row in conversion_rows:
-                filename = (
-                    row.get("filename")
-                    or row.get("Filename")
-                    or row.get("FILENAME")
-                    or ""
-                )
+                filename = (row.get("filename") or row.get("Filename") or row.get("FILENAME") or "")
                 filename_lower = filename.strip().lower()
                 if filename_lower and filename_lower in never_names_lower:
                     removed_never += 1
 
-                    # Drop from conversion_map
                     if filename_lower in conversion_map:
                         del conversion_map[filename_lower]
 
-                    # Delete staged CTXR if present
                     ctxr_path = STAGING_FOLDER / f"{filename_lower}.ctxr"
                     if ctxr_path.is_file():
                         try:
@@ -1926,17 +1981,17 @@ def main() -> int:
             if delete_failures:
                 return pause_and_exit(1)
 
-        # Initial CTXR listing (no hashes yet)
         ctxr_files = sorted(
             [p for p in STAGING_FOLDER.iterdir() if p.is_file() and p.suffix.lower() == ".ctxr"],
             key=lambda p: p.name.lower(),
         )
 
         upscaled_expected_main = is_upscaled_run
+        current_upscaler_version, current_upscaler_type = get_current_upscaler_metadata_for_run(upscaled_expected_main)
 
         # ==========================================================
         # EARLY PRUNE: if image exists and CSV metadata differs
-        # (before_hash OR used_nomips OR origin_folder OR opacity_stripped OR upscaled)
+        # (before_hash OR used_nomips OR origin_folder OR opacity_stripped OR upscaled OR upscaler meta)
         # then remove from CSV and delete staged CTXR if present.
         # ==========================================================
         early_mismatch_names: set[str] = set()
@@ -1948,6 +2003,9 @@ def main() -> int:
             csv_origin,
             csv_opacity_stripped,
             csv_upscaled,
+            csv_upscaler_version,
+            csv_upscaler_type,
+            csv_upscaler_meta_present,
         ) in conversion_map.items():
             img_before = image_hash_by_name.get(name)
             img_origin = image_origin_by_name.get(name)
@@ -1963,7 +2021,16 @@ def main() -> int:
             opacity_ok = (csv_opacity_stripped == img_opacity_expected)
             upscaled_ok = (csv_upscaled == upscaled_expected_main)
 
-            if not (origin_ok and mip_ok and before_ok and opacity_ok and upscaled_ok):
+            if upscaled_expected_main:
+                # Missing meta is a mismatch on upscaled runs.
+                upscaler_ok = bool(csv_upscaler_meta_present and (csv_upscaler_version == current_upscaler_version) and (csv_upscaler_type == current_upscaler_type))
+            else:
+                # Non-upscaled runs: allow missing and treat default as 0/none.
+                uv = (csv_upscaler_version or "").strip() or "0"
+                ut = (csv_upscaler_type or "").strip() or "none"
+                upscaler_ok = (uv == "0" and ut == "none")
+
+            if not (origin_ok and mip_ok and before_ok and opacity_ok and upscaled_ok and upscaler_ok):
                 early_mismatch_names.add(name)
 
         delete_failures = 0
@@ -2003,34 +2070,25 @@ def main() -> int:
         if delete_failures:
             return pause_and_exit(1)
 
-        # Refresh CTXR list after meta-mismatch deletes
         ctxr_files = sorted(
             [p for p in STAGING_FOLDER.iterdir() if p.is_file() and p.suffix.lower() == ".ctxr"],
             key=lambda p: p.name.lower(),
         )
 
-        # ==========================================================
-        # PRUNE: if listed in CSV but no staged CTXR exists, remove from CSV
-        # ==========================================================
         prune_csv_entries_missing_staged_ctxr(conversion_csv, conversion_header, conversion_rows, conversion_map)
 
-        # Refresh again after CSV prune
         ctxr_files = sorted(
             [p for p in STAGING_FOLDER.iterdir() if p.is_file() and p.suffix.lower() == ".ctxr"],
             key=lambda p: p.name.lower(),
         )
 
-        # ==========================================================
-        # If a non-orphan staged CTXR has no CSV entry, delete it.
-        # It will be treated as "missing" and regenerated/added later.
-        # ==========================================================
         deleted_missing_csv = 0
         delete_failures = 0
 
         for ctxr in ctxr_files:
             name = ctxr.stem.lower()
             if name not in image_hash_by_name:
-                continue  # orphan handling happens later
+                continue
 
             if name in conversion_map:
                 continue
@@ -2048,7 +2106,6 @@ def main() -> int:
         if delete_failures:
             return pause_and_exit(1)
 
-        # Refresh CTXR list after "missing CSV" deletes
         ctxr_files = sorted(
             [p for p in STAGING_FOLDER.iterdir() if p.is_file() and p.suffix.lower() == ".ctxr"],
             key=lambda p: p.name.lower(),
@@ -2076,12 +2133,8 @@ def main() -> int:
             )
             return 0
 
-        # ==========================================================
-        # FINAL: hash CTXRs ONCE for keep/orphan/mismatch classification
-        # ==========================================================
         ctxr_hash_by_path = hash_ctxr_files_with_progress(ctxr_files, workers, "Hash ctxr")
 
-        # Decide actions (orphans, mismatches, keeps)
         orphans: list[Path] = []
         mismatches: list[Path] = []
         keeps: list[Path] = []
@@ -2103,6 +2156,9 @@ def main() -> int:
                 expected_origin,
                 expected_opacity_stripped,
                 expected_upscaled,
+                expected_upscaler_version,
+                expected_upscaler_type,
+                expected_upscaler_meta_present,
             ) = conversion_map[name]
 
             current_origin = image_origin_by_name.get(name, "")
@@ -2116,7 +2172,18 @@ def main() -> int:
             opacity_ok = (expected_opacity_stripped == current_opacity_expected)
             upscaled_ok = (expected_upscaled == upscaled_expected_main)
 
-            if before_ok and ctxr_ok and mip_ok and origin_ok and opacity_ok and upscaled_ok:
+            if upscaled_expected_main:
+                upscaler_ok = bool(
+                    expected_upscaler_meta_present
+                    and (expected_upscaler_version == current_upscaler_version)
+                    and (expected_upscaler_type == current_upscaler_type)
+                )
+            else:
+                uv = (expected_upscaler_version or "").strip() or "0"
+                ut = (expected_upscaler_type or "").strip() or "none"
+                upscaler_ok = (uv == "0" and ut == "none")
+
+            if before_ok and ctxr_ok and mip_ok and origin_ok and opacity_ok and upscaled_ok and upscaler_ok:
                 keeps.append(ctxr)
             else:
                 mismatches.append(ctxr)
@@ -2156,6 +2223,9 @@ def main() -> int:
                 expected_origin,
                 expected_opacity_stripped,
                 expected_upscaled,
+                expected_upscaler_version,
+                expected_upscaler_type,
+                expected_upscaler_meta_present,
             ) = conversion_map[name]
 
             try:
@@ -2167,7 +2237,6 @@ def main() -> int:
                     f"  expected_mipmaps={bool_to_csv(not expected_used_nomips)} "
                     f"actual_mipmaps={bool_to_csv(not current_used_nomips)}"
                 )
-
                 log(f"  expected_origin={expected_origin} actual_origin={current_origin}")
                 log(
                     f"  expected_opacity_stripped={bool_to_csv(expected_opacity_stripped)} "
@@ -2176,6 +2245,18 @@ def main() -> int:
                 log(
                     f"  expected_upscaled={bool_to_csv(expected_upscaled)} actual_upscaled={bool_to_csv(upscaled_expected_main)}"
                 )
+
+                if upscaled_expected_main:
+                    log(
+                        f"  expected_upscaler_version={(expected_upscaler_version or '').strip() or '<missing>'} "
+                        f"actual_upscaler_version={current_upscaler_version}"
+                    )
+                    log(
+                        f"  expected_upscaler_type={(expected_upscaler_type or '').strip() or '<missing>'} "
+                        f"actual_upscaler_type={current_upscaler_type}"
+                    )
+                    log(f"  expected_upscaler_meta_present={bool_to_csv(expected_upscaler_meta_present)}")
+
                 deleted_mismatches += 1
             except Exception as e:
                 log(f"[FAIL MISMATCH] {ctxr_digest}  {ctxr.name} (delete error: {e})")
