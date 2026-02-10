@@ -52,12 +52,13 @@ CHAINNER_EXE = Path(r"C:\Users\cmkoo\AppData\Local\chaiNNer\chaiNNer.exe")
 CHAINNER_PROJECT_2X = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\2x Upscaling.chn")
 CHAINNER_PROJECT_4X = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\4x Upscaling.chn")
 
-CHAINNER_PROJECT_2X_STRIPPED_OPACITY = Path(
-    r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\2x Upscaling - Strip Alpha.chn"
-)
-CHAINNER_PROJECT_4X_STRIPPED_OPACITY = Path(
-    r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\4x Upscaling - Strip Alpha.chn"
-)
+CHAINNER_PROJECT_2X_STRIPPED_OPACITY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\2x Upscaling - Strip Alpha.chn")
+CHAINNER_PROJECT_4X_STRIPPED_OPACITY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\4x Upscaling - Strip Alpha.chn")
+
+#0 = v1 release
+#1 = corrected opaque texture alpha stripping for upscaling
+#2 = wavelet color fix!!!!! oh dang
+UPSCALE_PROCESS_VERSION = "2" 
 
 CSV_FLUSH_SECONDS = 5.0
 
@@ -125,7 +126,7 @@ def get_chainner_project_for_staging(stripped_opacity: bool) -> Path:
 
 def get_current_upscaler_metadata_for_run(is_upscaled_run: bool) -> tuple[str, str]:
     if is_upscaled_run:
-        return ("1", "remarci_4x")
+        return (UPSCALE_PROCESS_VERSION, "remarci_4x")
     return ("0", "none")
 
 
