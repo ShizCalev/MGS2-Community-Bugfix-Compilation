@@ -1,7 +1,4 @@
 texture_name
-0051b133
-006baeb5
-006d97ed
 1wallSh_alp_ovl.bmp
 1wallSh_alp_ovl.bmp_0632d8b69677918c5ecab5a7bf5e3589
 angle_alp_ovl.bmp
@@ -16,7 +13,6 @@ d00a_wire_alp_ovl.bmp
 d_sky_hasira_alp.bmp
 dammydoll_alp.bmp
 debug_font_alp_ovl.bmp
-densou_font_alp_ovl.bmp
 dogtag_chain_black_msk.bmp
 dogtag_tx_alp.bmp
 e_sky_cld_sun_01_alp.bmp
@@ -32,8 +28,6 @@ flare3_msk.bmp
 flare4_msk.bmp
 flare_ri_msk.bmp
 fog_alp.bmp
-font_alp_ovl.bmp
-font_mini_alp_ovl.bmp
 frost02_alp.bmp
 gasmask_alp.bmp
 gno_para_himo_ovl_alp.bmp
@@ -41,7 +35,6 @@ gray_128_128_add_alp.bmp
 gray_128_192_alp_ovl.bmp
 heart_alp.bmp
 heart_msk.bmp
-kmo_droppings01_alp.bmp
 list1_alp_ovl.bmp
 list2_alp_ovl.bmp
 list3_alp_ovl.bmp
@@ -125,14 +118,10 @@ sp25a_sdw_dan02_9_alp_ovl.bmp
 stg00_alp_ovl.bmp
 stg_rabel_alp_ovl.bmp
 svc_bonbori_alp.bmp
-tag1_alp_ovl.bmp
-tag2_alp_ovl.bmp
-tag3_alp_ovl.bmp
 tnc_gost_body_b_ovl_alp.bmp
 tnc_gost_body_c_ovl_alp.bmp
 tnc_gost_face_b_ovl_alp.bmp
 tnc_gost_hair_ovl_alp.bmp
-usa_met_ovl_sub_alp.bmp
 vr2_dmm_sub_alp_ovl.bmp
 vr2_noise_b1_alp.bmp
 vr2_pitfall_a0_add_alp.bmp

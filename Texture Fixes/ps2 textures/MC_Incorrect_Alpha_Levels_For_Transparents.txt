@@ -3162,6 +3162,9 @@ HAS ALPHA
 	stin_alp_ovl.bmp
 	stun_alp_ovl.bmp
 	styp_alp_ovl.bmp
+	tag1_alp_ovl.bmp
+	tag2_alp_ovl.bmp
+	tag3_alp_ovl.bmp
 	tgl_alp_ovl.bmp
 	title_logo_blue_alp_ovl.bmp
 	title_logo_mono_alp_ovl.bmp

@@ -19,6 +19,12 @@ def check_file(ctxr_path: Path) -> Path | None:
         return ctxr_path
     return None
 
+def pause_and_exit(code: int = 1) -> None:
+    try:
+        input("\nPress ENTER to exit...")
+    except KeyboardInterrupt:
+        pass
+    raise SystemExit(code)
 
 def main():
     # Collect all .ctxr files first (single-threaded walk)
@@ -53,6 +59,7 @@ def main():
                 log.write(str(m) + "\n")
         print(f"\nMissing PNG entries logged to: {LOG_FILE}")
         print(f"Total missing: {len(missing)}")
+        pause_and_exit(1)
     else:
         print("No missing PNGs found.")
         if LOG_FILE.exists():

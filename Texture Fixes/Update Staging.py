@@ -36,6 +36,8 @@ UNPROCESSED_FOLDERS_CSV_NAME = "unprocessed_folders.csv"
 # Relative location of never_upscale.txt inside the git repo
 NEVER_UPSCALE_REL_PATH = Path("Texture Fixes") / "never_upscale.txt"
 
+FIND_UNCONVERTED_SCRIPT = SCRIPT_DIR / "mc textures" / "find unconverted.py"
+
 # ==========================================================
 # HARDCODED STAGING ROOTS
 # ==========================================================
@@ -78,12 +80,12 @@ BUILD_DIST_COPIES: list[Path] = [
     # Add more targets here
 ]
 
-def pause_and_exit(code: int = 1) -> int:
+def pause_and_exit(code: int = 1) -> None:
     try:
         input("\nPress ENTER to exit...")
     except KeyboardInterrupt:
         pass
-    return code
+    raise SystemExit(code)
 
 def _sha1_file(path: Path) -> str:
     h = hashlib.sha1()
@@ -134,6 +136,30 @@ def sync_build_dist_files() -> None:
         except OSError as e:
             print(f"[ERROR] Copy failed {BUILD_DIST_SOURCE} -> {dst}: {e}")
             pause_and_exit(1)
+
+def run_find_unconverted() -> None:
+    if not FIND_UNCONVERTED_SCRIPT.is_file():
+        print(f"[ERROR] Required pre-flight script missing: {FIND_UNCONVERTED_SCRIPT}")
+        pause_and_exit(1)
+
+    print("#################################################")
+    print(f"Running pre-flight check: {FIND_UNCONVERTED_SCRIPT}")
+    print("#################################################")
+
+    result = subprocess.run(
+        [sys.executable, str(FIND_UNCONVERTED_SCRIPT)],
+        cwd=str(SCRIPT_DIR),
+    )
+
+    if result.returncode == 1:
+        print("[ERROR] find unconverted.py reported unconverted textures. Aborting.")
+        pause_and_exit(1)
+
+    if result.returncode != 0:
+        print(f"[ERROR] find unconverted.py failed with exit code {result.returncode}")
+        pause_and_exit(result.returncode)
+
+    print("[INFO] Pre-flight check passed.")
 
 
 # ==========================================================
@@ -896,6 +922,9 @@ def write_self_remade_modified_dates() -> None:
 # MAIN
 # ==========================================================
 def main() -> None:
+    # verify no unconverted textures exist
+    run_find_unconverted()
+    
     # Ensure Build_Dist_Folders.py is synced into sibling repos
     sync_build_dist_files()
 
