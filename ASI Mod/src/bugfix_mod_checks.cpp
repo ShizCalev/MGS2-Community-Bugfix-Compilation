@@ -10,8 +10,8 @@
 
 //Community Bugfix hashes
 constexpr const char* CBFC_BASE_FLATLIST_WIN_COL_ORANGE2_CTXR_SHA1 = "11d03110d40b42adeafde2fa5f5cf65f27d6fc52";
-constexpr const char* CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "8a264048ed801ff00ca5477e9c721b6f42a38bda";
-constexpr const char* CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "ecf723350dac8790e01ee7470b3e45761e79a939";
+constexpr const char* CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "e3b5923c9ce88a173a49d26e3bb4de2b77303b50";
+constexpr const char* CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "33003443c78e1162ef71d4a4521f1c02ceb54f6c";
 
 
 constexpr const char* CBFC_2x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "89f56fb1822ba33148c42872fdfd6ead7278f912";
