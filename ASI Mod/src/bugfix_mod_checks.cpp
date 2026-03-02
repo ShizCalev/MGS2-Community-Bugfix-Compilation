@@ -14,8 +14,8 @@ constexpr const char* CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "e3b5923c9ce88a
 constexpr const char* CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "33003443c78e1162ef71d4a4521f1c02ceb54f6c";
 
 
-constexpr const char* CBFC_2x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "89f56fb1822ba33148c42872fdfd6ead7278f912";
-constexpr const char* CBFC_4x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "004e54e6d30a76394b2d801c60479fcf0c7bdb51";
+constexpr const char* CBFC_2x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "16d11c6f3800c098e4c7a643dc8b837136cce7be";
+constexpr const char* CBFC_4x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "a545a73f98a0e74ad58f6b56ddf87fea8a814635";
 
 
 
