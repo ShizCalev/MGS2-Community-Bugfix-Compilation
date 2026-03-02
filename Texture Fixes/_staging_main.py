@@ -55,14 +55,20 @@ CHAINNER_PROJECT_4X = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\T
 CHAINNER_PROJECT_2X_STRIPPED_OPACITY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\2x Upscaling - Strip Alpha.chn")
 CHAINNER_PROJECT_4X_STRIPPED_OPACITY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\4x Upscaling - Strip Alpha.chn")
 
-#0 = v1 release
-#1 = corrected opaque texture alpha stripping for upscaling
-#2 = wavelet color fix!!!!! oh dang
-UPSCALE_PROCESS_VERSION = "2" 
+# 0 = v1 release
+# 1 = corrected opaque texture alpha stripping for upscaling
+# 2 = wavelet color fix!!!!! oh dang
+UPSCALE_PROCESS_VERSION = "2"
 
 CSV_FLUSH_SECONDS = 5.0
 
 PRINT_LOCK = Lock()
+
+
+# ==========================================================
+# CTXR3 LAUNCH CONFIG
+# ==========================================================
+LAUNCH_CTXR3_PY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\_launch_ctxr3.py")
 
 
 def _clear_progress_line() -> None:
@@ -88,6 +94,15 @@ def pause_and_exit(code: int = 1) -> int:
     except KeyboardInterrupt:
         pass
     return code
+
+
+def has_any_uppercase(s: str) -> bool:
+    if not s:
+        return False
+    for ch in s:
+        if ch.isalpha() and ch.isupper():
+            return True
+    return False
 
 
 # ==========================================================
@@ -344,7 +359,6 @@ def image_is_fully_opaque_or_no_alpha(path: Path) -> bool:
         raise RuntimeError(f"Failed checking alpha opacity for {path}: {e}")
 
 
-
 # ==========================================================
 # DEMASTERED PS2 SOURCE REMAP HELPERS
 # ==========================================================
@@ -538,7 +552,7 @@ def origin_relative_to_required_subpath_or_die(image_path: Path) -> str:
     if idx < 0:
         raise RuntimeError(f'Image path does not contain REQUIRED_SUBPATH "{REQUIRED_SUBPATH}": {image_path}')
 
-    rel = full_str[idx + len(REQUIRED_SUBPATH) :]
+    rel = full_str[idx + len(REQUIRED_SUBPATH):]
     rel = rel.lstrip(r"\/")
 
     rel_folder = str(Path(rel).parent)
@@ -550,14 +564,15 @@ def origin_relative_to_required_subpath_or_die(image_path: Path) -> str:
 # LOAD / MAP CSV
 # mapping entry:
 # (before_hash, ctxr_hash, used_nomips_bool, origin_folder_string, opacity_stripped_bool, upscaled_bool,
-#  upscaler_version_str, upscaler_type_str, upscaler_meta_present_bool)
+#  upscaler_version_str, upscaler_type_str, upscaler_meta_present_bool, ctxr3_converted_bool,
+#  filename_has_uppercase_bool)
 #
 # NOTE: CSV mipmaps column means "has mipmaps". Internally we track "used_nomips".
 # ==========================================================
 def load_conversion_csv_unique_or_die(
     csv_path: Path,
 ) -> tuple[
-    dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool]],
+    dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool, bool, bool]],
     list[dict[str, str]],
     list[str],
     bool,
@@ -580,11 +595,14 @@ def load_conversion_csv_unique_or_die(
         header_has_upscaler_cols = ("upscaler_version" in header_lower) and ("upscaler_type" in header_lower)
 
         rows: list[dict[str, str]] = []
-        mapping: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool]] = {}
+        mapping: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool, bool, bool]] = {}
         duplicates: list[str] = []
 
         for row in rdr:
-            filename = (row.get("filename") or row.get("Filename") or row.get("FILENAME") or "").strip()
+            filename_raw = (row.get("filename") or row.get("Filename") or row.get("FILENAME") or "").strip()
+            filename_has_upper = has_any_uppercase(filename_raw)
+
+            filename = filename_raw
             before_hash = (row.get("before_hash") or row.get("Before_hash") or row.get("BEFORE_HASH") or "").strip().lower()
             ctxr_hash = (row.get("ctxr_hash") or row.get("Ctxr_hash") or row.get("CTXR_HASH") or "").strip().lower()
 
@@ -600,6 +618,8 @@ def load_conversion_csv_unique_or_die(
             ).strip()
             upscaler_type_raw = (row.get("upscaler_type") or row.get("Upscaler_type") or row.get("UPSCALER_TYPE") or "").strip()
 
+            ctxr3_converted_raw = (row.get("ctxr3_converted") or row.get("Ctxr3_converted") or row.get("CTXR3_CONVERTED") or "").strip()
+
             if not filename:
                 continue
 
@@ -613,6 +633,9 @@ def load_conversion_csv_unique_or_die(
                 upscaled = get_staging_upscaled_bool()
 
             upscaler_meta_present = bool(header_has_upscaler_cols and upscaler_version_raw and upscaler_type_raw)
+
+            # If the column is missing or blank, treat as false.
+            ctxr3_converted = bool_from_csv(ctxr3_converted_raw) if ctxr3_converted_raw else False
 
             name = filename.lower()
             if name in mapping:
@@ -628,6 +651,8 @@ def load_conversion_csv_unique_or_die(
                     upscaler_version_raw,
                     upscaler_type_raw,
                     upscaler_meta_present,
+                    ctxr3_converted,
+                    filename_has_upper,
                 )
 
             rows.append(row)
@@ -755,6 +780,238 @@ def hash_images_unique_or_die(
     return out_hash, out_origin, out_opacity_expected
 
 
+# ==========================================================
+# CTXR3 LAUNCH HELPERS
+# ==========================================================
+def _needs_ctxr3_conversion_nonupscaled(
+    stem_lower: str,
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool, bool, bool]],
+) -> bool:
+    entry = conversion_map.get(stem_lower)
+    if entry is None:
+        return True
+    ctxr3_converted = bool(entry[9])
+    return not ctxr3_converted
+
+
+# ==========================================================
+# CTXR3 LAUNCH HELPERS (DEMSTERED PS2 REMAP SAFE, SPLIT OPAQUE/NORMAL)
+# ==========================================================
+import hashlib as _hashlib
+
+
+CTX3R_PS2_TMP_ROOT_NAME = "_ctxr3_ps2_tmp"
+
+
+def _stable_dir_tag(path: Path) -> str:
+    b = str(path.resolve()).lower().encode("utf-8", errors="strict")
+    return _hashlib.sha1(b).hexdigest()[:12]
+
+
+def _is_under_path(child: Path, parent: Path) -> bool:
+    try:
+        child.resolve().relative_to(parent.resolve())
+        return True
+    except Exception:
+        return False
+
+
+def _safe_rmtree(path: Path) -> None:
+    try:
+        if path.exists():
+            shutil.rmtree(path)
+    except Exception as e:
+        log(f"[CTXR3 WARN] Failed deleting temp dir {path}: {e}")
+
+
+def _copy_ps2_sources_to_ctxr3_tmp_split_or_die(
+    ps2_images: list[Path],
+    tmp_root: Path,
+) -> tuple[Path, list[tuple[Path, Path]]]:
+    """
+    Copy ONLY the requested PS2 source images into fresh temp subfolders and return:
+      (batch_dir, [(run_cwd, representative_original_source_path), ...])
+
+    We must preserve "opaque" knowledge for _launch_ctxr3.py, which checks for "opaque"
+    in the path string. So we copy into:
+      tmp/<tag>/opaque/<filename.ext>
+      tmp/<tag>/normal/<filename.ext>
+
+    Then the caller runs _launch_ctxr3.py with cwd set to each subfolder that has files.
+    """
+    if not ps2_images:
+        raise RuntimeError("Internal error: _copy_ps2_sources_to_ctxr3_tmp_split_or_die called with 0 files")
+
+    src_dir = ps2_images[0].parent
+    tag = _stable_dir_tag(src_dir)
+    batch_dir = tmp_root / tag
+
+    if batch_dir.exists():
+        try:
+            shutil.rmtree(batch_dir)
+        except Exception as e:
+            raise RuntimeError(f"Failed clearing CTXR3 PS2 tmp batch dir: {batch_dir} ({e})")
+
+    opaque_dir = batch_dir / "opaque"
+    normal_dir = batch_dir / "normal"
+    opaque_dir.mkdir(parents=True, exist_ok=True)
+    normal_dir.mkdir(parents=True, exist_ok=True)
+
+    opaque_rep: Path | None = None
+    normal_rep: Path | None = None
+
+    copied = 0
+    for src in sorted(ps2_images, key=lambda p: p.name.lower()):
+        if not src.is_file():
+            raise RuntimeError(f"PS2 source does not exist: {src}")
+
+        is_opaque = ("opaque" in str(src).lower())
+        dst_parent = opaque_dir if is_opaque else normal_dir
+        dst = dst_parent / src.name.lower()
+
+        try:
+            shutil.copy2(src, dst)
+        except Exception as e:
+            raise RuntimeError(
+                "Failed copying PS2 source into CTXR3 tmp:\n"
+                f"  src={src}\n"
+                f"  dst={dst}\n"
+                f"  err={e}"
+            )
+
+        copied += 1
+        if is_opaque and opaque_rep is None:
+            opaque_rep = src
+        if (not is_opaque) and normal_rep is None:
+            normal_rep = src
+
+    out: list[tuple[Path, Path]] = []
+    if opaque_rep is not None:
+        out.append((opaque_dir, opaque_rep))
+    if normal_rep is not None:
+        out.append((normal_dir, normal_rep))
+
+    log(f"[CTXR3] Demastered PS2 tmp batch prepared: {batch_dir} ({copied} file(s))")
+    return (batch_dir, out)
+
+
+def _run_launch_ctxr3_or_die(
+    run_cwd: Path,
+    staging_folder: Path,
+    origin_override: str | None,
+) -> None:
+    target_dir_arg = str(staging_folder)
+
+    args = [
+        sys.executable,
+        str(LAUNCH_CTXR3_PY),
+        "-targetdir",
+        target_dir_arg,
+    ]
+
+    if origin_override:
+        args += ["-originfolder", origin_override]
+
+    try:
+        p = subprocess.run(
+            args,
+            cwd=str(run_cwd),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            encoding="utf8",
+            errors="replace",
+        )
+    except Exception as e:
+        raise RuntimeError(f"[CTXR3] Failed launching _launch_ctxr3.py in {run_cwd}: {e}")
+
+    out = (p.stdout or "").rstrip()
+    if out:
+        log("[CTXR3 आउट]")
+        log(out)
+
+    if p.returncode != 0:
+        raise RuntimeError(f"[CTXR3] _launch_ctxr3.py failed (rc={p.returncode}) in {run_cwd}")
+
+
+def launch_ctxr3_for_pending_or_die(
+    image_files: list[Path],
+    manual_ui_textures: set[str],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool, bool, bool]],
+    staging_folder: Path,
+) -> None:
+    # Only used for NON-upscaled runs.
+    if not LAUNCH_CTXR3_PY.is_file():
+        raise RuntimeError(f"_launch_ctxr3.py not found: {LAUNCH_CTXR3_PY}")
+
+    is_demastered_run = staging_folder_is_demastered()
+
+    tmp_root = staging_folder / CTX3R_PS2_TMP_ROOT_NAME
+    if is_demastered_run:
+        tmp_root.mkdir(parents=True, exist_ok=True)
+
+    by_dir: dict[Path, list[Path]] = {}
+
+    for img in image_files:
+        stem = img.stem.lower()
+        if stem not in manual_ui_textures:
+            continue
+
+        if not _needs_ctxr3_conversion_nonupscaled(stem, conversion_map):
+            continue
+
+        d = img.parent
+        if d not in by_dir:
+            by_dir[d] = []
+        by_dir[d].append(img)
+
+    if not by_dir:
+        # Nothing to do, but still nuke temp root if demastered.
+        if is_demastered_run:
+            _safe_rmtree(tmp_root)
+        return
+
+    log("[CTXR3] Launching ctxr3 conversion script for pending manual UI textures (NON-upscaled run).")
+
+    try:
+        # Deterministic ordering
+        for d in sorted(by_dir.keys(), key=lambda p: str(p).lower()):
+            imgs = by_dir[d]
+            stems = sorted({p.stem.lower() for p in imgs}, key=lambda s: s.lower())
+
+            log(f"[CTXR3] Batch source dir: {d}")
+            log(f"[CTXR3] Pending stems in this batch: {len(stems)}")
+
+            if is_demastered_run and _is_under_path(d, PS2_TEXTURES_ROOT):
+                batch_dir, runs = _copy_ps2_sources_to_ctxr3_tmp_split_or_die(imgs, tmp_root)
+
+                try:
+                    for run_cwd, rep_src in runs:
+                        origin_override = origin_relative_to_required_subpath_or_die(rep_src)
+
+                        log(f"[CTXR3] CWD: {run_cwd}")
+                        _run_launch_ctxr3_or_die(
+                            run_cwd=run_cwd,
+                            staging_folder=staging_folder,
+                            origin_override=origin_override,
+                        )
+                finally:
+                    _safe_rmtree(batch_dir)
+
+                continue
+
+            # Normal case: run in-place
+            log(f"[CTXR3] CWD: {d}")
+            _run_launch_ctxr3_or_die(
+                run_cwd=d,
+                staging_folder=staging_folder,
+                origin_override=None,
+            )
+
+    finally:
+        if is_demastered_run:
+            _safe_rmtree(tmp_root)
+            
 # ==========================================================
 # PARAM EXPORT HELPERS
 # ==========================================================
@@ -1089,7 +1346,7 @@ def _dims_within_factor_wiggle(before: tuple[int, int], after: tuple[int, int], 
 
 def run_nvtt_exports_or_die(
     image_files: list[Path],
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool, bool, bool]],
     image_hash_by_name: dict[str, str],
     image_origin_by_name: dict[str, str],
     image_used_nomips_by_name: dict[str, bool],
@@ -1118,17 +1375,26 @@ def run_nvtt_exports_or_die(
 
     # ==========================================================
     # Build missing list.
-    # For NON-upscaled runs, SKIP "self remade" images that would
-    # use DPF_NOMIPS (manual handling required).
-    # For upscaled runs, DO NOT skip them; treat them like normal
-    # NO-MIPS images so they can go through the pipeline.
+    # For NON-upscaled runs:
+    #   - SKIP manual_ui_textures entirely (ctxr3 pipeline handles these).
+    #   - SKIP "self remade" images that would use DPF_NOMIPS (manual handling required).
+    # For upscaled runs:
+    #   - DO NOT skip self-remade nomips; treat like normal NO-MIPS images.
+    #   - manual_ui_textures are treated as normal (but forced to mipmaps=true in this pipeline).
     # ==========================================================
     missing: list[Path] = []
+    skipped_manual_ui_nonupscaled: list[Path] = []
     skipped_self_remade_nomips: list[Path] = []
     not_yet_converted_paths: list[Path] = []
 
     for img in image_files:
         name = img.stem.lower()
+
+        # NON-upscaled runs: these are expected to be handled by the ctxr3 conversion script.
+        if (not upscaled_expected) and (name in manual_ui_textures):
+            skipped_manual_ui_nonupscaled.append(img)
+            continue
+
         if name in conversion_map:
             continue
 
@@ -1149,6 +1415,9 @@ def run_nvtt_exports_or_die(
 
         missing.append(img)
 
+    if skipped_manual_ui_nonupscaled:
+        log(f"[PARAM] Skipping {len(skipped_manual_ui_nonupscaled)} manual UI texture(s) in NON-upscaled run (ctxr3 pipeline).")
+
     if not_yet_converted_paths:
         write_not_yet_converted_txt(STAGING_FOLDER, not_yet_converted_paths)
         log(f"[PARAM] Wrote {NOT_YET_CONVERTED_TXT} with {len(not_yet_converted_paths)} path(s)")
@@ -1156,10 +1425,7 @@ def run_nvtt_exports_or_die(
         remove_not_yet_converted_txt_if_exists(STAGING_FOLDER)
 
     if skipped_self_remade_nomips:
-        log(f"[PARAM] Skipping {len(skipped_self_remade_nomips)} self-remade image(s) that require NO-MIPS (manual handling required):")
-        for p in sorted(skipped_self_remade_nomips, key=lambda x: x.name.lower()):
-            log(f"  [SKIP SELF-REMADE NOMIPS] {p}")
-        log("")
+        log(f"[PARAM] Skipping {len(skipped_self_remade_nomips)} self-remade image(s) that require NO-MIPS (manual handling required).")
 
     error_log = STAGING_FOLDER / ERROR_LOG_PATH
 
@@ -1168,16 +1434,6 @@ def run_nvtt_exports_or_die(
         remove_error_log_if_exists(error_log)
         return
 
-    # ==========================================================
-    # For upscaled staging folders:
-    #   - Split into two chains:
-    #       * normal chain: _upscaling + normal chaiNNer project
-    #       * alpha chain : _upscaling_alpha_stripped + strip-alpha chaiNNer project
-    #   - Keep existing logic:
-    #       * python pre-strip step stays (applies to alpha chain only)
-    #       * dims-before, dims-after, factor validation, failure cleanup
-    #       * swap to upscaled copies, then POT resave
-    # ==========================================================
     if upscaled_expected:
         log("[UPSCALE] Staging folder is an upscaled variant (2x/4x).")
         log(f"[UPSCALE] Preparing {len(missing)} image(s) for external upscaling.")
@@ -1201,7 +1457,7 @@ def run_nvtt_exports_or_die(
         if chain_alpha:
             mapping_alpha = copy_images_for_upscaling_or_die(chain_alpha, UPSCALE_STAGING_DIR_STRIPPED_OPACITY)
 
-            # Opacity stripping BEFORE chaiNNer on the copied paths (same logic as before).
+            # Opacity stripping BEFORE chaiNNer on the copied paths.
             for orig, ups in list(mapping_alpha.items()):
                 stem_lower = orig.stem.lower()
                 opacity_expected = image_opacity_expected_by_name.get(stem_lower, False)
@@ -1352,6 +1608,7 @@ def run_nvtt_exports_or_die(
         "upscaled",
         "upscaler_version",
         "upscaler_type",
+        "ctxr3_converted",
     ]
     conversion_header = ensure_csv_header_has_columns(list(conversion_header), needed_cols)
 
@@ -1608,6 +1865,7 @@ def run_nvtt_exports_or_die(
             uv = (r.get("upscaler_version") or "").strip()
             ut = (r.get("upscaler_type") or "").strip()
             meta_present = bool(uv and ut)
+            ctxr3_converted_val = bool_from_csv((r.get("ctxr3_converted") or "").strip()) if (r.get("ctxr3_converted") or "").strip() else False
 
             conversion_map[name] = (
                 (r.get("before_hash") or "").lower(),
@@ -1619,6 +1877,8 @@ def run_nvtt_exports_or_die(
                 uv,
                 ut,
                 meta_present,
+                ctxr3_converted_val,
+                False,  # filename_has_uppercase: our pipeline always writes lowercase
             )
 
         log(f"[CSV] Appended {len(pending_rows)} row(s)")
@@ -1648,6 +1908,7 @@ def run_nvtt_exports_or_die(
                         "upscaled": bool_to_csv(upscaled_expected),
                         "upscaler_version": upscaler_version,
                         "upscaler_type": upscaler_type,
+                        "ctxr3_converted": "false",
                     }
                 )
             else:
@@ -1686,7 +1947,7 @@ def prune_csv_entries_missing_staged_ctxr(
     conversion_csv_path: Path,
     conversion_header: list[str],
     conversion_rows: list[dict[str, str]],
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, bool, bool, bool]],
 ) -> int:
     staged_ctxr_stems: set[str] = set()
     for p in STAGING_FOLDER.iterdir():
@@ -1800,6 +2061,7 @@ def main() -> int:
                 "upscaled",
                 "upscaler_version",
                 "upscaler_type",
+                "ctxr3_converted",
             ]
 
         needed_cols = [
@@ -1812,15 +2074,18 @@ def main() -> int:
             "upscaled",
             "upscaler_version",
             "upscaler_type",
+            "ctxr3_converted",
         ]
         conversion_header = ensure_csv_header_has_columns(list(conversion_header), needed_cols)
 
+        # Detect missing columns
         with conversion_csv.open("r", encoding="utf8", newline="") as f:
             rdr = csv.reader(f)
             first = next(rdr, None)
         if first is None:
             raise RuntimeError(f"{CONVERSION_CSV} is empty or unreadable")
         file_header_lower = [h.strip().lower() for h in first]
+
         if any(col.lower() not in file_header_lower for col in needed_cols):
             if not is_upscaled_run:
                 for row in conversion_rows:
@@ -1834,10 +2099,88 @@ def main() -> int:
                         row["upscaler_version"] = ""
                     if "upscaler_type" not in row:
                         row["upscaler_type"] = ""
+
+            for row in conversion_rows:
+                if "ctxr3_converted" not in row or not (row.get("ctxr3_converted") or "").strip():
+                    row["ctxr3_converted"] = "false"
+
             write_conversion_csv_atomic(conversion_csv, conversion_header, conversion_rows)
             log(f"[CSV] Rewrote {CONVERSION_CSV} to add missing columns")
 
             conversion_map, conversion_rows, conversion_header, header_has_upscaler_cols = load_conversion_csv_unique_or_die(conversion_csv)
+
+        # ==========================================================
+        # CASE RULE: Any CSV row whose "filename" contains uppercase is a mismatch.
+        # Also: any staged CTXR filename containing uppercase is a mismatch.
+        # We handle both before any other keep/delete decisions.
+        # ==========================================================
+        case_mismatch_names: set[str] = set()
+
+        for name, entry in conversion_map.items():
+            filename_has_upper = bool(entry[10])
+            if filename_has_upper:
+                case_mismatch_names.add(name)
+
+        staged_ctxr_case_bad: list[Path] = []
+        staged_ctxr_all: list[Path] = sorted(
+            [p for p in STAGING_FOLDER.iterdir() if p.is_file() and p.suffix.lower() == ".ctxr"],
+            key=lambda p: p.name.lower(),
+        )
+        for p in staged_ctxr_all:
+            if has_any_uppercase(p.name):
+                staged_ctxr_case_bad.append(p)
+                case_mismatch_names.add(p.stem.lower())
+
+        if staged_ctxr_case_bad:
+            delete_failures = 0
+            for p in staged_ctxr_case_bad:
+                try:
+                    p.unlink()
+                    log(f"[DEL CASE-MISMATCH] {p.name}")
+                except Exception as e:
+                    log(f"[FAIL CASE-MISMATCH] {p.name} (delete error: {e})")
+                    delete_failures += 1
+            if delete_failures:
+                return pause_and_exit(1)
+
+        if case_mismatch_names:
+            pruned_rows: list[dict[str, str]] = []
+            removed = 0
+
+            for row in conversion_rows:
+                filename_raw = (row.get("filename") or row.get("Filename") or row.get("FILENAME") or "").strip()
+                filename_lower = filename_raw.lower()
+                if filename_lower and filename_lower in case_mismatch_names:
+                    removed += 1
+                    continue
+                pruned_rows.append(row)
+
+            if removed:
+                conversion_rows[:] = pruned_rows
+
+                for k in list(conversion_map.keys()):
+                    if k in case_mismatch_names:
+                        del conversion_map[k]
+
+                write_conversion_csv_atomic(conversion_csv, conversion_header, conversion_rows)
+                log(f"[CSV] Removed {removed} row(s) from {CONVERSION_CSV} due to uppercase filename mismatch")
+
+            # Also delete any remaining staged CTXR for these stems (lowercase versions too).
+            delete_failures = 0
+            deleted = 0
+            for stem in sorted(case_mismatch_names):
+                ctxr_path = STAGING_FOLDER / f"{stem}.ctxr"
+                if ctxr_path.is_file():
+                    try:
+                        ctxr_path.unlink()
+                        log(f"[DEL CASE-MISMATCH] {ctxr_path.name}")
+                        deleted += 1
+                    except Exception as e:
+                        log(f"[FAIL CASE-MISMATCH] {ctxr_path.name} (delete error: {e})")
+                        delete_failures += 1
+
+            if delete_failures:
+                return pause_and_exit(1)
 
         if is_upscaled_run and never_upscale_stems:
             never_names_lower = {s.lower() for s in never_upscale_stems}
@@ -1894,6 +2237,8 @@ def main() -> int:
             csv_upscaler_version,
             csv_upscaler_type,
             csv_upscaler_meta_present,
+            csv_ctxr3_converted,
+            csv_filename_has_upper,
         ) in conversion_map.items():
             img_before = image_hash_by_name.get(name)
             img_origin = image_origin_by_name.get(name)
@@ -1901,6 +2246,11 @@ def main() -> int:
             img_opacity_expected = image_opacity_expected_by_name.get(name)
 
             if img_before is None or img_origin is None or img_used_nomips is None or img_opacity_expected is None:
+                continue
+
+            # Any uppercase in CSV filename is a hard mismatch.
+            if csv_filename_has_upper:
+                early_mismatch_names.add(name)
                 continue
 
             origin_ok = (str(csv_origin).strip().lower() == str(img_origin).strip().lower())
@@ -1920,7 +2270,12 @@ def main() -> int:
                 ut = (csv_upscaler_type or "").strip() or "none"
                 upscaler_ok = (uv == "0" and ut == "none")
 
-            if not (origin_ok and mip_ok and before_ok and opacity_ok and upscaled_ok and upscaler_ok):
+            # NON-upscaled runs: manual_ui_textures must have ctxr3_converted=true
+            ctxr3_ok = True
+            if (not upscaled_expected_main) and (name in manual_ui_textures):
+                ctxr3_ok = (csv_ctxr3_converted is True)
+
+            if not (origin_ok and mip_ok and before_ok and opacity_ok and upscaled_ok and upscaler_ok and ctxr3_ok):
                 early_mismatch_names.add(name)
 
         delete_failures = 0
@@ -2021,6 +2376,17 @@ def main() -> int:
                 conversion_rows=conversion_rows,
                 conversion_header=conversion_header,
             )
+
+            # After we've handled the CSV for everything we can in non-upscaled runs, kick ctxr3 where needed.
+            if not is_upscaled_run:
+                conversion_map2, _rows2, _hdr2, _ = load_conversion_csv_unique_or_die(conversion_csv)
+                launch_ctxr3_for_pending_or_die(
+                    image_files=image_files,
+                    manual_ui_textures=manual_ui_textures,
+                    conversion_map=conversion_map2,
+                    staging_folder=STAGING_FOLDER,
+                )
+
             return 0
 
         ctxr_hash_by_path = hash_ctxr_files_with_progress(ctxr_files, workers, "Hash ctxr")
@@ -2031,6 +2397,12 @@ def main() -> int:
         mismatched_names: set[str] = set()
 
         for ctxr in ctxr_files:
+            # Any uppercase in CTXR filename is a hard mismatch.
+            if has_any_uppercase(ctxr.name):
+                mismatches.append(ctxr)
+                mismatched_names.add(ctxr.stem.lower())
+                continue
+
             name = ctxr.stem.lower()
             ctxr_digest = ctxr_hash_by_path[ctxr].lower()
 
@@ -2049,7 +2421,15 @@ def main() -> int:
                 expected_upscaler_version,
                 expected_upscaler_type,
                 expected_upscaler_meta_present,
+                expected_ctxr3_converted,
+                expected_filename_has_upper,
             ) = conversion_map[name]
+
+            # Any uppercase in CSV filename is a hard mismatch.
+            if expected_filename_has_upper:
+                mismatches.append(ctxr)
+                mismatched_names.add(name)
+                continue
 
             current_origin = image_origin_by_name.get(name, "")
             current_used_nomips = image_used_nomips_by_name.get(name, False)
@@ -2073,7 +2453,12 @@ def main() -> int:
                 ut = (expected_upscaler_type or "").strip() or "none"
                 upscaler_ok = (uv == "0" and ut == "none")
 
-            if before_ok and ctxr_ok and mip_ok and origin_ok and opacity_ok and upscaled_ok and upscaler_ok:
+            # NON-upscaled runs: manual_ui_textures must have ctxr3_converted=true
+            ctxr3_ok = True
+            if (not upscaled_expected_main) and (name in manual_ui_textures):
+                ctxr3_ok = (expected_ctxr3_converted is True)
+
+            if before_ok and ctxr_ok and mip_ok and origin_ok and opacity_ok and upscaled_ok and upscaler_ok and ctxr3_ok:
                 keeps.append(ctxr)
             else:
                 mismatches.append(ctxr)
@@ -2099,39 +2484,62 @@ def main() -> int:
 
         for ctxr in mismatches:
             name = ctxr.stem.lower()
-            ctxr_digest = (ctxr_hash_by_path[ctxr] or "").lower()
+            ctxr_digest = (ctxr_hash_by_path.get(ctxr) or "").lower()
 
             img_digest = (image_hash_by_name.get(name) or "").lower()
             current_origin = image_origin_by_name.get(name, "")
             current_used_nomips = image_used_nomips_by_name.get(name, False)
             current_opacity_expected = image_opacity_expected_by_name.get(name, False)
 
-            (
-                expected_before,
-                expected_ctxr,
-                expected_used_nomips,
-                expected_origin,
-                expected_opacity_stripped,
-                expected_upscaled,
-                expected_upscaler_version,
-                expected_upscaler_type,
-                expected_upscaler_meta_present,
-            ) = conversion_map[name]
+            expected_before = ""
+            expected_ctxr = ""
+            expected_used_nomips = False
+            expected_origin = ""
+            expected_opacity_stripped = False
+            expected_upscaled = upscaled_expected_main
+            expected_upscaler_version = ""
+            expected_upscaler_type = ""
+            expected_upscaler_meta_present = False
+            expected_ctxr3_converted = False
+            expected_filename_has_upper = False
+
+            if name in conversion_map:
+                (
+                    expected_before,
+                    expected_ctxr,
+                    expected_used_nomips,
+                    expected_origin,
+                    expected_opacity_stripped,
+                    expected_upscaled,
+                    expected_upscaler_version,
+                    expected_upscaler_type,
+                    expected_upscaler_meta_present,
+                    expected_ctxr3_converted,
+                    expected_filename_has_upper,
+                ) = conversion_map[name]
 
             try:
                 ctxr.unlink()
                 log(f"[DEL MISMATCH] {ctxr_digest}  {ctxr.name}")
-                log(f"  expected_before={expected_before} actual_image={img_digest}")
-                log(f"  expected_ctxr  ={expected_ctxr} actual_ctxr ={ctxr_digest}")
-                log(f"  expected_mipmaps={bool_to_csv(not expected_used_nomips)} actual_mipmaps={bool_to_csv(not current_used_nomips)}")
-                log(f"  expected_origin={expected_origin} actual_origin={current_origin}")
-                log(f"  expected_opacity_stripped={bool_to_csv(expected_opacity_stripped)} actual_opacity_stripped={bool_to_csv(current_opacity_expected)}")
-                log(f"  expected_upscaled={bool_to_csv(expected_upscaled)} actual_upscaled={bool_to_csv(upscaled_expected_main)}")
 
-                if upscaled_expected_main:
-                    log(f"  expected_upscaler_version={(expected_upscaler_version or '').strip() or '<missing>'} actual_upscaler_version={current_upscaler_version}")
-                    log(f"  expected_upscaler_type={(expected_upscaler_type or '').strip() or '<missing>'} actual_upscaler_type={current_upscaler_type}")
-                    log(f"  expected_upscaler_meta_present={bool_to_csv(expected_upscaler_meta_present)}")
+                # If this is a case-based mismatch, be explicit.
+                if has_any_uppercase(ctxr.name) or expected_filename_has_upper:
+                    log("  reason=uppercase filename mismatch (CSV and/or CTXR)")
+                else:
+                    log(f"  expected_before={expected_before} actual_image={img_digest}")
+                    log(f"  expected_ctxr  ={expected_ctxr} actual_ctxr ={ctxr_digest}")
+                    log(f"  expected_mipmaps={bool_to_csv(not expected_used_nomips)} actual_mipmaps={bool_to_csv(not current_used_nomips)}")
+                    log(f"  expected_origin={expected_origin} actual_origin={current_origin}")
+                    log(f"  expected_opacity_stripped={bool_to_csv(expected_opacity_stripped)} actual_opacity_stripped={bool_to_csv(current_opacity_expected)}")
+                    log(f"  expected_upscaled={bool_to_csv(expected_upscaled)} actual_upscaled={bool_to_csv(upscaled_expected_main)}")
+
+                    if upscaled_expected_main:
+                        log(f"  expected_upscaler_version={(expected_upscaler_version or '').strip() or '<missing>'} actual_upscaler_version={current_upscaler_version}")
+                        log(f"  expected_upscaler_type={(expected_upscaler_type or '').strip() or '<missing>'} actual_upscaler_type={current_upscaler_type}")
+                        log(f"  expected_upscaler_meta_present={bool_to_csv(expected_upscaler_meta_present)}")
+
+                    if (not upscaled_expected_main) and (name in manual_ui_textures):
+                        log(f"  expected_ctxr3_converted=true actual_ctxr3_converted={bool_to_csv(expected_ctxr3_converted)}")
 
                 deleted_mismatches += 1
             except Exception as e:
@@ -2186,6 +2594,16 @@ def main() -> int:
             conversion_rows=conversion_rows,
             conversion_header=conversion_header,
         )
+
+        # After we've handled the CSV for everything we can in non-upscaled runs, kick ctxr3 where needed.
+        if not is_upscaled_run:
+            conversion_map2, _rows2, _hdr2, _ = load_conversion_csv_unique_or_die(conversion_csv)
+            launch_ctxr3_for_pending_or_die(
+                image_files=image_files,
+                manual_ui_textures=manual_ui_textures,
+                conversion_map=conversion_map2,
+                staging_folder=STAGING_FOLDER,
+            )
 
         return 0
 

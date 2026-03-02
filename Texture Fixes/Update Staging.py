@@ -3,9 +3,11 @@ from __future__ import annotations
 import csv
 import hashlib
 import os
+import re
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -39,6 +41,27 @@ NEVER_UPSCALE_REL_PATH = Path("Texture Fixes") / "never_upscale.txt"
 FIND_UNCONVERTED_SCRIPT = SCRIPT_DIR / "mc textures" / "find unconverted.py"
 
 # ==========================================================
+# PRE-FLIGHT VALIDATION (manual_ui_textures vs no_mip_regex)
+# ==========================================================
+MANUAL_UI_TEXTURES_TXT = Path(
+    r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_ui_textures.txt"
+)
+NO_MIP_REGEX_TXT = Path(
+    r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\no_mip_regex.txt"
+)
+
+# ==========================================================
+# CTXR3 WAITING
+# ==========================================================
+# If _launch_ctxr3.py spawns CTXR3 and exits, we must wait here.
+WAIT_FOR_CTXR3_EXE_NAMES = [
+    "ctxr3.exe",
+]
+
+CTXR3_WAIT_POLL_SECONDS = 1.0
+
+
+# ==========================================================
 # HARDCODED STAGING ROOTS
 # ==========================================================
 BUGFIX_ROOT = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes")
@@ -50,16 +73,13 @@ STAGING_ROOTS: list[Path] = [
     BUGFIX_ROOT / "Staging",
     BUGFIX_ROOT / "Staging - 2x Upscaled",
     BUGFIX_ROOT / "Staging - 4x Upscaled",
-
     # Demastered pack
     DEMASTER_ROOT / "Staging",
     DEMASTER_ROOT / "Staging - 2x Upscaled",
     DEMASTER_ROOT / "Staging - 4x Upscaled",
-
     DEMASTER_ROOT / "Staging - UI",
     DEMASTER_ROOT / "Staging - UI - 2x Upscaled",
     DEMASTER_ROOT / "Staging - UI - 4x Upscaled",
-
     # Upscaled UI pack (2x / 4x only)
     UPSCALED_UI_ROOT / "Staging - 2x Upscaled",
     UPSCALED_UI_ROOT / "Staging - 4x Upscaled",
@@ -80,6 +100,7 @@ BUILD_DIST_COPIES: list[Path] = [
     # Add more targets here
 ]
 
+
 def pause_and_exit(code: int = 1) -> None:
     try:
         input("\nPress ENTER to exit...")
@@ -87,12 +108,138 @@ def pause_and_exit(code: int = 1) -> None:
         pass
     raise SystemExit(code)
 
+
 def _sha1_file(path: Path) -> str:
     h = hashlib.sha1()
     with path.open("rb") as f:
         for chunk in iter(lambda: f.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+# ==========================================================
+# PRE-FLIGHT VALIDATION HELPERS
+# ==========================================================
+def _read_noncomment_lines(path: Path) -> list[str]:
+    """
+    Read text file lines, stripping whitespace.
+    Ignores empty lines and lines starting with '#'.
+    """
+    if not path.is_file():
+        print(f"[ERROR] Required file missing: {path}")
+        pause_and_exit(1)
+
+    out: list[str] = []
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            for line in f:
+                raw = line.strip()
+                if not raw or raw.startswith("#"):
+                    continue
+                out.append(raw)
+    except OSError as e:
+        print(f"[ERROR] Failed to read {path}: {e}")
+        pause_and_exit(1)
+
+    return out
+
+
+def load_manual_ui_stems(manual_ui_textures_txt: Path) -> set[str]:
+    """
+    Load stems from manual_ui_textures.txt.
+
+    IMPORTANT:
+    - Each non-comment line is already the exact stem string.
+    - Do NOT strip extensions via Path(...).stem or any other parsing.
+    """
+    stems: set[str] = set()
+
+    if not manual_ui_textures_txt.is_file():
+        print(f"[ERROR] Required file missing: {manual_ui_textures_txt}")
+        pause_and_exit(1)
+
+    try:
+        with manual_ui_textures_txt.open("r", encoding="utf-8") as f:
+            for line in f:
+                raw = line.strip()
+                if not raw or raw.startswith("#"):
+                    continue
+                stems.add(raw.lower())
+    except OSError as e:
+        print(f"[ERROR] Failed to read {manual_ui_textures_txt}: {e}")
+        pause_and_exit(1)
+
+    return stems
+
+
+def load_no_mip_regexes(no_mip_regex_txt: Path) -> list[re.Pattern[str]]:
+    """
+    Load regex patterns from no_mip_regex.txt.
+    Ignores empty/comment lines.
+    Compiles with IGNORECASE.
+    """
+    patterns: list[re.Pattern[str]] = []
+
+    if not no_mip_regex_txt.is_file():
+        print(f"[ERROR] Required file missing: {no_mip_regex_txt}")
+        pause_and_exit(1)
+
+    try:
+        with no_mip_regex_txt.open("r", encoding="utf-8") as f:
+            for line in f:
+                raw = line.strip()
+                if not raw or raw.startswith("#"):
+                    continue
+                try:
+                    patterns.append(re.compile(raw, re.IGNORECASE))
+                except re.error as e:
+                    print(f"[ERROR] Invalid regex in {no_mip_regex_txt}: '{raw}' ({e})")
+                    pause_and_exit(1)
+    except OSError as e:
+        print(f"[ERROR] Failed to read {no_mip_regex_txt}: {e}")
+        pause_and_exit(1)
+
+    return patterns
+
+
+def verify_manual_ui_covered_by_no_mip_regex() -> None:
+    """
+    Verify every stem listed in manual_ui_textures.txt is matched by at least one regex in no_mip_regex.txt.
+    Aborts if any are not covered.
+    """
+    stems = load_manual_ui_stems(MANUAL_UI_TEXTURES_TXT)
+    regexes = load_no_mip_regexes(NO_MIP_REGEX_TXT)
+
+    if not stems:
+        print(f"[WARN] No stems found in {MANUAL_UI_TEXTURES_TXT}. Skipping coverage validation.")
+        return
+
+    if not regexes:
+        print(f"[ERROR] No regex patterns found in {NO_MIP_REGEX_TXT}. Cannot validate coverage.")
+        pause_and_exit(1)
+
+    missing: list[str] = []
+    for stem in sorted(stems):
+        matched = False
+        for rx in regexes:
+            if rx.search(stem) is not None:
+                matched = True
+                break
+        if not matched:
+            missing.append(stem)
+
+    if missing:
+        print("#################################################")
+        print("[ERROR] manual_ui_textures.txt contains stem(s) not covered by no_mip_regex.txt:")
+        print(f"  Manual list: {MANUAL_UI_TEXTURES_TXT}")
+        print(f"  Regex list:  {NO_MIP_REGEX_TXT}")
+        print("  Missing coverage for:")
+        for s in missing:
+            print(f"    - {s}")
+        print("#################################################")
+        pause_and_exit(1)
+
+    print(f"[INFO] Pre-flight ok: {len(stems)} manual_ui stem(s) are covered by no_mip_regex.txt")
 
 
 def sync_build_dist_files() -> None:
@@ -137,6 +284,7 @@ def sync_build_dist_files() -> None:
             print(f"[ERROR] Copy failed {BUILD_DIST_SOURCE} -> {dst}: {e}")
             pause_and_exit(1)
 
+
 def run_find_unconverted() -> None:
     if not FIND_UNCONVERTED_SCRIPT.is_file():
         print(f"[ERROR] Required pre-flight script missing: {FIND_UNCONVERTED_SCRIPT}")
@@ -160,6 +308,60 @@ def run_find_unconverted() -> None:
         pause_and_exit(result.returncode)
 
     print("[INFO] Pre-flight check passed.")
+
+
+# ==========================================================
+# CTXR3 PROCESS WAIT HELPERS
+# ==========================================================
+def _tasklist_text() -> str:
+    try:
+        out = subprocess.check_output(
+            ["tasklist"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+        return out
+    except Exception:
+        return ""
+
+
+def is_process_running_any(exe_names: list[str]) -> bool:
+    """
+    Returns True if any process in exe_names is currently running.
+    Uses tasklist (Windows).
+    """
+    tl = _tasklist_text().lower()
+    if not tl:
+        return False
+
+    for n in exe_names:
+        nn = (n or "").strip().lower()
+        if not nn:
+            continue
+        if nn in tl:
+            return True
+
+    return False
+
+
+def wait_for_processes_to_exit(exe_names: list[str], context: str) -> None:
+    """
+    Block until none of the exe_names are running.
+    """
+    if not exe_names:
+        return
+
+    if not is_process_running_any(exe_names):
+        return
+
+    print(f"[WAIT] Detected running process(es) {exe_names} after {context}. Waiting for them to exit...")
+
+    while is_process_running_any(exe_names):
+        time.sleep(CTXR3_WAIT_POLL_SECONDS)
+
+    print(f"[WAIT] All {exe_names} have exited. Continuing.")
 
 
 # ==========================================================
@@ -193,6 +395,7 @@ def get_git_root() -> Path:
         pause_and_exit(1)
 
     return root
+
 
 def _normalize_newlines(b: bytes) -> bytes:
     # Treat CRLF/LF as equivalent so Windows newline differences don't force rewrites
@@ -245,8 +448,6 @@ def load_dimensions_names(dimensions_csv: Path) -> dict[str, str]:
 
     Returns dict:
         logical_name_lower (full filename including .bmp) -> original texture_name
-
-    CSV vs CSV comparisons are done on this full logical name, case insensitive.
     """
     if not dimensions_csv.is_file():
         print(f"ERROR: Dimensions CSV not found at: {dimensions_csv}")
@@ -278,9 +479,6 @@ def build_ps2_texture_index(ps2_root: Path) -> dict[str, Path]:
     """
     Index all .tga and .png files under 'Texture Fixes/ps2 textures',
     mapping lowercase Path(path).stem -> full path.
-
-    For filenames like 'w03b_ent01.bmp.tga', Path(...).stem.lower() is 'w03b_ent01.bmp',
-    which matches your logical name.
     """
     if not ps2_root.is_dir():
         print(f"WARNING: PS2 textures root does not exist: {ps2_root}")
@@ -304,10 +502,7 @@ def build_ps2_texture_index(ps2_root: Path) -> dict[str, Path]:
 
 def collect_converted_names(conversion_csv: Path) -> set[str]:
     """
-    Read conversion_hashes.csv and collect lowercase full filenames
-    from the 'filename' column.
-
-    This keeps the extension as part of the comparison, case insensitive.
+    Read conversion_hashes.csv and collect lowercase full filenames from the 'filename' column.
     """
     names: set[str] = set()
 
@@ -333,10 +528,6 @@ def collect_converted_names(conversion_csv: Path) -> set[str]:
 def load_never_upscale_stems(never_upscale_path: Path) -> set[str]:
     """
     Load logical names from never_upscale.txt.
-
-    Each nonempty, non-comment line is treated as a full logical name
-    (including .bmp) and stored as lowercase. No extensions are added
-    or modified. Comparison is exact on that normalized string.
     """
     stems: set[str] = set()
 
@@ -366,25 +557,6 @@ def write_not_in_folder_csv(
     ps2_texture_index: dict[str, Path],
     never_upscale_stems: set[str],
 ) -> None:
-    """
-    For a given job directory:
-      - Load conversion_hashes.csv
-      - Compute textures that exist in mgs2_ps2_dimensions.csv
-        but do not appear in conversion_hashes.csv (full logical name, including .bmp, case insensitive)
-      - Skip any logical names whose normalized value is in never_upscale_stems
-      - For each remaining texture:
-          * If there is a matching .tga/.png in ps2_texture_index
-            (matched via Path(path).stem.lower()), record its full path
-          * If there is NO matching .tga/.png, still record the filename, with
-            an empty full_path
-      - Write not_in_folder.csv beside conversion_hashes.csv with:
-            filename,full_path
-      - Also write unprocessed_folders.csv listing unique parent folders of
-        entries that DO have a non-empty full_path.
-
-    Optimization:
-      - Only rewrite the CSVs if the content actually changes (newline-insensitive).
-    """
     conversion_csv = job_dir / CONVERSION_CSV_NAME
     if not conversion_csv.is_file():
         print(f"[WARN] {CONVERSION_CSV_NAME} missing in job dir, skipping not_in_folder.csv: {job_dir}")
@@ -398,73 +570,28 @@ def write_not_in_folder_csv(
     output_csv = job_dir / NOT_IN_FOLDER_CSV_NAME
     output_folders_csv = job_dir / UNPROCESSED_FOLDERS_CSV_NAME
 
-    def _normalize_newlines(b: bytes) -> bytes:
-        return b.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
-
-    def _write_bytes_if_changed(path: Path, new_bytes: bytes) -> bool:
-        try:
-            if path.is_file():
-                old_bytes = path.read_bytes()
-                if _normalize_newlines(old_bytes) == _normalize_newlines(new_bytes):
-                    return False
-        except OSError:
-            # If we can't read it, fall back to rewriting
-            pass
-
-        tmp = path.with_suffix(path.suffix + ".tmp")
-        try:
-            tmp.write_bytes(new_bytes)
-            os.replace(tmp, path)  # atomic on Windows too
-            return True
-        finally:
-            try:
-                if tmp.exists():
-                    tmp.unlink()
-            except OSError:
-                pass
-
-    def _build_csv_bytes(table: list[list[str]]) -> bytes:
-        import io
-
-        buf = io.StringIO(newline="\n")
-        writer = csv.writer(buf, lineterminator="\n")
-        for r in table:
-            writer.writerow(r)
-        return buf.getvalue().encode("utf-8")
-
     rows: list[tuple[str, str]] = []
 
-    # dim_names keys are logical_name_lower (including .bmp)
     for logical_name_lower in sorted(dim_names.keys()):
-        # Already present in conversion_hashes.csv for this job
         if logical_name_lower in converted_names:
             continue
 
-        # Skip entries that should never be upscaled (for 2x/4x tiers)
         if logical_name_lower in never_upscale_stems:
             continue
 
         original_name = dim_names[logical_name_lower]
 
-        # Map to TGA/PNG using the logical name as the "stem" (including .bmp)
         stem_key = original_name.lower()
         tex_path = ps2_texture_index.get(stem_key)
-
-        if tex_path is not None:
-            full_path_str = str(tex_path)
-        else:
-            full_path_str = ""
+        full_path_str = str(tex_path) if tex_path is not None else ""
 
         rows.append((original_name, full_path_str))
 
-    # Build not_in_folder.csv (always at least header)
     not_in_rows: list[list[str]] = [["filename", "full_path"]]
     for filename, full_path in rows:
         not_in_rows.append([filename, full_path])
-
     not_in_bytes = _build_csv_bytes(not_in_rows)
 
-    # Build unprocessed_folders.csv (always at least header)
     folder_set: set[str] = set()
     for _, full_path in rows:
         if not full_path:
@@ -474,15 +601,12 @@ def write_not_in_folder_csv(
     folders_rows: list[list[str]] = [["folder"]]
     for folder in sorted(folder_set):
         folders_rows.append([folder])
-
     folders_bytes = _build_csv_bytes(folders_rows)
 
-    # Write only if changed
     wrote_not_in = _write_bytes_if_changed(output_csv, not_in_bytes)
     wrote_folders = _write_bytes_if_changed(output_folders_csv, folders_bytes)
 
     if not rows:
-        # Match your old “explicit empty output” behavior, but without rewriting if unchanged
         if wrote_not_in:
             print(f"[INFO] No missing textures for job, updated empty {output_csv}")
         else:
@@ -494,7 +618,6 @@ def write_not_in_folder_csv(
             print(f"[INFO] No missing textures for job, {output_folders_csv} already up to date")
         return
 
-    # Non-empty case logs
     if wrote_not_in:
         print(f"[INFO] Wrote {len(rows)} missing entries to {output_csv}")
     else:
@@ -504,7 +627,6 @@ def write_not_in_folder_csv(
         print(f"[INFO] Wrote {len(folder_set)} folders to {output_folders_csv}")
     else:
         print(f"[INFO] Skipped unchanged {output_folders_csv} ({len(folder_set)} folders)")
-
 
 
 # ==========================================================
@@ -531,6 +653,7 @@ def find_jobs(root: Path) -> list[Path]:
 def run_staging_main(job_dir: Path) -> None:
     """
     Run shared _staging_main.py with CWD set to the job directory.
+    Then wait for ctxr3.exe (or other configured CTXR3 exe names) to finish if it is running.
     """
     if not STAGING_MAIN_PATH.is_file():
         raise SystemExit(f"ERROR: Cannot find {STAGING_MAIN_NAME} at {STAGING_MAIN_PATH}")
@@ -550,14 +673,24 @@ def run_staging_main(job_dir: Path) -> None:
             f"{STAGING_MAIN_NAME} failed in {job_dir} with exit code {result.returncode}"
         )
 
+    # If ctxr3 was spawned and is still running, block here until it exits.
+    wait_for_processes_to_exit(WAIT_FOR_CTXR3_EXE_NAMES, context=f"job {job_dir}")
+
+
+def _tier_is_upscaled(root: Path) -> bool:
+    root_lower = str(root).lower()
+    return ("2x upscaled" in root_lower) or ("4x upscaled" in root_lower)
+
 
 def run_tier(root: Path) -> list[Path]:
     """
     Run all jobs under a single staging root.
 
-    - Sequential execution if root contains '2x upscaled' or '4x upscaled'
-    - Parallel execution otherwise
-    - Abort immediately if any job fails
+    Updated behavior:
+    - Sequential execution for:
+        * 2x/4x tiers (existing)
+        * non-upscaled tiers too (because ctxr3 can be spawned and must not overlap)
+    - Parallel execution is only used if you later relax this.
     """
     jobs = find_jobs(root)
 
@@ -565,16 +698,13 @@ def run_tier(root: Path) -> list[Path]:
         print(f"[INFO] No '{FOLDERS_TXT_NAME}' found under {root}")
         return []
 
-    root_lower = str(root).lower()
-    sequential = ("2x upscaled" in root_lower) or ("4x upscaled" in root_lower)
-
     print(f"[INFO] Found {len(jobs)} job(s) under {root}")
 
-    # ======================================================
-    # SEQUENTIAL MODE (2x / 4x)
-    # ======================================================
+    # Force sequential for anything that could cause interactive ctxr3 work.
+    sequential = True
+
     if sequential:
-        print("[INFO] Running jobs sequentially (2x/4x tier)")
+        print("[INFO] Running jobs sequentially (ctxr3-safe mode)")
 
         for idx, job_dir in enumerate(jobs, start=1):
             try:
@@ -587,11 +717,14 @@ def run_tier(root: Path) -> list[Path]:
                 print(f"[ERROR] Unexpected error in {job_dir}: {e}")
                 pause_and_exit(1)
 
+        # Extra: after the whole tier, ensure CTXR3 is not still running.
+        wait_for_processes_to_exit(WAIT_FOR_CTXR3_EXE_NAMES, context=f"tier {root}")
+
         print(f"[INFO] Finished all jobs under {root}")
         return jobs
 
     # ======================================================
-    # PARALLEL MODE (everything else)
+    # PARALLEL MODE (disabled by default now)
     # ======================================================
     workers = min(max(1, THREADS_PER_TIER), len(jobs))
     print(f"[INFO] Running up to {workers} job(s) in parallel")
@@ -614,10 +747,10 @@ def run_tier(root: Path) -> list[Path]:
                 print(f"[ERROR] Unexpected error in {job_dir}: {e}")
                 pause_and_exit(1)
 
+    wait_for_processes_to_exit(WAIT_FOR_CTXR3_EXE_NAMES, context=f"tier {root}")
+
     print(f"[INFO] Finished all jobs under {root}")
     return jobs
-
-
 
 
 def run_set_ctxr_dates() -> None:
@@ -643,9 +776,6 @@ def run_set_ctxr_dates() -> None:
 
 
 def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
-    """
-    Internal helper: sync 2x <-> 4x folders_to_process for a single project root pair.
-    """
     if not root_2x.is_dir():
         print(f"[INFO] 2x staging root does not exist, skipping 2x sync: {root_2x}")
         return
@@ -654,21 +784,19 @@ def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
         print(f"[WARN] 4x staging root does not exist, skipping 2x sync: {root_4x}")
         return
 
-    # Collect all relative FOLDERS_TXT paths under 4x
     rel_paths_4x: set[Path] = set()
     for txt_4x in root_4x.rglob(FOLDERS_TXT_NAME):
         if txt_4x.is_file():
             rel_paths_4x.add(txt_4x.relative_to(root_4x))
 
     if not rel_paths_4x:
-        print(f"[WARN] No 'folders to process.txt' found under 4x: {root_4x}, skipping 2x sync.")
+        print(f"[WARN] No '{FOLDERS_TXT_NAME}' found under 4x: {root_4x}, skipping 2x sync.")
         return
 
     print("[INFO] Syncing 'folders to process.txt' between 2x and 4x tiers")
     print(f"       2x root: {root_2x}")
     print(f"       4x root: {root_4x}")
 
-    # First handle existing 2x files
     seen_rel_2x: set[Path] = set()
 
     for txt_2x in root_2x.rglob(FOLDERS_TXT_NAME):
@@ -678,7 +806,6 @@ def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
         rel = txt_2x.relative_to(root_2x)
         seen_rel_2x.add(rel)
 
-        # If not in 4x -> delete
         if rel not in rel_paths_4x:
             print(f"[INFO] Removing 2x only '{FOLDERS_TXT_NAME}': {txt_2x}")
             try:
@@ -687,7 +814,6 @@ def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
                 print(f"[ERROR] Failed to delete {txt_2x}: {e}")
             continue
 
-        # Exists in both -> ensure contents match
         txt_4x = root_4x / rel
         try:
             data_2x = txt_2x.read_bytes()
@@ -703,7 +829,6 @@ def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
             except OSError as e:
                 print(f"[ERROR] Failed to overwrite {txt_2x} with {txt_4x}: {e}")
 
-    # Now handle files that exist ONLY in 4x
     for rel in rel_paths_4x:
         if rel in seen_rel_2x:
             continue
@@ -718,8 +843,7 @@ def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
         except OSError as e:
             print(f"[ERROR] Failed to copy missing 4x file to 2x: {src} -> {dst}: {e}")
 
-    # Finally, remove empty directories under 2x (but keep the root)
-    for dirpath, dirnames, filenames in os.walk(root_2x, topdown=False):
+    for dirpath, _dirnames, _filenames in os.walk(root_2x, topdown=False):
         p = Path(dirpath)
         if p == root_2x:
             continue
@@ -733,12 +857,6 @@ def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
 
 
 def sync_2x_folders_txt_with_4x() -> None:
-    """
-    Sync logic for all projects:
-      - Bugfix Compilation: Texture Fixes 2x <-> 4x
-      - Demastered pack:    Textures 2x <-> 4x
-      - Upscaled UI pack:   Textures 2x <-> 4x
-    """
     _sync_2x_4x_pair(
         BUGFIX_ROOT / "Staging - 2x Upscaled",
         BUGFIX_ROOT / "Staging - 4x Upscaled",
@@ -761,10 +879,6 @@ def sync_2x_folders_txt_with_4x() -> None:
 
 
 def ensure_conversion_csv_for_all_jobs() -> None:
-    """
-    For every 'folders to process.txt' under all staging roots,
-    ensure a 'conversion_hashes.csv' exists beside it with the correct header.
-    """
     for root in STAGING_ROOTS:
         if not root.is_dir():
             continue
@@ -781,18 +895,12 @@ def ensure_conversion_csv_for_all_jobs() -> None:
 
             print(f"[INFO] Creating missing {CONVERSION_CSV_NAME}: {csv_path}")
             try:
-                # newline="" to avoid double newlines on Windows
                 csv_path.write_text(CONVERSION_CSV_HEADER, encoding="utf-8", newline="")
             except OSError as e:
                 print(f"[ERROR] Failed to create {csv_path}: {e}")
 
 
 def is_eligible_upscale_job(job_dir: Path) -> bool:
-    """
-    Only generate not_in_folder/unprocessed_folders for jobs whose path
-    clearly sits under either ovr_stm/_win or flatlist/_win.
-    Comparison is done case-insensitively on the normalized path string.
-    """
     p = str(job_dir).replace("\\", "/").lower()
 
     return (
@@ -824,25 +932,12 @@ def generate_not_in_folder_for_tier(
 
 
 def write_self_remade_modified_dates() -> None:
-    """
-    Walk all .png and .tga files under Self Remade\\Finalized (except
-    the 'Source Files' subdirectory) and write stems + chosen timestamp
-    (earlier of ctime and mtime) to self_remade_modified_dates.csv in
-    the parent folder of each of:
-      - BUGFIX_ROOT
-      - DEMASTER_ROOT
-      - UPSCALED_UI_ROOT
-
-    If multiple files share the same stem, only the earliest timestamp
-    across all of them is kept.
-    """
     target_dir = SELF_REMADE_FINALIZED_DIR
 
     if not target_dir.is_dir():
         print(f"[WARN] Self Remade Finalized directory does not exist: {target_dir}")
         return
 
-    # Determine all output roots that actually exist on disk
     output_roots: list[Path] = []
     for project_root in (BUGFIX_ROOT, DEMASTER_ROOT, UPSCALED_UI_ROOT):
         parent = project_root.parent
@@ -862,13 +957,11 @@ def write_self_remade_modified_dates() -> None:
         print(f"  - {out_root / SELF_REMADE_MODIFIED_DATES_CSV_NAME}")
     print("#################################################")
 
-    # stem -> earliest chosen_time
     stem_to_time: dict[str, int] = {}
 
     skip_dir_name = "source files"
 
     for root_dir, dirnames, filenames in os.walk(target_dir):
-        # Prevent recursion into Source Files (case-insensitive)
         dirnames[:] = [d for d in dirnames if d.lower() != skip_dir_name]
 
         base = Path(root_dir)
@@ -885,24 +978,18 @@ def write_self_remade_modified_dates() -> None:
                 stat = path.stat()
                 mtime = int(stat.st_mtime)
                 ctime = int(stat.st_ctime)
-
-                # Prefer the earlier timestamp between ctime and mtime
                 chosen_time = ctime if ctime < mtime else mtime
-
             except OSError as e:
                 print(f"[ERROR] Failed to stat {path}: {e}")
                 continue
 
             stem = path.stem
-
             existing = stem_to_time.get(stem)
             if existing is None or chosen_time < existing:
                 stem_to_time[stem] = chosen_time
 
-    # Convert to sorted list of (stem, time)
     rows = sorted(stem_to_time.items(), key=lambda r: r[0])
 
-    # Write the same CSV content to each parent folder
     for out_root in output_roots:
         csv_path = out_root / SELF_REMADE_MODIFIED_DATES_CSV_NAME
 
@@ -922,23 +1009,17 @@ def write_self_remade_modified_dates() -> None:
 # MAIN
 # ==========================================================
 def main() -> None:
-    # verify no unconverted textures exist
+    verify_manual_ui_covered_by_no_mip_regex()
+
     run_find_unconverted()
-    
-    # Ensure Build_Dist_Folders.py is synced into sibling repos
     sync_build_dist_files()
-
-    # Very first step: sync 2x folders_to_process with 4x for all projects
     sync_2x_folders_txt_with_4x()
-
-    # Second step: ensure every job has a conversion_hashes.csv with header
     ensure_conversion_csv_for_all_jobs()
 
     if not STAGING_MAIN_PATH.is_file():
         print(f"ERROR: _staging_main.py not found at: {STAGING_MAIN_PATH}")
         pause_and_exit(1)
 
-    # Set up git root and PS2 data
     git_root = get_git_root()
 
     dimensions_csv = (
@@ -953,7 +1034,6 @@ def main() -> None:
     ps2_textures_root = git_root / "Texture Fixes" / "ps2 textures"
     ps2_texture_index = build_ps2_texture_index(ps2_textures_root)
 
-    # Load never_upscale.txt from repo
     never_upscale_path = git_root / NEVER_UPSCALE_REL_PATH
     never_upscale_stems = load_never_upscale_stems(never_upscale_path)
 
@@ -963,26 +1043,20 @@ def main() -> None:
         print(f"Processing staging root: {root}")
         print("#################################################")
 
-        # Run the actual staging pipeline for this tier
         run_tier(root)
 
-        # Decide whether to apply never_upscale filter for this tier
         root_lower = str(root).lower()
         if "2x upscaled" in root_lower or "4x upscaled" in root_lower:
             tier_blocklist = never_upscale_stems
         else:
             tier_blocklist = set()
 
-        # After the tier has finished, generate not_in_folder.csv and unprocessed_folders.csv for each job
         generate_not_in_folder_for_tier(root, dim_names, ps2_texture_index, tier_blocklist)
 
     print()
     print("[INFO] All staging roots processed.")
 
-    # Final step: update ctxr modified dates
     run_set_ctxr_dates()
-
-    # Extra final step: capture modified dates for Self Remade Finalized
     write_self_remade_modified_dates()
 
 

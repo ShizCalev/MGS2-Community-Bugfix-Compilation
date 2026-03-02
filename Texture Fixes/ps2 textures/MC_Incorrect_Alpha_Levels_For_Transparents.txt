@@ -2373,7 +2373,6 @@ HAS ALPHA
 	0065a618
 	006c9021
 	0086a618
-	blt_alp_ovl.bmp
 	cfr_wire_alp.bmp
 	chi01_alp.bmp
 	cyp_lens_rgb_alp_ovl.bmp
@@ -3023,6 +3022,7 @@ HAS ALPHA
 	azabu_alp_ovl.bmp
 	b_henden_alp_ovl.bmp
 	bc_renraku_alp_ovl.bmp
+	blt_alp_ovl.bmp
 	bsn1_alp_ovl.bmp
 	bsn2_alp_ovl.bmp
 	c_shokudou_alp_ovl.bmp

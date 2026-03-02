@@ -37,10 +37,8 @@ _bmap
 ^w24c_overguy_alp_ovl\.bmp$
 ^web
 _bg\.bmp$
-
 ^kictme.bmp$
 ^kictme.bmp_fafb163149953d777997f9fa0d4f83f8$
-
 //Manual UI stuff
 ^0002936b$
 ^001087b3$
@@ -109,8 +107,6 @@ _bg\.bmp$
 ^b_bg\.bmp$
 ^c_bg\.bmp$
 ^e_bg\.bmp$
-^jpnw_news_genora\.bmp$
-^jpnw_news_gollgon\.bmp$
 ^odai_a01a_ldr02a\.bmp$
 ^odai_bikkuri\.bmp$
 ^odai_erobook\.bmp$
@@ -132,8 +128,6 @@ _bg\.bmp$
 ^taisa_msx_alp_ovl\.bmp$
 ^d_bg.bmp$
 ^mode_alp_ovl\.bmp$
-
-^002e7ddf$
 ^stg00_alp_ovl.bmp$
 ^debug_font_alp_ovl\.bmp$
 ^densou_font_alp_ovl\.bmp$
@@ -170,15 +164,12 @@ _bg\.bmp$
 ^nom_b_alp_ovl\.bmp$
 ^cau_alp_ovl\.bmp$
 ^eva_alp_ovl\.bmp$
-^006a97ed$
 ^0068a618_ba9ef0a583a2d517886f9b6c53e96e92$
 ^0068a618$
 ^006aa618$
 ^0099a618$
 ^clr_alp_ovl.bmp$
 ^exit_alp_ovl.bmp_7f9196f232454b86ef93cc3591f1f2ab$
-
-
 //MC NPOTs
 ^00004ad1$
 ^0000c4dd$
@@ -279,7 +270,6 @@ _bg\.bmp$
 ^002d83e0_fe14aedf8aead9e025a71608da78f12d$
 ^002db10a$
 ^002e7dde$
-^002e7ddf$
 ^002e7de0$
 ^002e7de5$
 ^002e8486$
@@ -1065,3 +1055,26 @@ _bg\.bmp$
 ^wig1_alp_ovl\.bmp$
 ^wig2_alp_ovl\.bmp$
 ^wpb_alp_ovl\.bmp$
+^0009bc34_b930b4499997afc4e26e408ea169f9c7$
+^0076fe1a$
+^0077fe1a$
+^00a12eaf$
+^00c12eaf$
+^00f65e24$
+^00fb5e0d_a4c6847d4b922f6cd44f7d23a8727f2c$
+^act_telop02_jp_alp_ovl\.bmp$
+^act_telop03_jp_alp_ovl\.bmp$
+^act_telop04_jp_alp_ovl\.bmp$
+^act_telop05_jp_alp_ovl\.bmp$
+^act_telop06_jp_alp_ovl\.bmp$
+^act_telop08_jp_alp_ovl\.bmp$
+^act_telop09_jp_alp_ovl\.bmp$
+^act_telop10_jp_alp_ovl\.bmp$
+^act_telop11_jp_alp_ovl\.bmp$
+^act_telop5_alp_ovl\.bmp$
+^blt_alp_ovl\.bmp$
+^fiction_j_alp_ovl\.bmp$
+^logo_konami\.bmp$
+^pkg1_eng_alp_ovl\.bmp$
+^pkg2_eng_alp_ovl\.bmp$
+^sce_cesa_attention\.bmp$
