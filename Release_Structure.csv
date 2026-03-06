@@ -9,6 +9,7 @@ SDT Fixes\Music and Decensor Restoration\Peter Shell 2 core,dist\us\demo\_bp,fal
 SDT Fixes\Music and Decensor Restoration\Vamp vs Seals,dist\us\demo\_bp,false
 
 Model Fixes\HH60 Fix,dist\assets\kms\us\_win,false
+Model Fixes\C-D Bridge Shell 2 markers,dist\assets\kms\us,false
 
 Model Fixes\LOD replacements\Ames,dist\assets\kms\us,false
 Model Fixes\LOD replacements\Hostages,dist\assets\kms\us,false
