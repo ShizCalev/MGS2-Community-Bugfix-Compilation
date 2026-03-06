@@ -555,3 +555,8 @@ sr13e_alp_ovl.bmp_8e5d765a189254623f05bef061d0db1a
 sr14e_alp_ovl.bmp_ea172754f17f49457f2f04ae2319add2
 sr14j_alp_ovl.bmp_104b15f9971860fa4c6923382baf1463
 sr14j_bg_alp_ovl.bmp
+
+00304bad
+00814bac
+00af4bac
+00ce4bac

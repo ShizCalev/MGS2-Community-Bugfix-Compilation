@@ -1078,3 +1078,7 @@ _bg\.bmp$
 ^pkg1_eng_alp_ovl\.bmp$
 ^pkg2_eng_alp_ovl\.bmp$
 ^sce_cesa_attention\.bmp$
+^00304bad$
+^00814bac$
+^00af4bac$
+^00ce4bac$
