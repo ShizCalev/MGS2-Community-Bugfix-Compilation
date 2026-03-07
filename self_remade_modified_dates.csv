@@ -113,10 +113,9 @@ afevis_fp_sna_hi_finger.bmp,1758827527
 afevis_fp_sna_hi_finger2.bmp,1758827527
 afevis_fp_sna_hi_hand1.bmp,1758827527
 afevis_fp_sna_hi_hand2.bmp,1758827527
-alp,1772844555
-alp - Copy,1772844560
-alp2,1772847385
 animal_alp_ovl.bmp,1763104761
+augm_stabbed_tnc_body.bmp,1772881809
+augm_tnc_eri.bmp,1772881809
 b_bg.bmp,1758827527
 berrazano_alp_ovl.bmp,1768134010
 bg_alp_ovl.bmp,1758827527
@@ -138,8 +137,6 @@ ema_tag.bmp,1758827527
 fiction_e_alp_ovl.bmp,1758827527
 fiction_j_alp_ovl.bmp,1768192266
 ghost_pos.bmp,1758827436
-guy_old_v1_sna_hair1_alp_ovl.bmp,1772847642
-guy_old_v2_sna_hair1_alp_ovl.bmp,1772844301
 ibox_tx_all_alp.bmp,1767226183
 ibox_tx_all_alp.bmp_542a0e8227207db0a7c5b8c61cc0345d,1767226184
 ibox_tx_all_alp.bmp_791e610c4fcf41bf273b86f3bef405c7,1767226184
@@ -159,8 +156,6 @@ pkg1_eng_alp_ovl.bmp,1768131251
 pkg2_eng_alp_ovl.bmp,1768135243
 police_pos.bmp,1758827436
 r_bg.bmp,1758827527
-rgb,1772844560
-rgb - Copy,1772844560
 s_oil_ref_add_alp_ovl_mod1120.bmp,1758827527
 s_oil_sea_alp_ovl_mod0022.bmp,1758827527
 sce_cesa_attention.bmp,1768119202
@@ -168,6 +163,9 @@ seculitycard_lv1_alp.bmp,1765665593
 seculitycard_lv2_alp.bmp,1765665612
 seculitycard_lv3_alp.bmp,1765665617
 seculitycard_lv4_alp.bmp,1765665621
+sel_arm_rblood.bmp,1772881809
+sel_bag2blood.bmp,1772881809
+sel_bodyblood.bmp,1772881809
 sel_boots.bmp,1762063146
 sna_body_ss01dt.bmp,1758827527
 sna_hair1_alp_ovl.bmp,1772847417
@@ -216,6 +214,16 @@ title_logo_blue_alp_ovl.bmp,1762063146
 title_logo_mono_alp_ovl.bmp,1762063146
 title_mgs2_alp_ovl.bmp,1762063146
 title_sol_alp_ovl.bmp,1768441589
+tnc_eri.bmp,1772881809
+tnc_eri_bd.bmp,1772881809
+tnc_gost_body_b_ovl_alp.bmp,1772881809
+tnc_gost_body_c_ovl_alp.bmp,1772881809
+tnc_gost_body_ovl_alp.bmp,1772881809
+tnc_gost_face_ovl_alp.bmp,1772881809
+tnc_re_body_bd.bmp,1772881809
+tnc_re_faceneck_dead.bmp,1772881809
+tnc_re_faceneck_dead.bmp_0e551a799467218ab1818640b8ee2d96,1772881809
+tnc_shatsu_bd.bmp,1772881809
 w00a_blc_t1.bmp_7f11fc01c0e5875532e7dd318d7c9e68,1758827579
 w00a_pol1.bmp,1758827527
 w01a0_box00.bmp,1732494859

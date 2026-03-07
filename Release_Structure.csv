@@ -21,6 +21,10 @@ Model Fixes\LOD replacements\Snake - MGS1,dist\eu\stage,false
 Model Fixes\LOD replacements\Snake - Tuxedo,dist\assets\kms\us,false
 Model Fixes\LOD replacements\Weapon - M9,dist\assets\kms\us,false
 
+Model Fixes\Decensor\manifests\eu,dist\eu\stage,false
+Model Fixes\Decensor\manifests\jp,dist\jp\stage,false
+
+
 Model Fixes\Texture Corrections\Strut F - Emma blood\EU,dist\eu\stage,false
 Model Fixes\Texture Corrections\Strut F - Emma blood\JP,dist\jp\stage,false
 
