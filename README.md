@@ -81,7 +81,6 @@ Recommended Mod Load Order (from first to last):
 4. MGS2 Community Bugfix Compilation - AI Upscaled Texture Addon (if desired)
 5. [MGS2 Demastered Texture Pack](https://github.com/ShizCalev/MGS2-Demastered-Substance-Edition/) (if installed)
 6. [IroquoisPliskin1972](https://www.nexusmods.com/profile/IroquoisPliskin1972)'s [Solid Snake and Pliskin fixes and overhaul﻿](https://www.nexusmods.com/metalgearsolid2mc/mods/45)
-7. [GuyOnAChair](https://www.nexusmods.com/profile/GuyOnAChair)'s [MGS2MC Solid Snake Hair Fix﻿](https://www.nexusmods.com/metalgearsolid2mc/mods/10)
 5. All other mods
 
 
@@ -166,11 +165,18 @@ Recommended Mod Load Order (from first to last):
 
 - Replaced a poorly upscaled power generator texture with its higher-quality PS2 version. [2011 HDC]
 
-- Fixed a hole in the top of the HH-60 Helicopters used by the SEALS during the Plant intro. [2001 SoL] Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
+- Fixed a hole in the top of the HH-60 Helicopters used by the SEALS during the Plant intro. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
 
 - Fixed rogue black pixel on Shell 1 Core doors. (door_b00.bmp) [2011 HDC]
 
 - Fixed the EU PS1 MGS1 Special Missions CD being shown instead of the US MGS1 VR Missions disc. [2011 HDC]
+
+- Fixed rogue black pixels along the texture seams on Olga's back. [2001 SoL]
+
+- Fixed transparency issues with Snake's hair. [2001 SoL] | Contributed by [Guy on a Chair](https://www.nexusmods.com/profile/GuyOnAChair), touched up by Afevis
+
+- Fixed several Shell 2 struts having a Shell 1 area texture when viewed from the C-D Connecting Bridge. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
+
 
 <br>
 
@@ -199,11 +205,15 @@ Recommended Mod Load Order (from first to last):
 
 ### Restored Content:
 
+- Restored original PS2 controller icons (can be selected via MGSHDFix's config tool.) [2011 HDC]
+
 - Restored Fatman's glock to its original version (the slide serrations & slide release were simplified in HDC → MC, presumably for copyright reasons.) [2023 MC]
 
 - Restored the secret Konami.jp reward screen for collecting all dogtags using the new Konami.com archival site, utilizing a tinyurl & QR code to make it easier to open. (The original URL has been dead since 2007, and Konami removed the screen with the MC release.) [2011 HDC/2023 MC]
 
 - Restored numerous crosses changed from red to green. [2023 MC]
+
+- Restored censored blood textures on Marines & SEALs. [2003 Substance] ([Comparison Video](https://www.youtube.com/watch?v=8j9nR0xXttI))
 
 - Restored missing audio track in Guard Rush boss intro cutscene. [2003 Substance] | Contributed by [Knight_Killer](https://www.nexusmods.com/profile/KnightKiIIer)
 
@@ -259,6 +269,8 @@ Feel free to inquire about texture file names if you need assistance pinpointing
 	- Title cards, Smithsonian quotes, ect, at the start of both main chapters
 	- Location / setting cards (ie Verrazano Bridge, Big Shell Disposal Facility, ect.)
 	- Snake Tales title cards
+	- Basic actions UI
+	- Arsenal Gear pause screen (when radar is enabled.)
 
 - Remade all KojiPro posters (ie MGS Ghost Babel, Policenauts, Zone of Enders), using their original real-life promotional posters as the higher quality base / reference material.
 
@@ -266,7 +278,11 @@ Feel free to inquire about texture file names if you need assistance pinpointing
 
 - Remade ocean reflection maps utilizing their source assets.
 
-- Remade the security camera monitor screen during the first Ames cutscene, also fixing the consistency issue where Raiden was not wearing his disguise. (w24c1_rev_disp_01.bmp) [2001 SoL]
+- Remade the security camera monitor screen during the first Ames cutscene. (w24c1_rev_disp_01.bmp) [2001 SoL]
+
+- Remade casting theater images.
+
+- Remade several codec call videos that were stretched from 4:3 to 16:9 & still the original PS2 resolution. (MG1, MGS1 flashbacks during Aresenal. MG1 footage captured from 1987 MSX, MGS1 captured from MC using MGSM2Fix widescreen.) [2011 HDC]
 
 
 
