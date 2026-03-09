@@ -117,6 +117,12 @@ def _sha1_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def _sha1_bytes(data: bytes) -> str:
+    h = hashlib.sha1()
+    h.update(data)
+    return h.hexdigest()
+
+
 # ==========================================================
 # PRE-FLIGHT VALIDATION HELPERS
 # ==========================================================
@@ -242,19 +248,72 @@ def verify_manual_ui_covered_by_no_mip_regex() -> None:
     print(f"[INFO] Pre-flight ok: {len(stems)} manual_ui stem(s) are covered by no_mip_regex.txt")
 
 
+# ==========================================================
+# BUILD_DIST_FOLDERS.py SYNC HELPERS
+# ==========================================================
+
+def _detect_newline_style(text: str) -> str:
+    crlf = text.count("\r\n")
+    lf = text.count("\n") - crlf
+    if crlf > 0 and crlf >= lf:
+        return "\r\n"
+    return "\n"
+
+
+def _normalize_text_newlines(text: str) -> str:
+    return text.replace("\r\n", "\n").replace("\r", "\n")
+
+
+def _apply_newline_style(text: str, newline: str) -> str:
+    normalized = _normalize_text_newlines(text)
+    return normalized.replace("\n", newline)
+    
+LOCAL_SYNC_PREFIXES_BLOCK_RE = re.compile(
+    r"(?ms)^LOCAL_SYNC_PREFIXES:\s*dict\s*\[\s*str\s*,\s*str\s*\]\s*=\s*\{.*?^\}"
+)
+
+def _extract_local_sync_prefixes_block(text: str) -> str | None:
+    match = LOCAL_SYNC_PREFIXES_BLOCK_RE.search(text)
+    if not match:
+        return None
+    return match.group(0)
+
+
+def _merge_build_dist_preserving_local_sync_prefixes(
+    source_text: str,
+    dest_text: str,
+    dest_path: Path,
+) -> str:
+    """
+    Replace the source LOCAL_SYNC_PREFIXES block with the destination's block,
+    if the destination contains one.
+    """
+    src_block = _extract_local_sync_prefixes_block(source_text)
+    if src_block is None:
+        print(f"[ERROR] Source file is missing LOCAL_SYNC_PREFIXES block: {BUILD_DIST_SOURCE}")
+        pause_and_exit(1)
+
+    dst_block = _extract_local_sync_prefixes_block(dest_text)
+    if dst_block is None:
+        print(f"[WARN] Destination missing LOCAL_SYNC_PREFIXES block, using source block: {dest_path}")
+        return source_text
+
+    return source_text.replace(src_block, dst_block, 1)
+
+
 def sync_build_dist_files() -> None:
     """
-    Copy Build_Dist_Folders.py from BUILD_DIST_SOURCE to each path in BUILD_DIST_COPIES
-    if missing or if sha1 differs.
+    Copy Build_Dist_Folders.py from BUILD_DIST_SOURCE to each path in BUILD_DIST_COPIES,
+    but preserve each destination repo's LOCAL_SYNC_PREFIXES block and newline style.
     """
     if not BUILD_DIST_SOURCE.is_file():
         print(f"[ERROR] Build_Dist_Folders.py source missing: {BUILD_DIST_SOURCE}")
         pause_and_exit(1)
 
     try:
-        src_hash = _sha1_file(BUILD_DIST_SOURCE)
+        source_text = BUILD_DIST_SOURCE.read_text(encoding="utf-8")
     except OSError as e:
-        print(f"[ERROR] Failed to hash source Build_Dist_Folders.py: {BUILD_DIST_SOURCE} ({e})")
+        print(f"[ERROR] Failed to read source Build_Dist_Folders.py: {BUILD_DIST_SOURCE} ({e})")
         pause_and_exit(1)
 
     for dst in BUILD_DIST_COPIES:
@@ -264,24 +323,49 @@ def sync_build_dist_files() -> None:
             print(f"[ERROR] Failed creating folder {dst.parent}: {e}")
             pause_and_exit(1)
 
-        if dst.is_file():
-            try:
-                dst_hash = _sha1_file(dst)
-            except OSError:
-                dst_hash = None
+        final_text = source_text
+        preserved_local_sync = False
+        dest_newline = "\n"
 
-            if dst_hash == src_hash:
-                print(f"[INFO] Build_Dist_Folders.py already up to date: {dst}")
+        if dst.exists():
+            if not dst.is_file():
+                print(f"[ERROR] Destination exists but is not a file: {dst}")
+                pause_and_exit(1)
+
+            try:
+                dest_text = dst.read_text(encoding="utf-8")
+            except OSError as e:
+                print(f"[ERROR] Failed to read destination Build_Dist_Folders.py: {dst} ({e})")
+                pause_and_exit(1)
+
+            dest_newline = _detect_newline_style(dest_text)
+
+            final_text = _merge_build_dist_preserving_local_sync_prefixes(
+                source_text=source_text,
+                dest_text=dest_text,
+                dest_path=dst,
+            )
+            preserved_local_sync = True
+
+            # If normalized text is identical, skip writing entirely.
+            if _normalize_text_newlines(dest_text) == _normalize_text_newlines(final_text):
+                if preserved_local_sync:
+                    print(f"[INFO] Build_Dist_Folders.py already up to date (LOCAL_SYNC_PREFIXES preserved): {dst}")
+                else:
+                    print(f"[INFO] Build_Dist_Folders.py already up to date: {dst}")
                 continue
-        elif dst.exists():
-            print(f"[ERROR] Destination exists but is not a file: {dst}")
-            pause_and_exit(1)
+
+        final_text = _apply_newline_style(final_text, dest_newline)
+        final_bytes = final_text.encode("utf-8")
 
         try:
-            shutil.copy2(BUILD_DIST_SOURCE, dst)
-            print(f"[INFO] Synced Build_Dist_Folders.py -> {dst}")
+            dst.write_bytes(final_bytes)
+            if preserved_local_sync:
+                print(f"[INFO] Synced Build_Dist_Folders.py with preserved LOCAL_SYNC_PREFIXES -> {dst}")
+            else:
+                print(f"[INFO] Synced Build_Dist_Folders.py -> {dst}")
         except OSError as e:
-            print(f"[ERROR] Copy failed {BUILD_DIST_SOURCE} -> {dst}: {e}")
+            print(f"[ERROR] Write failed {dst}: {e}")
             pause_and_exit(1)
 
 
@@ -419,7 +503,7 @@ def _write_bytes_if_changed(path: Path, new_bytes: bytes) -> bool:
     tmp = path.with_suffix(path.suffix + ".tmp")
     try:
         tmp.write_bytes(new_bytes)
-        os.replace(tmp, path)  # atomic replace on Windows too
+        os.replace(tmp, path)
         return True
     finally:
         try:
@@ -673,7 +757,6 @@ def run_staging_main(job_dir: Path) -> None:
             f"{STAGING_MAIN_NAME} failed in {job_dir} with exit code {result.returncode}"
         )
 
-    # If ctxr3 was spawned and is still running, block here until it exits.
     wait_for_processes_to_exit(WAIT_FOR_CTXR3_EXE_NAMES, context=f"job {job_dir}")
 
 
@@ -683,15 +766,6 @@ def _tier_is_upscaled(root: Path) -> bool:
 
 
 def run_tier(root: Path) -> list[Path]:
-    """
-    Run all jobs under a single staging root.
-
-    Updated behavior:
-    - Sequential execution for:
-        * 2x/4x tiers (existing)
-        * non-upscaled tiers too (because ctxr3 can be spawned and must not overlap)
-    - Parallel execution is only used if you later relax this.
-    """
     jobs = find_jobs(root)
 
     if not jobs:
@@ -700,7 +774,6 @@ def run_tier(root: Path) -> list[Path]:
 
     print(f"[INFO] Found {len(jobs)} job(s) under {root}")
 
-    # Force sequential for anything that could cause interactive ctxr3 work.
     sequential = True
 
     if sequential:
@@ -717,15 +790,11 @@ def run_tier(root: Path) -> list[Path]:
                 print(f"[ERROR] Unexpected error in {job_dir}: {e}")
                 pause_and_exit(1)
 
-        # Extra: after the whole tier, ensure CTXR3 is not still running.
         wait_for_processes_to_exit(WAIT_FOR_CTXR3_EXE_NAMES, context=f"tier {root}")
 
         print(f"[INFO] Finished all jobs under {root}")
         return jobs
 
-    # ======================================================
-    # PARALLEL MODE (disabled by default now)
-    # ======================================================
     workers = min(max(1, THREADS_PER_TIER), len(jobs))
     print(f"[INFO] Running up to {workers} job(s) in parallel")
 

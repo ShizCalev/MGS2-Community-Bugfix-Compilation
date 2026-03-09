@@ -270,7 +270,6 @@ Feel free to inquire about texture file names if you need assistance pinpointing
 	- Location / setting cards (ie Verrazano Bridge, Big Shell Disposal Facility, ect.)
 	- Snake Tales title cards
 	- Basic actions UI
-	- Arsenal Gear pause screen (when radar is enabled.)
 
 - Remade all KojiPro posters (ie MGS Ghost Babel, Policenauts, Zone of Enders), using their original real-life promotional posters as the higher quality base / reference material.
 

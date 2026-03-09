@@ -1,4 +1,5 @@
 native ui stuff slash custom remade
+dont remove these or youre likely to cause the game to crash due to resolution limits
 kcej_logo_alp_ovl.bmp
 00919e1e
 004fc78a
@@ -11,6 +12,7 @@ title_logo_mono_alp_ovl.bmp
 0076fe1a
 logo_konami.bmp
 00b60372
+#end-native-ui
 
 liqmix water stuff
 drop01_alp2_mod1021.bmp
