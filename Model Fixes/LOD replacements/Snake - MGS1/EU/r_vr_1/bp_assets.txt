@@ -325,10 +325,10 @@ textures/flatlist/sna_hi_eye01dt.bmp.ctxr,stage/r_vr_1/resident/sna_hi_eye01dt.b
 textures/flatlist/sna_hi_eye_ovl_sub_alp.bmp.ctxr,stage/r_vr_1/resident/sna_hi_eye_ovl_sub_alp.bmp.ctxr,eu/stage/r_vr_1/resident/007c2ac3/00c3020f.ctxr
 textures/flatlist/sna_hi_face01dt.bmp.ctxr,stage/r_vr_1/resident/sna_hi_face01dt.bmp.ctxr,eu/stage/r_vr_1/resident/007c2ac3/008d5b4b.ctxr
 textures/flatlist/sna_hi_face_ovl_sub_alp.bmp.ctxr,stage/r_vr_1/resident/sna_hi_face_ovl_sub_alp.bmp.ctxr,eu/stage/r_vr_1/resident/007c2ac3/00d7cd75.ctxr
-textures/flatlist/sna_hi_finger.bmp.ctxr,stage/r_vr_1/resident/sna_hi_finger.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/001b7235.ctxr
-textures/flatlist/sna_hi_finger2.bmp.ctxr,stage/r_vr_1/resident/sna_hi_finger2.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/006e46d5.ctxr
-textures/flatlist/sna_hi_hand1.bmp.ctxr,stage/r_vr_1/resident/sna_hi_hand1.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/0034dafa.ctxr
-textures/flatlist/sna_hi_hand2.bmp.ctxr,stage/r_vr_1/resident/sna_hi_hand2.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/0034dafb.ctxr
+textures/flatlist/afevis_fp_sna_hi_finger.bmp.ctxr,stage/r_vr_1/resident/sna_hi_finger.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/001b7235.ctxr
+textures/flatlist/afevis_fp_sna_hi_finger2.bmp.ctxr,stage/r_vr_1/resident/sna_hi_finger2.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/006e46d5.ctxr
+textures/flatlist/afevis_fp_sna_hi_hand1.bmp.ctxr,stage/r_vr_1/resident/sna_hi_hand1.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/0034dafa.ctxr
+textures/flatlist/afevis_fp_sna_hi_hand2.bmp.ctxr,stage/r_vr_1/resident/sna_hi_hand2.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/0034dafb.ctxr
 textures/flatlist/sna_hi_meziri.bmp.ctxr,stage/r_vr_1/resident/sna_hi_meziri.bmp.ctxr,eu/stage/r_vr_1/resident/007c2ac3/00e17bd9.ctxr
 textures/flatlist/sna_m9_glip.bmp.ctxr,stage/r_vr_1/resident/sna_m9_glip.bmp.ctxr,eu/stage/r_vr_1/resident/007c2ac3/00495322.ctxr
 textures/flatlist/sna_os_ovl_mod1120_alp_emap.bmp.ctxr,stage/r_vr_1/resident/sna_os_ovl_mod1120_alp_emap.bmp.ctxr,eu/stage/r_vr_1/resident/0055aab4/008df696.ctxr

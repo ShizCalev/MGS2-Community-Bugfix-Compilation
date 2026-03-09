@@ -42,8 +42,11 @@ LOCAL_SYNC_PREFIXES: dict[str, str] = {
     "dist_4x": "MGS2 Community Bugfix Compilation - 4x Upscaled",
 }
 
-IGNORED_TARGET_DIR_NAMES = {"plugins", "logs"}
-
+IGNORED_TARGET_PATH_PREFIXES = {
+    Path("plugins"),
+    Path("logs"),
+    Path("assets/gcx"),
+}
 
 def log(message: str = "") -> None:
     with LOG_LOCK:
@@ -744,9 +747,13 @@ def get_sync_root_for_destination(
 
 
 def should_ignore_target_rel(rel_path: Path) -> bool:
-    parts_lower = {part.lower() for part in rel_path.parts}
-    return any(name in parts_lower for name in IGNORED_TARGET_DIR_NAMES)
+    rel_lower = Path(*[p.lower() for p in rel_path.parts])
 
+    for prefix in IGNORED_TARGET_PATH_PREFIXES:
+        if rel_lower.parts[:len(prefix.parts)] == prefix.parts:
+            return True
+
+    return False
 
 def sha1_file(path: Path) -> str:
     h = hashlib.sha1()
