@@ -376,9 +376,9 @@ textures/flatlist/sun_alp.bmp.ctxr,stage/w01e/cache/sun_alp.bmp.ctxr,eu/stage/w0
 textures/flatlist/suppressor_mk_alp.bmp.ctxr,stage/w01e/cache/suppressor_mk_alp.bmp.ctxr,eu/stage/w01e/cache/00573de0/009b85b0.ctxr
 textures/flatlist/svc_bonbori.bmp.ctxr,stage/w01e/cache/svc_bonbori.bmp.ctxr,eu/stage/w01e/cache/00573de0/0038dde9.ctxr
 textures/flatlist/tnc_boot_bt1.bmp.ctxr,stage/w01e/cache/tnc_boot_bt1.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00337f1b.ctxr
-textures/flatlist/tnc_eri.bmp.ctxr,stage/w01e/cache/tnc_eri.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/0061408b.ctxr
+textures/flatlist/augm_tnc_eri.bmp.ctxr,stage/w01e/cache/tnc_eri.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/0061408b.ctxr
 textures/flatlist/tnc_eri2.bmp.ctxr,stage/w01e/cache/tnc_eri2.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/0028119e.ctxr
-textures/flatlist/tnc_eri_bd.bmp.ctxr,stage/w01e/cache/tnc_eri_bd.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00473944.ctxr
+textures/flatlist/tnc_eri2.bmp.ctxr,stage/w01e/cache/tnc_eri_bd.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00473944.ctxr
 textures/flatlist/tnc_hairtop01dt.bmp.ctxr,stage/w01e/cache/tnc_hairtop01dt.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/0087e023.ctxr
 textures/flatlist/tnc_hand_b.bmp.ctxr,stage/w01e/cache/tnc_hand_b.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/0039cce7.ctxr
 textures/flatlist/tnc_hand_f.bmp.ctxr,stage/w01e/cache/tnc_hand_f.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/0039cceb.ctxr
@@ -386,9 +386,9 @@ textures/flatlist/tnc_leg.bmp.ctxr,stage/w01e/cache/tnc_leg.bmp.ctxr,eu/stage/w0
 textures/flatlist/tnc_obj_faceneck00.bmp.ctxr,stage/w01e/cache/tnc_obj_faceneck00.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/005aac0c.ctxr
 textures/flatlist/tnc_r_year01dt.bmp.ctxr,stage/w01e/cache/tnc_r_year01dt.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00cac608.ctxr
 textures/flatlist/tnc_re_arm201.bmp.ctxr,stage/w01e/cache/tnc_re_arm201.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00b40752.ctxr
-textures/flatlist/tnc_re_body_bd.bmp.ctxr,stage/w01e/cache/tnc_re_body_bd.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00152d14.ctxr
+textures/flatlist/augm_stabbed_tnc_body.bmp.ctxr,stage/w01e/cache/tnc_re_body_bd.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00152d14.ctxr
 textures/flatlist/tnc_re_faceneck_dead.bmp.ctxr,stage/w01e/cache/tnc_re_faceneck_dead.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00fe371e.ctxr
-textures/flatlist/tnc_shatsu_bd.bmp.ctxr,stage/w01e/cache/tnc_shatsu_bd.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00c9da6b.ctxr
+textures/flatlist/tnc_shatsu.bmp.ctxr,stage/w01e/cache/tnc_shatsu_bd.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00c9da6b.ctxr
 textures/flatlist/tnr_shoese_re.bmp.ctxr,stage/w01e/cache/tnr_shoese_re.bmp.ctxr,eu/stage/w01e/cache/0033bf7f/00c1e00a.ctxr
 textures/flatlist/usp_emb.bmp.ctxr,stage/w01e/cache/usp_emb.bmp.ctxr,eu/stage/w01e/cache/009e05c5/0031402f.ctxr
 textures/flatlist/usp_sb_all.bmp.ctxr,stage/w01e/cache/usp_sb_all.bmp.ctxr,eu/stage/w01e/cache/00249cf1/0067aaa7.ctxr

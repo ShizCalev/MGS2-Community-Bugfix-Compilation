@@ -319,8 +319,8 @@ textures/flatlist/tnc_boot_bt1.bmp.ctxr,stage/d04t/cache/tnc_boot_bt1.bmp.ctxr,e
 textures/flatlist/tnc_boot_bt1.bmp.ctxr,stage/d04t/cache/tnc_boot_bt1.bmp.ctxr,eu/stage/d04t/cache/00b65d75/00337f1b.ctxr
 textures/flatlist/tnc_eri.bmp.ctxr,stage/d04t/cache/tnc_eri.bmp.ctxr,eu/stage/d04t/cache/00b65d75/0061408b.ctxr
 textures/flatlist/tnc_eri2.bmp.ctxr,stage/d04t/cache/tnc_eri2.bmp.ctxr,eu/stage/d04t/cache/00b65d75/0028119e.ctxr
-textures/flatlist/tnc_eri_bd.bmp.ctxr,stage/d04t/cache/tnc_eri_bd.bmp.ctxr,eu/stage/d04t/cache/00a68520/00473944.ctxr
-textures/flatlist/tnc_eri_bd.bmp.ctxr,stage/d04t/cache/tnc_eri_bd.bmp.ctxr,eu/stage/d04t/cache/00b65d75/00473944.ctxr
+textures/flatlist/tnc_eri_2.bmp.ctxr,stage/d04t/cache/tnc_eri_bd.bmp.ctxr,eu/stage/d04t/cache/00a68520/00473944.ctxr
+textures/flatlist/tnc_eri_2.bmp.ctxr,stage/d04t/cache/tnc_eri_bd.bmp.ctxr,eu/stage/d04t/cache/00b65d75/00473944.ctxr
 textures/flatlist/tnc_fl_r.bmp.ctxr,stage/d04t/cache/tnc_fl_r.bmp.ctxr,eu/stage/d04t/cache/001a6995/0028789e.ctxr
 textures/flatlist/tnc_fl_r_decal.bmp.ctxr,stage/d04t/cache/tnc_fl_r_decal.bmp.ctxr,eu/stage/d04t/cache/001a6995/009240da.ctxr
 textures/flatlist/tnc_hairtop01dt.bmp.ctxr,stage/d04t/cache/tnc_hairtop01dt.bmp.ctxr,eu/stage/d04t/cache/00a68520/0087e023.ctxr
