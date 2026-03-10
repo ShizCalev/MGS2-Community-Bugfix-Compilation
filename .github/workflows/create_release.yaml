@@ -149,7 +149,8 @@ jobs:
     - run: Copy-Item "ASI Mod\x64\Release\${{ github.event.repository.name }}.asi" "dist/plugins/${{ github.event.repository.name }}.asi"
 
     # Logs & metadata
-    - run: Copy-Item README.md "dist/logs/${{ github.event.repository.name }}.log"
+    - run: Copy-Item README.md "dist/logs/${{ github.event.repository.name }}_Game.log"
+    - run: Copy-Item README.md "dist/logs/${{ github.event.repository.name }}_Launcher.log"    
     - run: Copy-Item LICENSE "dist/plugins/${{ github.event.repository.name }}_LICENSE"
     - run: Copy-Item "ASI Mod\${{ github.event.repository.name }}.ini" "dist/plugins/${{ github.event.repository.name }}.ini"
     

@@ -37,21 +37,86 @@ constexpr const char* VANILLA_p010_01_p01g_VAMP_SEAL_SDT_SHA1 = "301dcbda56107c7
 // todo - do all this shit in futures
 // detect outdated ui files
 // detect guy on a chair's old hair
-//      - bring over sha1 checker from demaster (after upgrading that to futures too
 // 
 
 void VerifyInstallation::Check()
 {
+    struct FileHashResult
+    {
+        std::filesystem::path path;
+        bool exists = false;
+        std::optional<std::array<std::uint8_t, 20>> sha1;
+    };
 
+
+
+    const auto openCommunityBugfixPage =
+        []()
+        {
+            ShellExecuteA(
+                nullptr,
+                "open",
+                "https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files",
+                nullptr,
+                nullptr,
+                SW_SHOWNORMAL
+            );
+        };
+
+
+    auto startHashTask =
+        [](const std::filesystem::path& path) -> std::future<FileHashResult>
+        {
+            return std::async(
+                std::launch::async,
+                [path]() -> FileHashResult
+                {
+                    FileHashResult result;
+                    result.path = path;
+                    result.exists = std::filesystem::exists(path);
+
+                    if (!result.exists)
+                    {
+                        return result;
+                    }
+
+                    result.sha1 = Util::ComputeSHA1Bytes(path);
+                    return result;
+                });
+        };
+
+    const std::filesystem::path baseColOrange2Path = sExePath / "textures" / "flatlist" / "_win" / "col_orange2.bmp.ctxr";
+    const std::filesystem::path ovrStmColOrange2Path = sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "col_orange2.bmp.ctxr";
+    const std::filesystem::path seculityCardPath = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "seculitycard_lv2_alp.bmp.ctxr";
+    const std::filesystem::path betterAudioCheckPath = sExePath / "us" / "demo" / "_bp" / "p010_01_p01g.sdt";
+    const std::filesystem::path zoePosterPath = sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "zoe_pos_n.bmp.ctxr";
+    const std::filesystem::path snakeHairPath = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair3.bmp.ctxr";
+
+    const auto hashEquals =
+        [](const FileHashResult& result, const char* expected) -> bool
+        {
+            return result.exists && result.sha1.has_value() && Util::SHA1Equals(*result.sha1, expected);
+        };
+
+    auto baseColOrange2Future = startHashTask(baseColOrange2Path);
+    auto ovrStmColOrange2Future = startHashTask(ovrStmColOrange2Path);
+    auto seculityCardFuture = startHashTask(seculityCardPath);
+    auto betterAudioFuture = startHashTask(betterAudioCheckPath);
+    auto zoePosterFuture = startHashTask(zoePosterPath);
+    auto snakeHairFuture = startHashTask(snakeHairPath);
+
+    const FileHashResult baseColOrange2Result = baseColOrange2Future.get();
+    const FileHashResult ovrStmColOrange2Result = ovrStmColOrange2Future.get();
+    const FileHashResult seculityCardResult = seculityCardFuture.get();
+    const FileHashResult betterAudioResult = betterAudioFuture.get();
+    const FileHashResult zoePosterResult = zoePosterFuture.get();
+    const FileHashResult snakeHairResult = snakeHairFuture.get();
 
     // ------------------------------------------------------
     // MGS2: Verify Afevis Bugfix Collection (base) installation
     // ------------------------------------------------------
-
-    if (const std::filesystem::path afevisBugfixTestPathOne = sExePath / "textures" / "flatlist" / "_win" / "col_orange2.bmp.ctxr"; //verify base bugfix compilation is installed
-        std::filesystem::exists(afevisBugfixTestPathOne) && !Util::SHA1Check(afevisBugfixTestPathOne, CBFC_BASE_FLATLIST_WIN_COL_ORANGE2_CTXR_SHA1))
+    if (baseColOrange2Result.exists && !hashEquals(baseColOrange2Result, CBFC_BASE_FLATLIST_WIN_COL_ORANGE2_CTXR_SHA1))
     {
-
         spdlog::warn("------------------- ! Community Bugfix Compilation (Base) Missing ! -------------------");
         spdlog::warn("Community Bugfix Compilation installation issue detected, base package is NOT found.");
         spdlog::warn("This can occur if Steam has verified integrity and damaged your mod files, or if the Base Bugfix Compilation zip wasn't installed.");
@@ -60,6 +125,7 @@ void VerifyInstallation::Check()
         spdlog::warn("Please visit our Nexus page at: https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files to download the base package.");
         spdlog::warn("Or our GitHub releases page at: https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/releases");
         spdlog::warn("------------------- ! Community Bugfix Compilation (Base) Missing ! -------------------");
+
         if (int result = MessageBoxA(
             nullptr,
             "Community Bugfix Compilation installation issue detected, base package is NOT found.\n"
@@ -73,30 +139,22 @@ void VerifyInstallation::Check()
             "(You can also find a link to our GitHub releases on the Nexus page if preferred.)",
             "Community Bugfix Compilation (Base) Missing",
             MB_ICONWARNING | MB_YESNO);
-            result == IDYES)
+        result == IDYES)
         {
-            ShellExecuteA(
-                nullptr,
-                "open",
-                "https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files",
-                nullptr,
-                nullptr,
-                SW_SHOWNORMAL
-            );
+            openCommunityBugfixPage();
         }
-        
-
     }
 
-
-    if (const std::filesystem::path col_orange2OvrStmTest = sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "col_orange2.bmp.ctxr"; //upscaled texture pack installation checks
-        std::filesystem::exists(col_orange2OvrStmTest))
+    if (ovrStmColOrange2Result.exists)
     {
+        // ------------------------------------------------------
+        // MGS2: Check if liqmix AI slop packs are installed
+        // ------------------------------------------------------
+        const bool isLiqMixPack =
+            hashEquals(ovrStmColOrange2Result, LIQMIX_SLOP_4X_ORANGE2_CTXR_SHA1) ||
+            hashEquals(ovrStmColOrange2Result, LIQMIX_SLOP_2X_ORANGE2_CTXR_SHA1);
 
-            // ------------------------------------------------------
-            // MGS2: Check if liqmix AI slop packs are installed
-            // ------------------------------------------------------
-        if (Util::SHA1Check(col_orange2OvrStmTest, LIQMIX_SLOP_4X_ORANGE2_CTXR_SHA1) || Util::SHA1Check(col_orange2OvrStmTest, LIQMIX_SLOP_2X_ORANGE2_CTXR_SHA1)) //liqmix 2x & 4x hashes
+        if (isLiqMixPack)
         {
             spdlog::warn("------------------- ! Community Bugfix Compilation - Mod Compatibility Issue ! -------------------");
             spdlog::warn("LiqMix's AI Slop AI Upscaled texture pack has been detected.");
@@ -105,40 +163,31 @@ void VerifyInstallation::Check()
             spdlog::warn("Please visit our Nexus page at: https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files to download our upscaled texture package.");
             spdlog::warn("Or our GitHub releases page at: https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/releases");
             spdlog::warn("------------------- ! Community Bugfix Compilation - Mod Compatibility Issue ! -------------------");
+
             if (int result = MessageBoxA(
                 nullptr,
                 "LiqMix's AI Slop AI Upscaled texture pack has been detected.\n"
-                "LiqMix's AI Slop texture pack is VERY out of date and has been replaced by the Community Bugfix Compilation's upscaled packs, which includes all the texture fixes from the base version."
+                "\n"
+                "LiqMix's AI Slop texture pack is VERY out of date and has been replaced by the Community Bugfix Compilation's upscaled packs, which includes all the texture fixes from the base version.\n"
                 "Please remove LiqMix's AI Slop Upscaled texture pack to ensure proper game functionality.\n"
                 "\n"
-                "Would you like to open the Community Bugfix Nexus download page now to download the base package?"
+                "Would you like to open the Community Bugfix Nexus download page now to download the correct package?\n"
                 "(You can also find a link to our GitHub releases on the Nexus page if preferred.)",
-                "Community Bugfix Compilation (Base) Missing",
+                "Community Bugfix Compilation - Mod Compatibility Issue",
                 MB_ICONWARNING | MB_YESNO);
-            result == IDYES)
+                result == IDYES)
             {
-                ShellExecuteA(
-                    nullptr,
-                    "open",
-                    "https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files",
-                    nullptr,
-                    nullptr,
-                    SW_SHOWNORMAL
-                );
+                openCommunityBugfixPage();
             }
         }
-            // ------------------------------------------------------
-            // MGS2: Verify community bugfix upscaled pack is loaded AFTER the base pack
-            // ------------------------------------------------------
-        else if (Util::SHA1Check(col_orange2OvrStmTest, CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1)) //community fix 4x is installed
+        // ------------------------------------------------------
+        // MGS2: Verify community bugfix upscaled pack is loaded AFTER the base pack
+        // ------------------------------------------------------
+        else if (hashEquals(ovrStmColOrange2Result, CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1))
         {
-            if (const std::filesystem::path SelfRemade_4x_ovr_eu_seculitycard_lv2_alp = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "seculitycard_lv2_alp.bmp.ctxr"; 
-                std::filesystem::exists(SelfRemade_4x_ovr_eu_seculitycard_lv2_alp) && !Util::SHA1Check(SelfRemade_4x_ovr_eu_seculitycard_lv2_alp, CBFC_4x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1))
+            if (seculityCardResult.exists && !hashEquals(seculityCardResult, CBFC_4x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1))
             {
-
-
                 spdlog::warn("------------------- ! Community Bugfix Compilation (4x Upscaled Pack) Installation Issue ! -------------------");
-
                 spdlog::warn("Community Bugfix Compilation 4x Texture Pack installation issue detected.");
                 spdlog::warn("Unable to get the expected texture hash for seculitycard_lv2_alp in the 4x Upscaled pack. This usually means the base package was installed or loaded after the 4x pack.");
                 spdlog::warn("The 4x Upscaled pack must be installed or loaded AFTER the base package.");
@@ -148,7 +197,6 @@ void VerifyInstallation::Check()
                 spdlog::warn("Or our GitHub releases page at: https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/releases");
                 spdlog::warn("------------------- ! Community Bugfix Compilation (4x Upscaled Pack) Installation Issue ! -------------------");
 
-
                 if (int result = MessageBoxA(
                     nullptr,
                     "Community Bugfix Compilation 4x Texture Pack installation issue detected.\n"
@@ -156,8 +204,8 @@ void VerifyInstallation::Check()
                     "Unable to get the expected texture hash for seculitycard_lv2_alp in the 4x Upscaled pack. This usually means the base package was installed or loaded after the 4x pack.\n"
                     "The 4x Upscaled pack must be installed or loaded AFTER the base package.\n"
                     "\n"
-                    "Please reinstall the 4x Upscaled pack to ensure correct behavior."
-                    "If you are using a mod manager, make sure the 4x Upscaled pack is loaded AFTER the base package."
+                    "Please reinstall the 4x Upscaled pack to ensure correct behavior.\n"
+                    "If you are using a mod manager, make sure the 4x Upscaled pack is loaded AFTER the base package.\n"
                     "\n"
                     "Would you like to open the Community Bugfix Nexus download page now to redownload the 4x upscaled package?\n"
                     "(You can also find a link to our GitHub releases on the Nexus page if preferred.)",
@@ -165,36 +213,23 @@ void VerifyInstallation::Check()
                     MB_ICONWARNING | MB_YESNO);
                 result == IDYES)
                 {
-                    ShellExecuteA(
-                        nullptr,
-                        "open",
-                        "https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files",
-                        nullptr,
-                        nullptr,
-                        SW_SHOWNORMAL
-                    );
+                    openCommunityBugfixPage();
                 }
             }
         }
-
-        else if (Util::SHA1Check(col_orange2OvrStmTest, CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1)) //community fix 2x is installed
+        else if (hashEquals(ovrStmColOrange2Result, CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1))
         {
-            if (const std::filesystem::path SelfRemade_2x_ovr_eu_seculitycard_lv2_alp = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "seculitycard_lv2_alp.bmp.ctxr";
-                std::filesystem::exists(SelfRemade_2x_ovr_eu_seculitycard_lv2_alp) && !Util::SHA1Check(SelfRemade_2x_ovr_eu_seculitycard_lv2_alp, CBFC_2x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1))
+            if (seculityCardResult.exists && !hashEquals(seculityCardResult, CBFC_2x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1))
             {
-
-
                 spdlog::warn("------------------- ! Community Bugfix Compilation (2x Upscaled Pack) Installation Issue ! -------------------");
-
                 spdlog::warn("Community Bugfix Compilation 2x Texture Pack installation issue detected.");
                 spdlog::warn("Unable to get the expected texture hash for seculitycard_lv2_alp in the 2x Upscaled pack. This usually means the base package was installed or loaded after the 2x pack.");
                 spdlog::warn("The 2x Upscaled pack must be installed or loaded AFTER the base package.");
                 spdlog::warn("Please reinstall the 2x Upscaled pack to ensure correct behavior.");
                 spdlog::warn("If you are using a mod manager, make sure the 2x Upscaled pack is loaded AFTER the base package.");
-                spdlog::warn("Please visit our Nexus page at: https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files to redownload the 4x upscaled package.");
+                spdlog::warn("Please visit our Nexus page at: https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files to redownload the 2x upscaled package.");
                 spdlog::warn("Or our GitHub releases page at: https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/releases");
                 spdlog::warn("------------------- ! Community Bugfix Compilation (2x Upscaled Pack) Installation Issue ! -------------------");
-
 
                 if (int result = MessageBoxA(
                     nullptr,
@@ -203,8 +238,8 @@ void VerifyInstallation::Check()
                     "Unable to get the expected texture hash for seculitycard_lv2_alp in the 2x Upscaled pack. This usually means the base package was installed or loaded after the 2x pack.\n"
                     "The 2x Upscaled pack must be installed or loaded AFTER the base package.\n"
                     "\n"
-                    "Please reinstall the 2x Upscaled pack to ensure correct behavior."
-                    "If you are using a mod manager, make sure the 2x Upscaled pack is loaded AFTER the base package."
+                    "Please reinstall the 2x Upscaled pack to ensure correct behavior.\n"
+                    "If you are using a mod manager, make sure the 2x Upscaled pack is loaded AFTER the base package.\n"
                     "\n"
                     "Would you like to open the Community Bugfix Nexus download page now to redownload the 2x upscaled package?\n"
                     "(You can also find a link to our GitHub releases on the Nexus page if preferred.)",
@@ -212,32 +247,19 @@ void VerifyInstallation::Check()
                     MB_ICONWARNING | MB_YESNO);
                 result == IDYES)
                 {
-                    ShellExecuteA(
-                        nullptr,
-                        "open",
-                        "https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files",
-                        nullptr,
-                        nullptr,
-                        SW_SHOWNORMAL
-                    );
+                    openCommunityBugfixPage();
                 }
             }
         }
-        
-
-
     }
 
     // ------------------------------------------------------
     // MGS2: Verify community bugfix upscaled pack is loaded AFTER better audio mod
     // ------------------------------------------------------
-
-    if (const std::filesystem::path afevisBugfixTestPathOne = sExePath / "us" / "demo" / "_bp" / "p010_01_p01g.sdt"; //vamp cutscene decensor fix
-        std::filesystem::exists(afevisBugfixTestPathOne) && (Util::SHA1Check(afevisBugfixTestPathOne, BETTER_AUDIO_p010_01_p01g_VAMP_SEAL_SDT_SHA1)
-                                                             || Util::SHA1Check(afevisBugfixTestPathOne, VANILLA_p010_01_p01g_VAMP_SEAL_SDT_SHA1))) //vanilla sha1
+    if (betterAudioResult.exists &&
+        (hashEquals(betterAudioResult, BETTER_AUDIO_p010_01_p01g_VAMP_SEAL_SDT_SHA1) ||
+         hashEquals(betterAudioResult, VANILLA_p010_01_p01g_VAMP_SEAL_SDT_SHA1)))
     {
-
-
         spdlog::warn("------------------- ! Community Bugfix Compilation (Base) - Installation Issue ! -------------------");
         spdlog::warn("Community Bugfix Compilation installation issue detected!");
         spdlog::warn("Unexpected SHA-1 hash for p010_01_p01g.sdt.");
@@ -247,6 +269,7 @@ void VerifyInstallation::Check()
         spdlog::warn("Please visit our Nexus page at: https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files to redownload the base package.");
         spdlog::warn("Or our GitHub releases page at: https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/releases");
         spdlog::warn("------------------- ! Community Bugfix Compilation (Base) Missing ! -------------------");
+
         if (int result = MessageBoxA(
             nullptr,
             "Community Bugfix Compilation installation issue detected!\n"
@@ -263,55 +286,38 @@ void VerifyInstallation::Check()
             MB_ICONWARNING | MB_YESNO);
         result == IDYES)
         {
-            ShellExecuteA(
-                nullptr,
-                "open",
-                "https://www.nexusmods.com/metalgearsolid2mc/mods/52?tab=files",
-                nullptr,
-                nullptr,
-                SW_SHOWNORMAL
-            );
+            openCommunityBugfixPage();
         }
     }
-
 
     // ------------------------------------------------------
     // MGS2: Check if Higher Resolution KojiPro posters mod is installed
     // ------------------------------------------------------
-
-    if (const std::filesystem::path afevisBugfixTestPathOne = sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "zoe_pos_n.bmp.ctxr"; //Higher Resolution KojiPro Posters check. we replaced it.
-        std::filesystem::exists(afevisBugfixTestPathOne) && Util::SHA1Check(afevisBugfixTestPathOne, HIGHER_RES_KOJIPRO_ZOE_POSTER_CTXR_SHA1))
+    if (zoePosterResult.exists && hashEquals(zoePosterResult, HIGHER_RES_KOJIPRO_ZOE_POSTER_CTXR_SHA1))
     {
-
-
         spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
         spdlog::warn("Community Bugfix Compilation installation issue detected.");
         spdlog::warn("j1llm4r13's Higher Resolution KojiPro Posters mod has been detected.");
         spdlog::warn("This mod has been replaced by the Community Bugfix Compilation, which hand-remakes the original source assets.");
         spdlog::warn("We already override the old mod's files, so we're just noting that it's unneeded here. <3");
-        spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue  ! -------------------");
-
+        spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
     }
-    
 
     // ------------------------------------------------------
     // MGS2: Check if guy on a chair hair fix is installed
     // ------------------------------------------------------
-
-    if (const std::filesystem::path afevisBugfixTestPathOne = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair3.bmp.ctxr"; //
-        std::filesystem::exists(afevisBugfixTestPathOne) && (Util::SHA1Check(afevisBugfixTestPathOne, GUYONACHAIR_HAIRFIX_SNA_HAIR3_V2_CTXR_SHA1) || Util::SHA1Check(afevisBugfixTestPathOne, GUYONACHAIR_HAIRFIX_SNA_HAIR3_V1_CTXR_SHA1)))
+    if (snakeHairResult.exists &&
+        (hashEquals(snakeHairResult, GUYONACHAIR_HAIRFIX_SNA_HAIR3_V2_CTXR_SHA1) ||
+         hashEquals(snakeHairResult, GUYONACHAIR_HAIRFIX_SNA_HAIR3_V1_CTXR_SHA1)))
     {
-
-
         spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
         spdlog::warn("Community Bugfix Compilation installation issue detected.");
         spdlog::warn("Guy on a Chair's Snake hair fix mod has been detected.");
         spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.");
         spdlog::warn("Leftover mod files have been cleaned up.");
-        spdlog::warn("------------------- !  Community Bugfix Compilation - Installation Issue  ! -------------------");
-
+        spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
     }
 
 
-
 }
+

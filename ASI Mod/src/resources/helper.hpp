@@ -81,6 +81,8 @@ namespace Util
     std::string GetFileProductName(const std::filesystem::path& path);
 
     bool SHA1Check(const std::filesystem::path& filePath, const std::string& expected);
+    std::optional<std::array<std::uint8_t, 20>> ComputeSHA1Bytes(const std::filesystem::path& filePath);
+    bool SHA1Equals(const std::array<std::uint8_t, 20>& actual, const std::string& expected);
 
     void ShutdownSHA1Provider();
 

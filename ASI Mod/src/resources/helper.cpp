@@ -797,21 +797,14 @@ namespace Util
     }
 
 
-    bool SHA1Check(const std::filesystem::path& filePath, const std::string& expected)
+    std::optional<std::array<std::uint8_t, 20>> ComputeSHA1Bytes(const std::filesystem::path& filePath)
     {
-        std::array<std::uint8_t, 20> expectedBytes {};
-        if (!ParseSha1Hex(expected, expectedBytes))
-        {
-            spdlog::error("SHA1Check: invalid expected SHA-1 hex for '{}'", filePath.string());
-            return false;
-        }
-
         BCRYPT_ALG_HANDLE hAlg = nullptr;
         DWORD hashObjectSize = 0;
         if (!GetSHA1ProviderSnapshot(hAlg, hashObjectSize))
         {
-            spdlog::error("SHA1Check: failed to initialize SHA-1 provider for '{}'", filePath.string());
-            return false;
+            spdlog::error("ComputeSHA1Bytes: failed to initialize SHA-1 provider for '{}'", filePath.string());
+            return std::nullopt;
         }
 
         std::vector<std::uint8_t> hashObject(hashObjectSize);
@@ -819,16 +812,16 @@ namespace Util
         BCRYPT_HASH_HANDLE hHash = nullptr;
         if (BCryptCreateHash(hAlg, &hHash, hashObject.data(), hashObjectSize, nullptr, 0, 0) != 0)
         {
-            spdlog::error("SHA1Check: BCryptCreateHash failed for '{}'", filePath.string());
-            return false;
+            spdlog::error("ComputeSHA1Bytes: BCryptCreateHash failed for '{}'", filePath.string());
+            return std::nullopt;
         }
 
         std::ifstream file(filePath, std::ios::binary);
         if (!file)
         {
-            spdlog::error("SHA1Check: failed to open file '{}'", filePath.string());
+            spdlog::error("ComputeSHA1Bytes: failed to open file '{}'", filePath.string());
             BCryptDestroyHash(hHash);
-            return false;
+            return std::nullopt;
         }
 
         thread_local std::vector<char> buffer(1 << 16);
@@ -846,9 +839,9 @@ namespace Util
                     static_cast<ULONG>(bytesRead),
                     0) != 0)
                 {
-                    spdlog::error("SHA1Check: BCryptHashData failed for '{}'", filePath.string());
+                    spdlog::error("ComputeSHA1Bytes: BCryptHashData failed for '{}'", filePath.string());
                     BCryptDestroyHash(hHash);
-                    return false;
+                    return std::nullopt;
                 }
             }
 
@@ -859,25 +852,47 @@ namespace Util
 
             if (file.fail())
             {
-                spdlog::error("SHA1Check: read failed for '{}'", filePath.string());
+                spdlog::error("ComputeSHA1Bytes: read failed for '{}'", filePath.string());
                 BCryptDestroyHash(hHash);
-                return false;
+                return std::nullopt;
             }
         }
 
         std::array<std::uint8_t, 20> computedHash {};
         if (BCryptFinishHash(hHash, computedHash.data(), static_cast<ULONG>(computedHash.size()), 0) != 0)
         {
-            spdlog::error("SHA1Check: BCryptFinishHash failed for '{}'", filePath.string());
+            spdlog::error("ComputeSHA1Bytes: BCryptFinishHash failed for '{}'", filePath.string());
             BCryptDestroyHash(hHash);
-            return false;
+            return std::nullopt;
         }
 
         BCryptDestroyHash(hHash);
-
-        return std::equal(computedHash.begin(), computedHash.end(), expectedBytes.begin());
+        return computedHash;
     }
 
+    bool SHA1Equals(const std::array<std::uint8_t, 20>& actual, const std::string& expected)
+    {
+        std::array<std::uint8_t, 20> expectedBytes {};
+        if (!ParseSha1Hex(expected, expectedBytes))
+        {
+            spdlog::error("SHA1Equals: invalid expected SHA-1 hex.");
+            return false;
+        }
+
+        return std::equal(actual.begin(), actual.end(), expectedBytes.begin());
+    }
+
+    bool SHA1Check(const std::filesystem::path& filePath, const std::string& expected)
+    {
+        const std::optional<std::array<std::uint8_t, 20>> computed = ComputeSHA1Bytes(filePath);
+        if (!computed.has_value())
+        {
+            return false;
+        }
+
+        return SHA1Equals(*computed, expected);
+    }
+    
     void ShutdownSHA1Provider()
     {
         std::scoped_lock lock(gSha1ProviderMutex);

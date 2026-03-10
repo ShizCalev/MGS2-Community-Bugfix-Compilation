@@ -79,6 +79,10 @@ void Logging::Initialize()
     GetModuleFileNameW(baseModule, exePath, MAX_PATH);
     sExePath = exePath;
     sExeName = sExePath.filename().string();
+    if (_stricmp(sExeName.c_str(), "launcher.exe") == 0)
+    {
+        bIsLauncher = true;
+    }
     sExePath = sExePath.remove_filename();
 
     // spdlog initialisation
@@ -92,7 +96,7 @@ void Logging::Initialize()
             }
             g_Logging.bLoaded = true;
             // Create 10MB truncated logger
-            std::filesystem::path sLogFile = sFixName + ".log";
+            std::filesystem::path sLogFile = (sExePath / "logs" / (sFixName + (bIsLauncher ? "_Launcher" : "_Game") + ".log"));
             std::shared_ptr<spdlog::logger> logger = std::make_shared<spdlog::logger>(sLogFile.string(), std::make_shared<size_limited_sink<std::mutex>>((sExePath / "logs" / sLogFile).string(), 10 * 1024 * 1024));
             spdlog::set_default_logger(logger);
 
@@ -109,6 +113,11 @@ void Logging::Initialize()
             spdlog::info("ASI plugin location: {}", (sExePath / sFixPath / (sFixName + ".asi")).string());
             spdlog::info("----------");
             spdlog::info("Log file: {}", (sExePath / "logs" / sLogFile).string());
+            if (std::filesystem::path pOldLogFile = sExePath / "logs" / (sFixName + ".log"); std::filesystem::exists(pOldLogFile))
+            {
+                spdlog::warn("Found an outdated log file from a previous version of {}. Removing: {}", sFixName, pOldLogFile.string());
+                std::filesystem::remove(pOldLogFile);
+            }
             spdlog::info("----------");
 
             // Log module details
