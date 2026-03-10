@@ -26,12 +26,19 @@ constexpr const char* LIQMIX_SLOP_2X_ORANGE2_CTXR_SHA1 = "96ba1191c0da112d355bf5
 constexpr const char* HIGHER_RES_KOJIPRO_ZOE_POSTER_CTXR_SHA1 = "ce3fe5bd55aebb046103b5dba1cffa736b08abd2";
 
 
+constexpr const char* GUYONACHAIR_HAIRFIX_SNA_HAIR3_V2_CTXR_SHA1 = "606cbad8a8b3e850b9a8b76f944bc3be25ed5f69";
+constexpr const char* GUYONACHAIR_HAIRFIX_SNA_HAIR3_V1_CTXR_SHA1 = "f8ae30ee716bd43ed7af1e5b8d78a93d32711668";
+
 constexpr const char* BETTER_AUDIO_p010_01_p01g_VAMP_SEAL_SDT_SHA1 = "3424163081275d9152b162d648b82616d3100ab1";
 
 //Vanilla game hashes
 constexpr const char* VANILLA_p010_01_p01g_VAMP_SEAL_SDT_SHA1 = "301dcbda56107c7d5617a98256369abbb2b94fee";
 
-
+// todo - do all this shit in futures
+// detect outdated ui files
+// detect guy on a chair's old hair
+//      - bring over sha1 checker from demaster (after upgrading that to futures too
+// 
 
 void VerifyInstallation::Check()
 {
@@ -252,7 +259,7 @@ void VerifyInstallation::Check()
             "\n"
             "Would you like to open the Community Bugfix Nexus download page now to download the base package?\n"
             "(You can also find a link to our GitHub releases on the Nexus page if preferred.)",
-            "Community Bugfix Compilation (Base) Missing",
+            "Community Bugfix Compilation installation issue",
             MB_ICONWARNING | MB_YESNO);
         result == IDYES)
         {
@@ -282,10 +289,29 @@ void VerifyInstallation::Check()
         spdlog::warn("j1llm4r13's Higher Resolution KojiPro Posters mod has been detected.");
         spdlog::warn("This mod has been replaced by the Community Bugfix Compilation, which hand-remakes the original source assets.");
         spdlog::warn("We already override the old mod's files, so we're just noting that it's unneeded here. <3");
-        spdlog::warn("------------------- ! Community Bugfix Compilation (Base) Missing ! -------------------");
+        spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue  ! -------------------");
 
     }
     
+
+    // ------------------------------------------------------
+    // MGS2: Check if guy on a chair hair fix is installed
+    // ------------------------------------------------------
+
+    if (const std::filesystem::path afevisBugfixTestPathOne = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair3.bmp.ctxr"; //
+        std::filesystem::exists(afevisBugfixTestPathOne) && (Util::SHA1Check(afevisBugfixTestPathOne, GUYONACHAIR_HAIRFIX_SNA_HAIR3_V2_CTXR_SHA1) || Util::SHA1Check(afevisBugfixTestPathOne, GUYONACHAIR_HAIRFIX_SNA_HAIR3_V1_CTXR_SHA1)))
+    {
+
+
+        spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+        spdlog::warn("Community Bugfix Compilation installation issue detected.");
+        spdlog::warn("Guy on a Chair's Snake hair fix mod has been detected.");
+        spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.");
+        spdlog::warn("Leftover mod files have been cleaned up.");
+        spdlog::warn("------------------- !  Community Bugfix Compilation - Installation Issue  ! -------------------");
+
+    }
+
 
 
 }

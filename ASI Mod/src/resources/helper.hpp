@@ -3,6 +3,13 @@
 
 inline std::filesystem::path sFixPath;
 
+struct CtxrHashEntry
+{
+    const char* stem;
+    const char* sha1;
+};
+
+
 namespace Memory
 {
 
@@ -74,6 +81,9 @@ namespace Util
     std::string GetFileProductName(const std::filesystem::path& path);
 
     bool SHA1Check(const std::filesystem::path& filePath, const std::string& expected);
+
+    void ShutdownSHA1Provider();
+
 
     bool IsFileReadOnly(const std::filesystem::path& path);
 

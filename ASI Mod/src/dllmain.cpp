@@ -68,6 +68,9 @@ static void InitializeSubsystems()
     {
         INITIALIZE(CheckForUpdates());
     }
+
+    INITIALIZE(Util::ShutdownSHA1Provider());
+
 }
 
 std::mutex mainThreadFinishedMutex;

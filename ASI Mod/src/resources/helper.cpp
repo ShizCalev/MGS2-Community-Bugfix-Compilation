@@ -9,6 +9,139 @@
 
 #pragma comment(lib, "bcrypt.lib")
 
+
+namespace
+{
+    std::mutex gSha1ProviderMutex;
+    BCRYPT_ALG_HANDLE gSha1Alg = nullptr;
+    DWORD gSha1HashObjectSize = 0;
+
+    int HexNibble(const char c)
+    {
+        if (c >= '0' && c <= '9')
+        {
+            return c - '0';
+        }
+
+        if (c >= 'a' && c <= 'f')
+        {
+            return 10 + (c - 'a');
+        }
+
+        if (c >= 'A' && c <= 'F')
+        {
+            return 10 + (c - 'A');
+        }
+
+        return -1;
+    }
+
+    bool ParseSha1Hex(const std::string& hex, std::array<std::uint8_t, 20>& outBytes)
+    {
+        if (hex.size() != 40)
+        {
+            return false;
+        }
+
+        for (size_t i = 0; i < outBytes.size(); ++i)
+        {
+            const int hi = HexNibble(hex[i * 2]);
+            const int lo = HexNibble(hex[i * 2 + 1]);
+
+            if (hi < 0 || lo < 0)
+            {
+                return false;
+            }
+
+            outBytes[i] = static_cast<std::uint8_t>((hi << 4) | lo);
+        }
+
+        return true;
+    }
+
+    bool EnsureSHA1ProviderInitialized()
+    {
+        std::scoped_lock lock(gSha1ProviderMutex);
+
+        if (gSha1Alg != nullptr)
+        {
+            return true;
+        }
+
+        if (BCryptOpenAlgorithmProvider(&gSha1Alg, BCRYPT_SHA1_ALGORITHM, nullptr, 0) != 0)
+        {
+            gSha1Alg = nullptr;
+            spdlog::error("SHA1Check: BCryptOpenAlgorithmProvider failed.");
+            return false;
+        }
+
+        DWORD cbData = 0;
+        if (BCryptGetProperty(
+            gSha1Alg,
+            BCRYPT_OBJECT_LENGTH,
+            reinterpret_cast<PUCHAR>(&gSha1HashObjectSize),
+            sizeof(gSha1HashObjectSize),
+            &cbData,
+            0) != 0)
+        {
+            spdlog::error("SHA1Check: BCryptGetProperty failed.");
+            BCryptCloseAlgorithmProvider(gSha1Alg, 0);
+            gSha1Alg = nullptr;
+            gSha1HashObjectSize = 0;
+            return false;
+        }
+
+        return true;
+    }
+
+    bool GetSHA1ProviderSnapshot(BCRYPT_ALG_HANDLE& outAlg, DWORD& outHashObjectSize)
+    {
+        if (!EnsureSHA1ProviderInitialized())
+        {
+            return false;
+        }
+
+        std::scoped_lock lock(gSha1ProviderMutex);
+
+        if (gSha1Alg == nullptr || gSha1HashObjectSize == 0)
+        {
+            spdlog::error("SHA1Check: SHA-1 provider is unavailable after initialization.");
+            return false;
+        }
+
+        outAlg = gSha1Alg;
+        outHashObjectSize = gSha1HashObjectSize;
+        return true;
+    }
+
+    struct HashCheckResult
+    {
+        size_t index = 0;
+        std::filesystem::path filePath;
+        bool exists = false;
+        bool hashMatched = false;
+    };
+
+    HashCheckResult CheckCtxrEntryHash(
+        const std::filesystem::path& baseDir,
+        const CtxrHashEntry& entry,
+        const size_t index)
+    {
+        HashCheckResult result;
+        result.index = index;
+        result.filePath = baseDir / (std::string(entry.stem) + ".ctxr");
+        result.exists = std::filesystem::exists(result.filePath);
+
+        if (!result.exists)
+        {
+            return result;
+        }
+
+        result.hashMatched = Util::SHA1Check(result.filePath, entry.sha1);
+        return result;
+    }
+}
+
 namespace Memory
 {
     std::string GetModuleVersion(HMODULE module)
@@ -666,94 +799,220 @@ namespace Util
 
     bool SHA1Check(const std::filesystem::path& filePath, const std::string& expected)
     {
+        std::array<std::uint8_t, 20> expectedBytes {};
+        if (!ParseSha1Hex(expected, expectedBytes))
+        {
+            spdlog::error("SHA1Check: invalid expected SHA-1 hex for '{}'", filePath.string());
+            return false;
+        }
+
         BCRYPT_ALG_HANDLE hAlg = nullptr;
-        BCRYPT_HASH_HANDLE hHash = nullptr;
         DWORD hashObjectSize = 0;
-        DWORD cbData = 0;
-        BYTE* hashObject = nullptr;
-        BYTE hash[20]; // SHA-1 = 20 bytes
-
-        if (BCryptOpenAlgorithmProvider(&hAlg, BCRYPT_SHA1_ALGORITHM, nullptr, 0))
+        if (!GetSHA1ProviderSnapshot(hAlg, hashObjectSize))
         {
-            spdlog::error("SHA1Check: BCryptOpenAlgorithmProvider failed for '{}'", filePath.string());
+            spdlog::error("SHA1Check: failed to initialize SHA-1 provider for '{}'", filePath.string());
             return false;
         }
 
-        if (BCryptGetProperty(hAlg, BCRYPT_OBJECT_LENGTH, reinterpret_cast<PUCHAR>(&hashObjectSize),
-                              sizeof(DWORD), &cbData, 0))
-        {
-            spdlog::error("SHA1Check: BCryptGetProperty failed for '{}'", filePath.string());
-            BCryptCloseAlgorithmProvider(hAlg, 0);
-            return false;
-        }
+        std::vector<std::uint8_t> hashObject(hashObjectSize);
 
-        hashObject = new BYTE[hashObjectSize];
-        if (BCryptCreateHash(hAlg, &hHash, hashObject, hashObjectSize, nullptr, 0, 0))
+        BCRYPT_HASH_HANDLE hHash = nullptr;
+        if (BCryptCreateHash(hAlg, &hHash, hashObject.data(), hashObjectSize, nullptr, 0, 0) != 0)
         {
             spdlog::error("SHA1Check: BCryptCreateHash failed for '{}'", filePath.string());
-            delete[] hashObject;
-            BCryptCloseAlgorithmProvider(hAlg, 0);
             return false;
         }
 
         std::ifstream file(filePath, std::ios::binary);
         if (!file)
         {
-            spdlog::error("SHA1Check: Failed to open file '{}'", filePath.string());
-            delete[] hashObject;
+            spdlog::error("SHA1Check: failed to open file '{}'", filePath.string());
             BCryptDestroyHash(hHash);
-            BCryptCloseAlgorithmProvider(hAlg, 0);
             return false;
         }
 
-        std::vector<char> buffer(1 << 16);
-        while (file.good())
+        thread_local std::vector<char> buffer(1 << 16);
+
+        while (true)
         {
-            file.read(buffer.data(), buffer.size());
-            if (BCryptHashData(hHash, reinterpret_cast<PUCHAR>(buffer.data()), static_cast<ULONG>(file.gcount()), 0))
+            file.read(buffer.data(), static_cast<std::streamsize>(buffer.size()));
+            const std::streamsize bytesRead = file.gcount();
+
+            if (bytesRead > 0)
             {
-                spdlog::error("SHA1Check: BCryptHashData failed for '{}'", filePath.string());
-                delete[] hashObject;
+                if (BCryptHashData(
+                    hHash,
+                    reinterpret_cast<PUCHAR>(buffer.data()),
+                    static_cast<ULONG>(bytesRead),
+                    0) != 0)
+                {
+                    spdlog::error("SHA1Check: BCryptHashData failed for '{}'", filePath.string());
+                    BCryptDestroyHash(hHash);
+                    return false;
+                }
+            }
+
+            if (file.eof())
+            {
+                break;
+            }
+
+            if (file.fail())
+            {
+                spdlog::error("SHA1Check: read failed for '{}'", filePath.string());
                 BCryptDestroyHash(hHash);
-                BCryptCloseAlgorithmProvider(hAlg, 0);
                 return false;
             }
         }
 
-        if (BCryptFinishHash(hHash, hash, sizeof(hash), 0))
+        std::array<std::uint8_t, 20> computedHash {};
+        if (BCryptFinishHash(hHash, computedHash.data(), static_cast<ULONG>(computedHash.size()), 0) != 0)
         {
             spdlog::error("SHA1Check: BCryptFinishHash failed for '{}'", filePath.string());
-            delete[] hashObject;
             BCryptDestroyHash(hHash);
-            BCryptCloseAlgorithmProvider(hAlg, 0);
             return false;
         }
 
-        std::ostringstream oss;
-        for (auto b : hash)
-        {
-            oss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(b);
-        }
-
-        delete[] hashObject;
         BCryptDestroyHash(hHash);
-        BCryptCloseAlgorithmProvider(hAlg, 0);
 
-        std::string computed = oss.str();
+        return std::equal(computedHash.begin(), computedHash.end(), expectedBytes.begin());
+    }
 
-        if (computed.size() != expected.size())
+    void ShutdownSHA1Provider()
+    {
+        std::scoped_lock lock(gSha1ProviderMutex);
+
+        if (gSha1Alg != nullptr)
         {
-            spdlog::error("SHA1Check: Mismatch length for '{}' (expected {} chars, got {})",
-                          filePath.string(), expected.size(), computed.size());
+            BCryptCloseAlgorithmProvider(gSha1Alg, 0);
+            gSha1Alg = nullptr;
+            gSha1HashObjectSize = 0;
+
+            spdlog::info("SHA1Check: SHA-1 provider shut down.");
+        }
+    }
+
+    bool RemoveMatchedCtxrFilesWithSentinelLast(const std::filesystem::path& baseDir, const std::span<const CtxrHashEntry> entries, const char* logDescription)
+    {
+        if (entries.empty())
+        {
+            spdlog::warn("RemoveMatchedCtxrFilesWithSentinelLast: no entries supplied.");
             return false;
         }
 
-        bool match = std::equal(computed.begin(), computed.end(), expected.begin(),
-                                [](char a, char b)
-                                {
-                                    return std::tolower(static_cast<unsigned char>(a)) == std::tolower(static_cast<unsigned char>(b));
-                                });
-        return match;
+        std::error_code baseEc;
+
+        const std::filesystem::path exeRoot = std::filesystem::weakly_canonical(sExePath, baseEc);
+        if (baseEc)
+        {
+            spdlog::error("RemoveMatchedCtxrFilesWithSentinelLast: failed to canonicalize sExePath '{}': {}", sExePath.string(), baseEc.message());
+            return false;
+        }
+
+        baseEc.clear();
+        const std::filesystem::path baseCanonical = std::filesystem::weakly_canonical(baseDir, baseEc);
+        if (baseEc)
+        {
+            spdlog::error("RemoveMatchedCtxrFilesWithSentinelLast: failed to canonicalize baseDir '{}': {}", baseDir.string(), baseEc.message());
+            return false;
+        }
+
+        auto exeIt = exeRoot.begin();
+        auto baseIt = baseCanonical.begin();
+
+        for (; exeIt != exeRoot.end(); ++exeIt, ++baseIt)
+        {
+            if (baseIt == baseCanonical.end() || *baseIt != *exeIt)
+            {
+                spdlog::error(
+                    "RemoveMatchedCtxrFilesWithSentinelLast: baseDir '{}' is outside sExePath '{}'. Aborting cleanup.",
+                    baseCanonical.string(),
+                    exeRoot.string());
+                return false;
+            }
+        }
+
+        const size_t sentinelIndex = entries.size() - 1;
+        const CtxrHashEntry& sentinelEntry = entries[sentinelIndex];
+        const std::filesystem::path sentinelPath = baseCanonical / (std::string(sentinelEntry.stem) + ".ctxr");
+
+        spdlog::info("Checking for presence of {} in: {}", logDescription, baseCanonical.string());
+
+        if (!std::filesystem::exists(sentinelPath))
+        {
+            spdlog::info("No {} found, skipping cleanup.", logDescription);
+            return true;
+        }
+
+        if (!SHA1Check(sentinelPath, sentinelEntry.sha1))
+        {
+            spdlog::info("No {} found. Sentinel ({}.ctxr) detected but hash did not match outdated version, skipping cleanup.", logDescription, sentinelEntry.stem);
+            return true;
+        }
+
+        std::vector<std::future<HashCheckResult>> futures;
+        futures.reserve(sentinelIndex);
+
+        for (size_t i = 0; i < sentinelIndex; ++i)
+        {
+            futures.emplace_back(std::async(
+                std::launch::async,
+                [baseCanonical, entries, i]()
+                {
+                    return CheckCtxrEntryHash(baseCanonical, entries[i], i);
+                }));
+        }
+
+        std::vector<HashCheckResult> matchesToRemove;
+        matchesToRemove.reserve(sentinelIndex);
+
+        for (auto& future : futures)
+        {
+            HashCheckResult result = future.get();
+
+            if (!result.exists)
+            {
+                continue;
+            }
+
+            if (!result.hashMatched)
+            {
+                continue;
+            }
+
+            matchesToRemove.emplace_back(std::move(result));
+        }
+
+        for (const HashCheckResult& match : matchesToRemove)
+        {
+            std::error_code removeEc;
+            std::filesystem::remove(match.filePath, removeEc);
+
+            if (removeEc)
+            {
+                spdlog::warn("{} cleanup halted: failed to remove {}: {}", logDescription, match.filePath.string(), removeEc.message());
+                spdlog::warn("{} cleanup stopped before sentinel removal. Sentinel was intentionally left in place.", logDescription);
+                return false;
+            }
+
+            spdlog::info("Removed matched ctxr: {}", match.filePath.string());
+        }
+
+        {
+            std::error_code removeEc;
+            std::filesystem::remove(sentinelPath, removeEc);
+
+            if (removeEc)
+            {
+                spdlog::warn("{} cleanup halted: failed to remove sentinel {}: {}", logDescription, sentinelPath.string(), removeEc.message());
+                return false;
+            }
+
+            spdlog::info("Removed matched ctxr: {}", sentinelPath.string());
+        }
+
+        spdlog::info("{} cleanup fully completed.", logDescription);
+        return true;
     }
 
 
