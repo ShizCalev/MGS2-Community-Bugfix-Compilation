@@ -1,0 +1,14 @@
+a00b	Navigational Deck (Meryl Fight)
+a00c	Navigational Deck (After Meryl Fight UNUSED)
+a01e	Deck E,the bridge (Snake tales / alt missions)
+d04t	Snake sees Russian Choppers (Cutscene)
+d05t	Snake Sneaks on Olga/Olga Defeated (Cutscene)
+ta01e	Deck E,the bridge (Snake Tales with Meryl)
+w00b	Navigational Deck (Olga Fight)
+w00c	Navigational Deck (After Olga Fight)
+w01e	Deck E,the bridge
+
+
+a02b	engine
+a03a	holds port
+w01d	Deck D,crew's quarters
