@@ -230,6 +230,61 @@ def check_no_mip_fix(file_path, patterns):
             with print_lock:
                 print(f"[Error moving to no_mip_fix] {file_path}: {e}")
 
+def restore_stale_no_mip_files(patterns):
+    candidate_files = []
+
+    for root, _, files in os.walk(ROOT_DIR):
+        root_lower = root.lower()
+        if "no_mip_fixes" not in root_lower:
+            continue
+
+        for f in files:
+            if f.lower().endswith((".png", ".tga")):
+                candidate_files.append(os.path.join(root, f))
+
+    print(f"[+] Restore pass: Scanning {len(candidate_files)} files under no_mip_fixes...")
+
+    restored_count = 0
+
+    for file_path in candidate_files:
+        lower_path = file_path.lower()
+
+        parts = os.path.dirname(file_path).split(os.sep)
+        parts_lower = [p.lower() for p in parts]
+
+        if "no_mip_fixes" not in parts_lower:
+            continue
+
+        idx = parts_lower.index("no_mip_fixes")
+        base_dir = os.sep.join(parts[:idx])
+        if not base_dir:
+            continue
+
+        name_no_ext = os.path.splitext(os.path.basename(file_path))[0].lower()
+
+        should_stay_for_regex = matches_no_mip_patterns(name_no_ext, patterns)
+
+        is_ui_subfolder = (
+            f"{os.sep}no_mip_fixes{os.sep}ui{os.sep}" in lower_path
+            or f"{os.sep}no_mip_fixes{os.sep}not_regex_matched_ui{os.sep}" in lower_path
+        )
+
+        if should_stay_for_regex or is_ui_subfolder:
+            continue
+
+        dest_path = os.path.join(base_dir, os.path.basename(file_path))
+
+        try:
+            os.makedirs(base_dir, exist_ok=True)
+            shutil.move(file_path, dest_path)
+            with print_lock:
+                print(f"[Restored from no_mip_fixes] {file_path} -> {dest_path}")
+            restored_count += 1
+        except Exception as e:
+            with print_lock:
+                print(f"[Error restoring] {file_path}: {e}")
+
+    print(f"[+] Restore pass complete. Restored {restored_count} stale files from no_mip_fixes.")
 
 # ==========================================================
 # STAGE 4: NPOT UI / NOT_REGEX_MATCHED_UI
@@ -437,6 +492,8 @@ def main():
     # --- Stage 3: no-mip fix check ---
     print("[+] Stage 3: Checking for no-mip regex matches across all subfolders...")
     patterns = load_no_mip_patterns(NO_MIP_REGEX_FILE)
+
+    restore_stale_no_mip_files(patterns)
 
     all_png_tga = []
     for root, _, files in os.walk(ROOT_DIR):

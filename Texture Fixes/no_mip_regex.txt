@@ -1,8 +1,6 @@
 //Bumps & Speculars
 _sub_
 _sub\..*
-_mod1
-_mod2
 _bmap
 
 ^0015d707$

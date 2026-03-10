@@ -3999,7 +3999,7 @@ gen_mecaskirt_sub_ovl_alp.bmp
 gol_tarai_ovl_sub_alp.bmp
 vr2_dmm_sub_alp_ovl.bmp
 
------ NEEDS MIPS STRIPPED - NPOT (Count: 39) -----
+----- NEEDS MIPS STRIPPED - NPOT (Count: 38) -----
 0051a133
 angle_alp_ovl.bmp
 call_alp_ovl.bmp
@@ -4022,7 +4022,6 @@ mecgeno1_e_alp_ovl.bmp
 menu_fnt_alp_ovl.bmp
 mode_alp_ovl.bmp
 nom_alp_ovl.bmp
-nypo_ovl_mod1210_alp.bmp
 pit_arm_ovl_alp_sub.bmp
 pit_armark_l_alp_ovl_sub.bmp
 pit_armark_r_alp_ovl_sub.bmp
@@ -4134,7 +4133,7 @@ ws71a_sdw_12_alp_ovl.bmp
 xlit24a_alp.bmp
 xlit24b_alp.bmp
 
------ MIPS CORRECT - NPOT (NPOT) (Count: 173) -----
+----- MIPS CORRECT - NPOT (NPOT) (Count: 174) -----
 1wallSh_alp_ovl.bmp
 1wallSh_alp_ovl.bmp_0632d8b69677918c5ecab5a7bf5e3589
 cigarette_tx_alp.bmp
@@ -4167,6 +4166,7 @@ medicine_rabel_alp_ovl.bmp
 nametag_gbs1_def_add_alp.bmp
 nametag_wall_def_add_alp.bmp
 node_areaname_alp_ovl.bmp
+nypo_ovl_mod1210_alp.bmp
 pdray_marines_alp_ovl.bmp
 pdray_number_b01_alp_ovl.bmp
 pdray_number_b02_alp_ovl.bmp
@@ -4319,9 +4319,9 @@ BP REMADE | NEEDS MIPS STRIPPED - NPOT (NEED TO FIND): 128
 BP REMADE | MIPS CORRECT - POT (LOW PRIORITY): 15
 BP REMADE | MIPS CORRECT - NPOT (NEED TO FIND): 3
 OG PS2 FILES | NEEDS MIPS STRIPPED - POT (NEED TO FIND): 4
-OG PS2 FILES | NEEDS MIPS STRIPPED - NPOT (NEED TO FIND): 39
+OG PS2 FILES | NEEDS MIPS STRIPPED - NPOT (NEED TO FIND): 38
 OG PS2 FILES | MIPS CORRECT - POT (LOW PRIORITY): 92
-OG PS2 FILES | MIPS CORRECT - NPOT (NEED TO FIND): 173
+OG PS2 FILES | MIPS CORRECT - NPOT (NEED TO FIND): 174
 
 TOTAL MIPS CORRECT (POT): 107
 ALL OTHER CATEGORIES: 350

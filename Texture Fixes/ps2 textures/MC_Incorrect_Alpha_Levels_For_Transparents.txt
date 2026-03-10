@@ -29,6 +29,7 @@ HAS ALPHA
 	c_alp_ovl.bmp
 	c_alp_ovl.bmp_c3c45df5eff774d767719a74e507012e
 	cam_face_dt_skl_alp_ovl.bmp
+	cam_fh_ovl_alp_mod1120_emap.bmp
 	cam_mtg_alp_ovl.bmp
 	caution_alp_ovl.bmp
 	cd_alp_ovl.bmp
@@ -471,6 +472,7 @@ HAS ALPHA
 	ticsh2_alp_ovl.bmp
 	ticsh_alp_ovl.bmp
 	tools_shadow02_alp_ovl.bmp
+	usmdt_ovl_mod1210_alp.bmp
 	val_ra_pts1msk.bmp
 	ved_si2_msk.bmp
 	vmp_face_kizu1_ovl_alp.bmp
@@ -3190,7 +3192,6 @@ HAS ALPHA
 	cam_color_r_sub_alp_ovl.bmp
 	cam_eyes_ovl_sub_alp.bmp
 	cam_face_dt_sub_ovl_alp.bmp
-	cam_fh_ovl_alp_mod1120_emap.bmp
 	cam_hat_fh_dt_sub_alp_ovl.bmp
 	cam_hat_side_sub_alp_ovl.bmp
 	cam_kata_big_sub_alp_ovl.bmp
@@ -3481,7 +3482,6 @@ HAS ALPHA
 	tnr_re_body_ovl_sub_alp.bmp
 	tnr_re_eri_ovl_sub_alp.bmp
 	tnr_shoese_re_ovl_sub_alp.bmp
-	usmdt_ovl_mod1210_alp.bmp
 	vkf_big_mt_sub_alp_ovl.bmp
 	vmp_hair_back_ovl_sub_alp.bmp
 	vmp_leg_ss_ovl_sub_alp.bmp
