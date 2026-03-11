@@ -25,11 +25,19 @@ constexpr const char* LIQMIX_SLOP_2X_ORANGE2_CTXR_SHA1 = "96ba1191c0da112d355bf5
 
 constexpr const char* HIGHER_RES_KOJIPRO_ZOE_POSTER_CTXR_SHA1 = "ce3fe5bd55aebb046103b5dba1cffa736b08abd2";
 
+constexpr const char* GUYONACHAIR_HAIRFIX_V1_sna_hair1_alp_ovl_CTXR_SHA1 = "ac57554dd8fd091650c39c6698e551890af7cab1";
+constexpr const char* GUYONACHAIR_HAIRFIX_V1_sna_hair2_alp_ovl_CTXR_SHA1 = "68ab590796fd3849d64a7fa2c7c93960f2b89f30";
+constexpr const char* GUYONACHAIR_HAIRFIX_V1_sna_hair2dt_alp_ovl_CTXR_SHA1 = "862e917ccaf23e9bc9f7f841fe84dda00c70814b";
+constexpr const char* GUYONACHAIR_HAIRFIX_V1_sna_hair3_CTXR_SHA1 = "f8ae30ee716bd43ed7af1e5b8d78a93d32711668";
 
-constexpr const char* GUYONACHAIR_HAIRFIX_SNA_HAIR3_V2_CTXR_SHA1 = "606cbad8a8b3e850b9a8b76f944bc3be25ed5f69";
-constexpr const char* GUYONACHAIR_HAIRFIX_SNA_HAIR3_V1_CTXR_SHA1 = "f8ae30ee716bd43ed7af1e5b8d78a93d32711668";
+constexpr const char* GUYONACHAIR_HAIRFIX_V2_sna_hair1_alp_ovl_CTXR_SHA1 = "7daf7a08fc41da6d2697315db62de1b44a55d84d";
+constexpr const char* GUYONACHAIR_HAIRFIX_V2_sna_hair2_alp_ovl_CTXR_SHA1 = "3042e939b7900fc0d9afa84a51d13864336c3b52";
+constexpr const char* GUYONACHAIR_HAIRFIX_V2_sna_hair2dt_alp_ovl_CTXR_SHA1 = "1944c45397ef15c5a4b4d29f7ef34dc43774a958";
+constexpr const char* GUYONACHAIR_HAIRFIX_V2_sna_hair3_CTXR_SHA1 = "606cbad8a8b3e850b9a8b76f944bc3be25ed5f69";
 
 constexpr const char* BETTER_AUDIO_p010_01_p01g_VAMP_SEAL_SDT_SHA1 = "3424163081275d9152b162d648b82616d3100ab1";
+
+constexpr const char* AFEVIS_OLD_DECENSOR_EU_STAGE_D04T_BP_MANIFEST_SHA1 = "eaaee5d1c8d746994ee5dc47004a98448fe5c7b5";
 
 //Vanilla game hashes
 constexpr const char* VANILLA_p010_01_p01g_VAMP_SEAL_SDT_SHA1 = "301dcbda56107c7d5617a98256369abbb2b94fee";
@@ -90,7 +98,19 @@ void VerifyInstallation::Check()
     const std::filesystem::path seculityCardPath = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "seculitycard_lv2_alp.bmp.ctxr";
     const std::filesystem::path betterAudioCheckPath = sExePath / "us" / "demo" / "_bp" / "p010_01_p01g.sdt";
     const std::filesystem::path zoePosterPath = sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "zoe_pos_n.bmp.ctxr";
-    const std::filesystem::path snakeHairPath = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair3.bmp.ctxr";
+
+    const std::filesystem::path snakeHair1_Path = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair1_alp_ovl.bmp.ctxr";
+    const std::filesystem::path snakeHair2_Path = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair2_alp_ovl.bmp.ctxr";
+    const std::filesystem::path snakeHair2DT_Path = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair2dt_alp_ovl.bmp.ctxr";
+    const std::filesystem::path snakeHair3_Path = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair3.bmp.ctxr";
+
+    const std::filesystem::path v1_snakeHair1_Path = sExePath / "textures" / "flatlist" / "_win" / "sna_hair1_alp_ovl.bmp.ctxr";
+    const std::filesystem::path v1_snakeHair2_Path = sExePath / "textures" / "flatlist" / "_win" / "sna_hair2_alp_ovl.bmp.ctxr";
+    const std::filesystem::path v1_snakeHair2DT_Path = sExePath / "textures" / "flatlist" / "_win" / "sna_hair2dt_alp_ovl.bmp.ctxr";
+    const std::filesystem::path v1_snakeHair3_Path = sExePath / "textures" / "flatlist" / "_win" / "sna_hair3.bmp.ctxr";
+
+    const std::filesystem::path afevis_old_decensor_d04t_manifest_Path = sExePath / "eu" / "stage" / "d04t" / "bp_assets.txt";
+
 
     const auto hashEquals =
         [](const FileHashResult& result, const char* expected) -> bool
@@ -103,14 +123,31 @@ void VerifyInstallation::Check()
     auto seculityCardFuture = startHashTask(seculityCardPath);
     auto betterAudioFuture = startHashTask(betterAudioCheckPath);
     auto zoePosterFuture = startHashTask(zoePosterPath);
-    auto snakeHairFuture = startHashTask(snakeHairPath);
+    auto snakeHair1_Future = startHashTask(snakeHair1_Path);
+    auto snakeHair2_Future = startHashTask(snakeHair2_Path);
+    auto snakeHair2DT_Future = startHashTask(snakeHair2DT_Path);
+    auto snakeHair3_Future = startHashTask(snakeHair3_Path);
+    auto v1_snakeHair1_Future = startHashTask(v1_snakeHair1_Path);
+    auto v1_snakeHair2_Future = startHashTask(v1_snakeHair2_Path);
+    auto v1_snakeHair2DT_Future = startHashTask(v1_snakeHair2DT_Path);
+    auto v1_snakeHair3_Future = startHashTask(v1_snakeHair3_Path);
+    auto afevisOldDecensorD04TManifest_Future = startHashTask(afevis_old_decensor_d04t_manifest_Path);
 
     const FileHashResult baseColOrange2Result = baseColOrange2Future.get();
     const FileHashResult ovrStmColOrange2Result = ovrStmColOrange2Future.get();
     const FileHashResult seculityCardResult = seculityCardFuture.get();
     const FileHashResult betterAudioResult = betterAudioFuture.get();
     const FileHashResult zoePosterResult = zoePosterFuture.get();
-    const FileHashResult snakeHairResult = snakeHairFuture.get();
+    const FileHashResult snakeHair1_Result = snakeHair1_Future.get();
+    const FileHashResult snakeHair2_Result = snakeHair2_Future.get();
+    const FileHashResult snakeHair2DT_Result = snakeHair2DT_Future.get();
+    const FileHashResult snakeHair3_Result = snakeHair3_Future.get();
+    const FileHashResult v1_snakeHair1_Result = v1_snakeHair1_Future.get();
+    const FileHashResult v1_snakeHair2_Result = v1_snakeHair2_Future.get();
+    const FileHashResult v1_snakeHair2DT_Result = v1_snakeHair2DT_Future.get();
+    const FileHashResult v1_snakeHair3_Result = v1_snakeHair3_Future.get();
+    const FileHashResult afevisOldDecensorD04TManifest_Result = afevisOldDecensorD04TManifest_Future.get();
+
 
     // ------------------------------------------------------
     // MGS2: Verify Afevis Bugfix Collection (base) installation
@@ -257,8 +294,7 @@ void VerifyInstallation::Check()
     // MGS2: Verify community bugfix upscaled pack is loaded AFTER better audio mod
     // ------------------------------------------------------
     if (betterAudioResult.exists &&
-        (hashEquals(betterAudioResult, BETTER_AUDIO_p010_01_p01g_VAMP_SEAL_SDT_SHA1) ||
-         hashEquals(betterAudioResult, VANILLA_p010_01_p01g_VAMP_SEAL_SDT_SHA1)))
+        (hashEquals(betterAudioResult, BETTER_AUDIO_p010_01_p01g_VAMP_SEAL_SDT_SHA1) || hashEquals(betterAudioResult, VANILLA_p010_01_p01g_VAMP_SEAL_SDT_SHA1)))
     {
         spdlog::warn("------------------- ! Community Bugfix Compilation (Base) - Installation Issue ! -------------------");
         spdlog::warn("Community Bugfix Compilation installation issue detected!");
@@ -306,17 +342,98 @@ void VerifyInstallation::Check()
     // ------------------------------------------------------
     // MGS2: Check if guy on a chair hair fix is installed
     // ------------------------------------------------------
-    if (snakeHairResult.exists &&
-        (hashEquals(snakeHairResult, GUYONACHAIR_HAIRFIX_SNA_HAIR3_V2_CTXR_SHA1) ||
-         hashEquals(snakeHairResult, GUYONACHAIR_HAIRFIX_SNA_HAIR3_V1_CTXR_SHA1)))
-    {
-        spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
-        spdlog::warn("Community Bugfix Compilation installation issue detected.");
-        spdlog::warn("Guy on a Chair's Snake hair fix mod has been detected.");
-        spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.");
-        spdlog::warn("Leftover mod files have been cleaned up.");
-        spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+
+    //snakeHair1_Result is the community bugfixed file. the rest are leftovers
+    { 
+        if ((snakeHair1_Result.exists && (hashEquals(snakeHair1_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair1_alp_ovl_CTXR_SHA1) || hashEquals(snakeHair1_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair1_alp_ovl_CTXR_SHA1))) || //ovr_stm/ovr_eu
+            (v1_snakeHair1_Result.exists && hashEquals(v1_snakeHair1_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair1_alp_ovl_CTXR_SHA1)) ||         //v1 in flatlist/_win
+            (v1_snakeHair2_Result.exists && hashEquals(v1_snakeHair2_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair2_alp_ovl_CTXR_SHA1)) ||         //v1 in flatlist/_win
+            (v1_snakeHair2DT_Result.exists && hashEquals(v1_snakeHair2DT_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair2dt_alp_ovl_CTXR_SHA1)) ||   //v1 in flatlist/_win
+            (v1_snakeHair3_Result.exists && hashEquals(v1_snakeHair3_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair3_CTXR_SHA1)))                   //v1 in flatlist/_win
+        {
+            spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+            spdlog::warn("Community Bugfix Compilation installation issue detected.");
+            spdlog::warn("Guy on a Chair's Snake hair fix mod has been detected. ({})", snakeHair1_Result.path.string());
+            spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.");
+            spdlog::warn("Please reinstall the Community Bugfix Compilation (Base) to ensure correct behavior.");
+            spdlog::warn("Or, if you are using a mod manager, please remove Guy on a Chair's Snake hair fix mod.");
+            spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+            Logging::ShowConsole();
+            std::cout << "Community Bugfix Compilation installation issue detected.\n"
+                "----------------------------------------\n"
+                "Guy on a Chair's Snake hair fix mod has been detected.\n"
+                "(" << snakeHair1_Result.path.string() << ")\n"
+                "\n"
+                "This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.\n"
+                "\n"
+                "Please reinstall the Community Bugfix Compilation (Base) to ensure correct behavior.\n"
+                "Or, if you are using a mod manager, please remove Guy on a Chair's Snake hair fix mod." << std::endl;
+        }
+
+        if (snakeHair2_Result.exists && (hashEquals(snakeHair2_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair2_alp_ovl_CTXR_SHA1) || hashEquals(snakeHair2_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair2_alp_ovl_CTXR_SHA1)))
+        {
+            spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+            spdlog::warn("Community Bugfix Compilation installation issue detected.");
+            spdlog::warn("Leftover files from Guy on a Chair's Snake hair fix mod has been detected.");
+            spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.");
+            spdlog::warn("Removing leftover file: {}", snakeHair2_Result.path.string());
+            spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+            std::filesystem::remove(snakeHair2_Result.path);
+        }
+
+        if (snakeHair2DT_Result.exists && (hashEquals(snakeHair2DT_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair2dt_alp_ovl_CTXR_SHA1) || hashEquals(snakeHair2DT_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair2dt_alp_ovl_CTXR_SHA1)))
+        {
+            spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+            spdlog::warn("Community Bugfix Compilation installation issue detected.");
+            spdlog::warn("Leftover files from Guy on a Chair's Snake hair fix mod has been detected.");
+            spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.");
+            spdlog::warn("Removing leftover file: {}", snakeHair2DT_Result.path.string());
+            spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+            std::filesystem::remove(snakeHair2DT_Result.path);
+        }
+
+        if (snakeHair3_Result.exists && (hashEquals(snakeHair3_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair3_CTXR_SHA1) || hashEquals(snakeHair3_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair3_CTXR_SHA1)))
+        {
+            spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+            spdlog::warn("Community Bugfix Compilation installation issue detected.");
+            spdlog::warn("Leftover files from Guy on a Chair's Snake hair fix mod has been detected.");
+            spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.");
+            spdlog::warn("Removing leftover file: {}", snakeHair3_Result.path.string());
+            spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+            std::filesystem::remove(snakeHair3_Result.path);
+        }
     }
+
+
+    // ------------------------------------------------------
+    // Afevis's Sons of Liberty Restoration - Decensorship and Music Restoration
+    // ------------------------------------------------------
+
+    if (afevisOldDecensorD04TManifest_Result.exists && hashEquals(afevisOldDecensorD04TManifest_Result, AFEVIS_OLD_DECENSOR_EU_STAGE_D04T_BP_MANIFEST_SHA1))
+    {
+        spdlog::warn("------------------- ! Afevis's Sons of Liberty Restoration - Old Decensor Detected ! -------------------");
+        spdlog::warn("Afevis's Sons of Liberty Restoration - Decensorship and Music Restoration mod has been detected.");
+        spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Compilation, which includes the decensor and music restoration for all versions of the game.");
+        spdlog::warn("Installing the outdated version of the decensor mod after the Community Bugfix Compilation can cause crashes.");
+        spdlog::warn("Please reinstall the Community Bugfix Compilation (Base) to ensure correct behavior.");
+        spdlog::warn("Or, if you are using a mod manager, please remove Afevis's Sons of Liberty Restoration - Decensorship and Music Restoration mod.");
+        spdlog::warn("------------------- ! Afevis's Sons of Liberty Restoration - Old Decensor Detected ! -------------------");
+        
+
+        MessageBoxA(nullptr,
+            "Community Bugfix Compilation installation issue detected\n"
+            "----------------------------------------\n"
+            "Afevis's Sons of Liberty Restoration - Decensorship and Music Restoration mod has been detected.\n"
+            "\n"
+            "This mod has been integrated directly into the MGS2 Community Bugfix Compilation, which includes the decensor and music restoration for all versions of the game.\n"
+            "Installing the outdated version of the decensor mod after the Community Bugfix Compilation can cause crashes.\n"
+            "\n"
+            "Please reinstall the Community Bugfix Compilation (Base) to ensure correct behavior.\n"
+            "Or, if you are using a mod manager, please remove Afevis's Sons of Liberty Restoration - Decensorship and Music Restoration mod.",
+            "Community Bugfix Compilation Installation Issue",
+            MB_ICONWARNING | MB_OK);
+    }
+
 
 
 }

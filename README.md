@@ -81,7 +81,7 @@ Recommended Mod Load Order (from first to last):
 4. MGS2 Community Bugfix Compilation - AI Upscaled Texture Addon (if desired)
 5. [MGS2 Demastered Texture Pack](https://github.com/ShizCalev/MGS2-Demastered-Substance-Edition/) (if installed)
 6. [IroquoisPliskin1972](https://www.nexusmods.com/profile/IroquoisPliskin1972)'s [Solid Snake and Pliskin fixes and overhaul﻿](https://www.nexusmods.com/metalgearsolid2mc/mods/45)
-5. All other mods
+7. All other mods
 
 
 <br>
