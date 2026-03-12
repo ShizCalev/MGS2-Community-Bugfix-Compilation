@@ -22,8 +22,8 @@ afevis_fp_sna_hi_finger2.bmp,bfda8f2d28a90ddd2076f33e863c9049f4c0467c,12f6de941e
 afevis_fp_sna_hi_hand1.bmp,547d7c159933534163a266d2cc6923aa6236d328,22e2a428d975f407196a4e8265935c18f5be65ec,true,Self Remade\Finalized\Dont demaster\Dont upscale,true,false,0,none,false,1
 afevis_fp_sna_hi_hand2.bmp,8989845568e64eb2b17c990e39bf3d1f32dca373,5381a539e0f2494e99f536f4ccd60c8fbfdb5cdb,true,Self Remade\Finalized\Dont demaster\Dont upscale,true,false,0,none,false,1
 animal_alp_ovl.bmp,fe2bddeb1cf97ff137068d2e231453497185569e,fb12eaa936a3aa0afdb5ab494476ed95fab382d4,false,Self Remade\Finalized\Self Remastered\UI\Shared,true,false,0,none,true,1
-augm_stabbed_tnc_body.bmp,3c6a6fa48e519cd206c876d741b14f9dba11e7e8,5132c87114dbc2070e7187facd2f8e1a0ad4437d,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
-augm_tnc_eri.bmp,a4b588aa2ce8ab5284113ef9dd0cf649afdb3cb3,717745706c08e2591bdf945fecc583d3e6a1c80b,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
+augm_stabbed_tnc_body.bmp,3c6a6fa48e519cd206c876d741b14f9dba11e7e8,dd67602fbedaff2a1b9f004c24fd3d8cef4b949b,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
+augm_tnc_eri.bmp,a4b588aa2ce8ab5284113ef9dd0cf649afdb3cb3,717745706c08e2591bdf945fecc583d3e6a1c80b,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
 b_bg.bmp,24237a173703df54b3ccf6692f97d186d353bd87,cf38e2845b405ff06d1c0c05930f7591c562fac8,false,Self Remade\Finalized\Dont demaster\16-9 Fixes,true,false,0,none,true,1
 berrazano_alp_ovl.bmp,a26235f6d9ff8ec945b0eb6aa50a63befbb10683,d867af26f803cb1d6e33abda99075b898e8ab769,false,Self Remade\Finalized\Self Remastered\UI\Japanese,false,false,0,none,true,1
 bg_alp_ovl.bmp,0558188f1609dd3ca6ae74a6dc8bdd2e0b99f017,47df36607fabbc7e7715c15e8c8586c134dae6b3,false,Self Remade\Finalized\Dont demaster\16-9 Fixes,true,false,0,none,true,1
@@ -66,9 +66,9 @@ seculitycard_lv1_alp.bmp,7b5bd977427c3520953b0796b9b1de0e984eae3e,dec019a9e6649c
 seculitycard_lv2_alp.bmp,faf5689018816ff4bedaf9a7d22019143272a035,9e6c0491fb89385cdfda6eafd6be39074850c80f,true,Self Remade\Finalized\Dont demaster,false,false,0,none,false,1
 seculitycard_lv3_alp.bmp,cad9b0f7e148d1dc717faa88d7812d054a7ac554,751ec553011228427615ac856d1d3905382d8f2b,true,Self Remade\Finalized\Dont demaster,false,false,0,none,false,1
 seculitycard_lv4_alp.bmp,df5d78d1ea7cd0b6b3741e68f9b9c16544308527,25c4a1e67333cb82b77967bb3569adc802b91d12,true,Self Remade\Finalized\Dont demaster,false,false,0,none,false,1
-sel_arm_rblood.bmp,c84759c465aa24ad8c4283c7ae06ade1c2219900,8ceb3edfb126ea21616ad8c3c757f1547c7c10d4,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
+sel_arm_rblood.bmp,c84759c465aa24ad8c4283c7ae06ade1c2219900,68393f563f632874f22288d1e653c4a720282248,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
 sel_bag2blood.bmp,44c3c12391cba0a9c32985e832ffcf2a8b21c9b0,bd04ff564fc4de8e884fb6bd83c9aa9ca1af7f50,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
-sel_bodyblood.bmp,9fde56f9767ae32ff1f048521ce157b11775eaf0,d78cf8289ab0277a36e219e634e89c75f9d6097d,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
+sel_bodyblood.bmp,9fde56f9767ae32ff1f048521ce157b11775eaf0,574612fdf154ddff2f9499b4eac2ba213b63dc54,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
 sel_boots.bmp,3e5151c7c12b0b79de2f767de0bfeefe72f24617,cb98ef05dcb9d10402ca12b28df7fefa5f918b79,true,Self Remade\Finalized,true,false,0,none,false,1
 sna_body_ss01dt.bmp,94adef61c15d56d2e00d3ff72e0af379d9f60a99,d39c54a2af6ebb73286dbaf452a2800f563d1eba,true,Self Remade\Finalized,true,false,0,none,false,1
 sna_hair1_alp_ovl.bmp,162012e82b6145cb30b01d0203ca9e7f3c581c80,00c6df98d129bd2f59d785a3f9ad01c39dab7f92,true,Self Remade\Finalized\Not Demaster Fixed\Dont Upscale,false,false,0,none,false,1
@@ -93,16 +93,16 @@ title_logo_blue_alp_ovl.bmp,47fcc4846308561d5ef3dd4e553ee1c93cd245fb,96a3149b270
 title_logo_mono_alp_ovl.bmp,27f1c60b616d98b1da069f9a4f5e8e3b709ca51e,647d3ac0c5810da69131fa323e7f07f0748d7d67,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,false,false,0,none,true,1
 title_mgs2_alp_ovl.bmp,ab54dd9274b8080c5d64cdee8cd2bf36fb9206fd,35e26df9307d9be8b085c3a6b3facc0d0207b848,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,false,false,0,none,true,1
 title_sol_alp_ovl.bmp,ec3e1321d122880f96418052d278cb5ab991b0d7,19ad41e5a1759255c69c02745ba276895f9fdd2c,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,false,false,0,none,true,1
-tnc_eri.bmp,e0147a0a5a35d60ae14cf27984402ec80ad8821b,ce62b3821a86d27a934d808661b7273a023705e9,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
-tnc_eri_bd.bmp,39d8de194b1e2727d869e90d44cedd95b40bf1b5,11f7ee131a7d8ee8334364b21a376edc4e311eac,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
-tnc_gost_body_b_ovl_alp.bmp,3364647c1a57428197771a314508a4a728b34ff1,2428640278e2875bf4981596bf7de0b3f6c2b9c7,true,Self Remade\Finalized\Not Demaster Fixed,false,false,0,none,false,1
-tnc_gost_body_c_ovl_alp.bmp,82abfae2a4ec9b545ef82843128193360866411a,e1fadb7d0fb61992336f07fb0b9464e5f4bd40c9,true,Self Remade\Finalized\Not Demaster Fixed,false,false,0,none,false,1
-tnc_gost_body_ovl_alp.bmp,b516516baafe2f441cf04d888f3fb7da1c2f4b2f,b50d20d573c04297700ce4e580e000a2bf269a4f,true,Self Remade\Finalized\Not Demaster Fixed,false,false,0,none,false,1
-tnc_gost_face_ovl_alp.bmp,c730ef9a7d565213d49cb42d3fba37d3839afb59,720732ba1b67625c9061493afa6e37b9ff6fe4a6,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
-tnc_re_body_bd.bmp,ac95f9da0791aed91840e857721ef02c8b773796,0b8fc33c0389015aad5735ea2a506c22c7f51233,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
-tnc_re_faceneck_dead.bmp,b803c722ac147335d38f1cd411c95d8de151ec3f,64662d7198ec785ab6a11dc26a6a81660f487168,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
-tnc_re_faceneck_dead.bmp_0e551a799467218ab1818640b8ee2d96,b803c722ac147335d38f1cd411c95d8de151ec3f,5c4fb3587974aa5e9fac17c4221d55cf1caae442,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
-tnc_shatsu_bd.bmp,b95c9dbdadf4abadbab17886f7d973e0428977fd,c7c4a3d8b85cf96395d6dc0f7f446ce71f0b7898,true,Self Remade\Finalized\Not Demaster Fixed,true,false,0,none,false,1
+tnc_eri.bmp,e0147a0a5a35d60ae14cf27984402ec80ad8821b,ce62b3821a86d27a934d808661b7273a023705e9,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
+tnc_eri_bd.bmp,39d8de194b1e2727d869e90d44cedd95b40bf1b5,11f7ee131a7d8ee8334364b21a376edc4e311eac,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
+tnc_gost_body_b_ovl_alp.bmp,ba00e291107177d024fdf1c0005b397d83b4419f,22f394edbbfcf844af1251d50e5b686dd4d22982,true,Self Remade\Finalized\Dont demaster,false,false,0,none,false,1
+tnc_gost_body_c_ovl_alp.bmp,256c69501eeb0d06bcc499a618170fcbfb0c9ccd,649d70ee93b10dc783c02efa840c355635cea214,true,Self Remade\Finalized\Dont demaster,false,false,0,none,false,1
+tnc_gost_body_ovl_alp.bmp,d6a5792087a2c9cd961c78ff6d6e1c2dc0501fe2,ed2643d0bdd551fc9fb2738ac966ebbae0fe79ce,true,Self Remade\Finalized\Dont demaster,false,false,0,none,false,1
+tnc_gost_face_ovl_alp.bmp,c730ef9a7d565213d49cb42d3fba37d3839afb59,7dd73d0aeac9ad105fe608476356fb0803fffd43,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
+tnc_re_body_bd.bmp,ac95f9da0791aed91840e857721ef02c8b773796,7fd1c3feba12d2d40f65b6f44e57973bce023113,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
+tnc_re_faceneck_dead.bmp,b803c722ac147335d38f1cd411c95d8de151ec3f,d0ed440d6ce584137e7c9fc2ab7e76e1779b79b5,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
+tnc_re_faceneck_dead.bmp_0e551a799467218ab1818640b8ee2d96,b803c722ac147335d38f1cd411c95d8de151ec3f,db71ca087acd17f52599b5f6f474f2f719d64d9e,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
+tnc_shatsu_bd.bmp,b95c9dbdadf4abadbab17886f7d973e0428977fd,35d35485c44bff5e1f9e8a7a2b3420d6bf77beaa,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
 w00a_blc_t1.bmp_7f11fc01c0e5875532e7dd318d7c9e68,9d7c55c537f8018e77b34b4b233cc85911724659,c3f43958b1c5fbe26dd19d22688f20323993135a,true,Self Remade\Finalized\Dont demaster,true,false,0,none,false,1
 w00a_pol1.bmp,081ec908adcd2a4581e67c8058cfc35d9f82bd2e,4b38c3ac667838ea0a08bb75347c80d799450029,true,Self Remade\Finalized\Self Remastered,true,false,0,none,false,1
 w01a0_box00.bmp,ca25ac47d6368e62111e7982a0d09104d899af6e,f410c270981c3d847cb41a7e28ad2bcb6e551574,true,Self Remade\Finalized,true,false,0,none,false,1
