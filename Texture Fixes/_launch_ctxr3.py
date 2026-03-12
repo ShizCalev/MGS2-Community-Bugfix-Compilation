@@ -21,6 +21,9 @@ CTXR3_EXE = Path(r"J:\Mega\Games\MG Master Collection\Self made mods\Tooling\CTX
 # Kept for compatibility, but ctxr_list.txt now lists source image filenames only (png/tga), one per line.
 PREFIX = "mgs2/textures/flatlist/_win"
 
+NON_UPSCALED_PROCESS_VERSION = "1"
+
+
 OUT_CTXR_LIST_TXT = "ctxr_list.txt"
 DEPLOY_DIRS_TXT = "deploy_directories.txt"
 CONVERSION_CSV = "conversion_hashes.csv"
@@ -298,6 +301,7 @@ def write_conversion_csv(csv_path: Path, rows_by_filename: dict[str, dict[str, s
         "upscaler_version",
         "upscaler_type",
         "ctxr3_converted",
+        "non_upscaled_version",
     ]
 
     tmp_path = csv_path.with_suffix(csv_path.suffix + ".tmp")
@@ -721,6 +725,7 @@ def main() -> int:
             row["upscaler_version"] = "0"
             row["upscaler_type"] = "none"
             row["ctxr3_converted"] = "true"
+            row["non_upscaled_version"] = NON_UPSCALED_PROCESS_VERSION
 
             rows[stem_lower] = row
 
