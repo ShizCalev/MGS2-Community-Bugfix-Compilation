@@ -5,3 +5,7 @@ w32a_asi00.bmp - wrong wall
 w01a0_box00.bmp - HDC remaster restored (red cross)
 w01a0_box002.bmp - HDC remaster restored (red cross)
 sna_body_ss01dt.bmp - fixed white pixel on back of shoulder rigging
+iro_hi_face.bmp - contributed by IroquoisPliskin1972
+iro_hi_face_bandage.bmp - contributed by IroquoisPliskin1972
+iro_hair_base.bmp - contributed by IroquoisPliskin1972
+sna_hi_face_shave.bmp - contributed by IroquoisPliskin1972
