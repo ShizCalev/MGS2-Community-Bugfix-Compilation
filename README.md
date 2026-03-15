@@ -80,8 +80,7 @@ Recommended Mod Load Order (from first to last):
 3. MGS2 Community Bugfix Compilation - Base
 4. MGS2 Community Bugfix Compilation - AI Upscaled Texture Addon (if desired)
 5. [MGS2 Demastered Texture Pack](https://github.com/ShizCalev/MGS2-Demastered-Substance-Edition/) (if installed)
-6. [IroquoisPliskin1972](https://www.nexusmods.com/profile/IroquoisPliskin1972)'s [Solid Snake and Pliskin fixes and overhaul﻿](https://www.nexusmods.com/metalgearsolid2mc/mods/45)
-7. All other mods
+6. All other mods
 
 
 <br>
@@ -177,6 +176,10 @@ Recommended Mod Load Order (from first to last):
 
 - Fixed several Shell 2 struts having a Shell 1 area texture when viewed from the C-D Connecting Bridge. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
 
+- Fixed incorrect skintone on Pliskin's neck above his undersuit. [2001 SoL]
+
+- Fixed banding on Pliskin's hairline after Vamp encounter. [2011 HDC] | Contributed by [IroquoisPliskin1972](https://www.nexusmods.com/profile/IroquoisPliskin1972/mods)
+
 
 <br>
 
@@ -239,7 +242,12 @@ Recommended Mod Load Order (from first to last):
 
     - This in turn corrects a number of texture inconsistencies that were present on the low-poly LOD models, as those models are no longer used.
 
-    - The [Solid Snake and Pliskin face fixes](https://www.nexusmods.com/metalgearsolid2mc/mods/45) mod made by [IroquoisPliskin1972](https://www.nexusmods.com/metalgearsolid2mc/users/51924501) is still recommended to be installed alongside this mod for the remaining LOD models.
+- Reworked Pliskin's face texture utilizing the higher quality hair & beard from Snake's face texture to more closely match the original PS2 version. [2011 HDC] |  Contributed by [IroquoisPliskin1972](https://www.nexusmods.com/profile/IroquoisPliskin1972/mods)
+
+	- Example of the original PS2 vs HDC versions of Pliskin's texture; https://x.com/Nitroid/status/1628153900552314880
+	
+
+- Reworked Snake & Pliskin's low-polygon face textures to more closely match their high-polygon versions. (The textures were based off an early designs for Snake/Pliskin from the original development before high-polygon versions were created, resulting in the eyes and facial features being mismatched.) [2001 SoL]
 
 - Replaced a LOT of low resolution mipmap textures (used for far away areas when on the plant's connecting bridges) with their higher quality versions.
 
@@ -282,6 +290,8 @@ Feel free to inquire about texture file names if you need assistance pinpointing
 - Remade casting theater images.
 
 - Remade several codec call videos that were stretched from 4:3 to 16:9 & still the original PS2 resolution. (MG1, MGS1 flashbacks during Aresenal. MG1 footage captured from 1987 MSX, MGS1 captured from MC using MGSM2Fix widescreen.) [2011 HDC]
+
+- Remade Snake's shaved face texture, which was still its original PS2 resolution. [2011 HDC] |  Contributed by [IroquoisPliskin1972](https://www.nexusmods.com/profile/IroquoisPliskin1972/mods)
 
 
 

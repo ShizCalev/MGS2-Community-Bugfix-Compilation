@@ -171,3 +171,6 @@ loading_fhd
 loading
 loading_jp_4k
 loading_4k
+
+
+iro_snawear.bmp
