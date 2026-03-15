@@ -163,3 +163,11 @@ sensou_01_alp_ovl.bmp
 sensou_02_alp_ovl.bmp
 sensou_03_alp_ovl.bmp
 volume_setting_01
+loading_wqhd
+loading_jp_wqhd
+loading_jp_fhd
+loading_jp
+loading_fhd
+loading
+loading_jp_4k
+loading_4k

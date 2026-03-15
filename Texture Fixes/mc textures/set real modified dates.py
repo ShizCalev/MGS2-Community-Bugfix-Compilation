@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # ==========================================================
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT_DIR = SCRIPT_DIR  # recurse from where the script lives
-CSV_FILE = SCRIPT_DIR / "MC real file dates.csv"
+CSV_FILE = Path(r"C:\Development\Git\MGS2-PS2-Textures\u - dumped from substance\mgs2_mc_real_dates.csv")
 THREADS = max(4, os.cpu_count() or 4)
 
 

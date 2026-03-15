@@ -23,8 +23,8 @@ STAGING_MAIN_NAME = "_staging_main.py"
 STAGING_MAIN_PATH = SCRIPT_DIR / STAGING_MAIN_NAME
 
 # Script to run AFTER all staging tiers finish
-SET_CTXR_DATES_NAME = "set_ctxr_modified_dates.py"
-SET_CTXR_DATES_PATH = SCRIPT_DIR / SET_CTXR_DATES_NAME
+SET_CTXR_DATES_NAME = "Update All Local Vortex Folders.py"
+SET_CTXR_DATES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Update All Local Vortex Folders.py")
 
 # How many jobs to run in parallel within each staging tier
 THREADS_PER_TIER = 4
@@ -822,7 +822,7 @@ def run_tier(root: Path) -> list[Path]:
     return jobs
 
 
-def run_set_ctxr_dates() -> None:
+def run_update_local_vortex_folders() -> None:
     if not SET_CTXR_DATES_PATH.is_file():
         print(f"ERROR: Could not find {SET_CTXR_DATES_NAME} at: {SET_CTXR_DATES_PATH}")
         pause_and_exit(1)
@@ -1125,9 +1125,9 @@ def main() -> None:
     print()
     print("[INFO] All staging roots processed.")
 
-    #run_set_ctxr_dates()
+    
     write_self_remade_modified_dates()
-
+    run_update_local_vortex_folders() #update local vortex folders.
 
 if __name__ == "__main__":
     main()
