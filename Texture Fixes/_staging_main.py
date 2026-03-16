@@ -2956,9 +2956,9 @@ def main() -> int:
         deleted_mismatches = 0
         delete_failures = 0
 
-        if keeps:
-            for ctxr in keeps:
-                log(f"[KEEP] {ctxr_hash_by_path[ctxr]}  {ctxr.name}")
+        #if keeps:
+            #for ctxr in keeps:
+               # log(f"[KEEP] {ctxr_hash_by_path[ctxr]}  {ctxr.name}")
 
         for ctxr in orphans:
             digest = ctxr_hash_by_path[ctxr]

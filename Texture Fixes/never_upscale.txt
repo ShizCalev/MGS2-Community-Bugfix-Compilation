@@ -1,5 +1,5 @@
-native ui stuff slash custom remade
-dont remove these or youre likely to cause the game to crash due to resolution limits
+#native ui stuff slash custom remade
+#dont remove these or youre likely to cause the game to crash due to resolution limits
 kcej_logo_alp_ovl.bmp
 00919e1e
 004fc78a
@@ -14,7 +14,7 @@ logo_konami.bmp
 00b60372
 #end-native-ui
 
-liqmix water stuff
+#liqmix water stuff
 drop01_alp2_mod1021.bmp
 drop01_alp_mod1201.bmp
 drop01_msk.bmp
@@ -35,7 +35,7 @@ wrain04_add_alp_ovl.bmp
 wrain05_add_alp_ovl.bmp
 wrain06_add_alp_ovl.bmp
 
-liqmix stuff below
+#liqmix stuff below
 00678eb1
 00dbc1dd
 1_chuou_1f_alp_ovl.bmp
@@ -101,6 +101,33 @@ l_gaishu_alp_ovl.bmp
 l_oilfence_alp_ovl.bmp
 l_osui_alp_ovl.bmp
 lg_renraku_alp_ovl.bmp
+newyork_alp_ovl.bmp
+refre_alp_ovl.bmp
+refre_left_alp_ovl.bmp
+refre_right_alp_ovl.bmp
+senbi_kanpan_alp_ovl.bmp
+senbi_kanpan_left_alp_ovl.bmp
+senbi_kanpan_right_alp_ovl.bmp
+sensou_01_alp_ovl.bmp
+sensou_02_alp_ovl.bmp
+sensou_03_alp_ovl.bmp
+#end-liqmix
+
+#mc ui
+pausemenu_arrow_l
+pausemenu_arrow_r
+pausemenu_btn_00
+pausemenu_btn_01
+pausemenu_dialog_00
+pausemenu_head_line
+pausemenu_head_subitem
+pausemenu_icon_mute
+pausemenu_icon_volume
+pausemenu_line_00
+pausemenu_volume_00
+pausemenu_volume_01
+pausemenu_volume_cursor
+volume_setting_01
 mgs2_arrow_l_00
 mgs2_arrow_l_01
 mgs2_arrow_l_02
@@ -139,30 +166,7 @@ mgs2_keyass_line_00
 mgs2_keyass_line_01
 mgs2_keyass_page_00
 mgs2_keyass_page_01
-newyork_alp_ovl.bmp
-pausemenu_arrow_l
-pausemenu_arrow_r
-pausemenu_btn_00
-pausemenu_btn_01
-pausemenu_dialog_00
-pausemenu_head_line
-pausemenu_head_subitem
-pausemenu_icon_mute
-pausemenu_icon_volume
-pausemenu_line_00
-pausemenu_volume_00
-pausemenu_volume_01
-pausemenu_volume_cursor
-refre_alp_ovl.bmp
-refre_left_alp_ovl.bmp
-refre_right_alp_ovl.bmp
-senbi_kanpan_alp_ovl.bmp
-senbi_kanpan_left_alp_ovl.bmp
-senbi_kanpan_right_alp_ovl.bmp
-sensou_01_alp_ovl.bmp
-sensou_02_alp_ovl.bmp
-sensou_03_alp_ovl.bmp
-volume_setting_01
+
 loading_wqhd
 loading_jp_wqhd
 loading_jp_fhd
@@ -171,6 +175,79 @@ loading_fhd
 loading
 loading_jp_4k
 loading_4k
+#mc ui
+
+
 
 
 iro_snawear.bmp
+
+
+w00_sky_add_alp_ovl.bmp
+w00_sky_add_alp.bmp
+
+w10a_fogsky_01.bmp
+w10a_sky_b02_alp_ovl.bmp
+w10a_sky_b03_alp_ovl.bmp
+w10a_sky_c00_1.bmp
+w10a_sky_c00_2.bmp
+w10a_sky_c00_3.bmp
+w10a_sky_c00_4.bmp
+w10a_sky_hasira.bmp
+w10a_sky_test_01.bmp
+
+w60a_seacolor_b01.bmp
+w60a_seacolor_b02_alp_ovl.bmp
+w60a_seacolor_b03.bmp
+w60a_sky_b01_alp_ovl.bmp
+w60a_sky_b04_alp_ovl.bmp
+w60a_sky_d01_alp_ovl.bmp
+w51a_sky_n1_alp_ovl.bmp
+w51a_sky_n2_alp_ovl.bmp
+w51a_sky_n4_alp_ovl.bmp
+w51a_seacolor_01.bmp
+w51a_seacolor_04_alp_ovl.bmp
+w51a_sky_botom_01_alp_ovl.bmp
+d_sky_hasira_alp.bmp
+p_br_seacolor_01_alp_ovl.bmp
+w60a_sky_b02_alp_ovl.bmp
+w60a_sky_b03_alp_ovl.bmp
+w62a_sky_top_01_alp.bmp
+w21b_sky_e3_alp.bmp
+
+sky_sun_e_alp.bmp
+sky_sun_d_alp.bmp
+sky_m4_alp.bmp
+sky_m2_alp.bmp
+sky_m1_alp.bmp
+sky_e4_alp.bmp
+sky_e2_alp.bmp
+sky_e1_alp.bmp
+sky_d4_alp.bmp
+sky_d2_alp.bmp
+sky_d1_alp.bmp
+e_sky_top_01_alp.bmp
+e_sky_cld_sun_04_alp.bmp
+e_sky_cld_sun_03_alp.bmp
+e_sky_cld_sun_02_alp.bmp
+e_sky_cld_sun_01_alp.bmp
+d_sky_top_01_alp.bmp_8f57f7dc8141fdfd06af182d04249af3
+d_sky_top_01_alp.bmp
+
+DISABLE_w10b_gurade_01_alp.bmp
+DISABLE_w10b_rightfurea_01_alp.bmp
+DISABLE_w10b_rightfurea_04_alp.bmp
+
+
+DISABLE_flare_r2_msk.bmp
+DISABLE_flare_r1_msk.bmp
+DISABLE_flare_g2_msk.bmp
+DISABLE_flare_g1_msk.bmp
+DISABLE_flare_b2_msk.bmp
+DISABLE_flare_b1_msk.bmp
+DISABLE_flare0_msk.bmp
+
+w10a_gaitouakari_02_alp_ovl.bmp
+w10a_gaitouakari_03_alp_ovl.bmp
+
+sna_hair1_alp_ovl.bmp
