@@ -178,6 +178,8 @@ Recommended Mod Load Order (from first to last):
 
 - Fixed incorrect skintone on Pliskin's neck above his undersuit. [2001 SoL]
 
+- Fixed incorrect skintone on the back & sides of Snake's neck above his undersuit. [2011 HDC]
+
 - Fixed banding on Pliskin's hairline after Vamp encounter. [2011 HDC] | Contributed by [IroquoisPliskin1972](https://www.nexusmods.com/profile/IroquoisPliskin1972/mods)
 
 
@@ -258,6 +260,8 @@ Recommended Mod Load Order (from first to last):
 - Remade the ranking codename animal pixel art utilizing the original PS2 texture.
 
 - Resaved all 2500 remaining CTXR files using Kaiser window mips for consistent, higher quality mipmaps.
+
+- Restored the original PS2 cloud textures for the exterior of the tanker, which were nearest neighbor resized by Bluepoint & had varying amounts of artifacting introduced (meaning the original textures were slightly higher quality.) [2011 HDC]
 
 <br>
 
