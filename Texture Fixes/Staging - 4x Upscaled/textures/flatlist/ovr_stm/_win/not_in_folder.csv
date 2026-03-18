@@ -841,26 +841,6 @@ odai_a24a_ldr02.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fi
 odai_a24d2_pane03.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\OPAQUE\bp_remade\no_mip_fixes\ui\odai_a24d2_pane03.bmp.tga
 odai_a24d2_pane04.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\OPAQUE\bp_remade\no_mip_fixes\ui\odai_a24d2_pane04.bmp.tga
 pdray_marines_alp_ovl.bmp,
-pdray_number_b01_alp_ovl.bmp,
-pdray_number_b02_alp_ovl.bmp,
-pdray_number_b03_alp_ovl.bmp,
-pdray_number_b04_alp_ovl.bmp,
-pdray_number_b05_alp_ovl.bmp,
-pdray_number_c01_alp_ovl.bmp,
-pdray_number_c02_alp_ovl.bmp,
-pdray_number_c03_alp_ovl.bmp,
-pdray_number_c04_alp_ovl.bmp,
-pdray_number_c05_alp_ovl.bmp,
-pdray_number_d01_alp_ovl.bmp,
-pdray_number_d02_alp_ovl.bmp,
-pdray_number_d03_alp_ovl.bmp,
-pdray_number_d04_alp_ovl.bmp,
-pdray_number_d05_alp_ovl.bmp,
-pdray_number_e01_alp_ovl.bmp,
-pdray_number_e02_alp_ovl.bmp,
-pdray_number_e03_alp_ovl.bmp,
-pdray_number_e04_alp_ovl.bmp,
-pdray_number_e05_alp_ovl.bmp,
 pdray_seal_n32_wht_alp_ovl.bmp,
 pipe_shadow2_sub_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\OPAQUE\no_mip_fixes\pipe_shadow2_sub_ovl.bmp.tga
 pipe_shadow3_sub_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\OPAQUE\no_mip_fixes\pipe_shadow3_sub_ovl.bmp.tga
@@ -2716,8 +2696,6 @@ w31c_kage_ovl_alp_21.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Textu
 w31c_kage_ovl_alp_24.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\w31c_kage_ovl_alp_24.bmp.png
 w31c_kage_ovl_alp_25.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\w31c_kage_ovl_alp_25.bmp.png
 w31c_kage_ovl_alp_add_23.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\w31c_kage_ovl_alp_add_23.bmp.png
-w31c_number_alp_ovl_01.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\w31c_number_alp_ovl_01.bmp.png
-w31c_number_alp_ovl_02.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\w31c_number_alp_ovl_02.bmp.png
 w32a_sdw00_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\power of two\w32a_sdw00_alp_ovl.bmp.png
 w32a_sdw00a_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\power of two\w32a_sdw00a_alp_ovl.bmp.png
 w32a_sdw00b_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\power of two\w32a_sdw00b_alp_ovl.bmp.png

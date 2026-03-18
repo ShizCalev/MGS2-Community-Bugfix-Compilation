@@ -278,7 +278,6 @@ car_wagon_lig00_alp_decal.bmp
 w62a_kemuri_01_alp.bmp
 w31a_ref_light_add_alp_ovl_02.bmp
 
-ag_line_alp_ovl.bmp
 ag_line_alp_add_ovl.bmp
 w12b0_floor_scratch_sub_alp_ovl.bmp
 
@@ -304,7 +303,6 @@ elvt_moji6_alp_ovl.bmp
 elvt_moji5_alp_ovl.bmp
 elvt_moji4_alp_ovl.bmp
 elvt_moji3_alp_ovl.bmp
-w14a0_floor_moji_01_alp_ovl.bmp
 w14a0_floor_line_01_alp_ovl.bmp
 w12b0_floor_scratch_sub_alp_ovl
 w24c0n_label02_alp_ovl.bmp
@@ -457,3 +455,29 @@ w24c_node_areaname_alp_ovl.bmp
 w24c0_stst04_alp_ovl.bmp
 w31a_node_areaname_alp_ovl.bmp
 wc_alp_ovl.bmp
+w22a_wall_logo_02_alp_ovl.bmp
+w22a_wall_logo_01_alp_ovl.bmp
+w31c_number_alp_ovl_02.bmp
+w31c_number_alp_ovl_01.bmp
+w11a2_wl_number_alp_ovl.bmp
+vr2_frg_numbers_add_alp_ovl.bmp
+pdray_number_e05_alp_ovl.bmp
+pdray_number_e04_alp_ovl.bmp
+pdray_number_e03_alp_ovl.bmp
+pdray_number_e02_alp_ovl.bmp
+pdray_number_e01_alp_ovl.bmp
+pdray_number_d05_alp_ovl.bmp
+pdray_number_d04_alp_ovl.bmp
+pdray_number_d03_alp_ovl.bmp
+pdray_number_d02_alp_ovl.bmp
+pdray_number_d01_alp_ovl.bmp
+pdray_number_c05_alp_ovl.bmp
+pdray_number_c04_alp_ovl.bmp
+pdray_number_c03_alp_ovl.bmp
+pdray_number_c02_alp_ovl.bmp
+pdray_number_c01_alp_ovl.bmp
+pdray_number_b05_alp_ovl.bmp
+pdray_number_b04_alp_ovl.bmp
+pdray_number_b03_alp_ovl.bmp
+pdray_number_b02_alp_ovl.bmp
+pdray_number_b01_alp_ovl.bmp

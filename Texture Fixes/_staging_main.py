@@ -2978,6 +2978,7 @@ def main() -> int:
         deleted_orphans = 0
         deleted_mismatches = 0
         delete_failures = 0
+        orphan_names: set[str] = set()
 
         #if keeps:
             #for ctxr in keeps:
@@ -2985,8 +2986,10 @@ def main() -> int:
 
         for ctxr in orphans:
             digest = ctxr_hash_by_path[ctxr]
+            name = ctxr.stem.lower()
             try:
                 ctxr.unlink()
+                orphan_names.add(name)
                 log(f"[DEL ORPHAN] {digest}  {ctxr.name}")
                 deleted_orphans += 1
             except Exception as e:
@@ -3076,26 +3079,45 @@ def main() -> int:
                 log(f"[FAIL MISMATCH] {ctxr_digest}  {ctxr.name} (delete error: {e})")
                 delete_failures += 1
 
-        if mismatched_names:
+        names_to_remove_from_csv = set(mismatched_names)
+        names_to_remove_from_csv.update(orphan_names)
+
+        if names_to_remove_from_csv:
             pruned_rows: list[dict[str, str]] = []
             removed = 0
+            removed_orphan_rows = 0
+            removed_mismatch_rows = 0
 
             for row in conversion_rows:
                 filename = (row.get("filename") or row.get("Filename") or row.get("FILENAME") or "").strip().lower()
-                if filename and filename in mismatched_names:
-                    removed += 1
+                if not filename:
+                    pruned_rows.append(row)
                     continue
+
+                if filename in orphan_names:
+                    removed += 1
+                    removed_orphan_rows += 1
+                    continue
+
+                if filename in mismatched_names:
+                    removed += 1
+                    removed_mismatch_rows += 1
+                    continue
+
                 pruned_rows.append(row)
 
             if removed > 0:
                 conversion_rows[:] = pruned_rows
 
                 for k in list(conversion_map.keys()):
-                    if k in mismatched_names:
+                    if k in names_to_remove_from_csv:
                         del conversion_map[k]
 
                 write_conversion_csv_atomic(conversion_csv, conversion_header, conversion_rows)
-                log(f"[CSV] Removed {removed} row(s) from {CONVERSION_CSV} due to mismatches")
+                log(
+                    f"[CSV] Removed {removed} row(s) from {CONVERSION_CSV} "
+                    f"({removed_orphan_rows} orphan, {removed_mismatch_rows} mismatch)"
+                )
 
         log("")
         log(f"[RESULT] Keep: {len(keeps)}")
