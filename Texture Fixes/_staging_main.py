@@ -39,6 +39,7 @@ NO_MIP_REGEX_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Tex
 MANUAL_UI_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_ui_textures.txt")
 
 NEVER_UPSCALE_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\never_upscale.txt")
+SHADOW_MAP_STEMS_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\shadow_map_stems.txt")
 
 UPSCALE_STAGING_DIR = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\_upscaling")
 UPSCALE_STAGING_DIR_STRIPPED_OPACITY = Path(
@@ -348,6 +349,19 @@ def load_manual_ui_textures_or_die(path: Path) -> set[str]:
 
     return out
 
+def load_simple_stem_list_or_die(path: Path) -> set[str]:
+    if not path.is_file():
+        raise RuntimeError(f"Stem list not found: {path}")
+
+    out: set[str] = set()
+
+    for raw in path.read_text(encoding="utf8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        out.add(line.lower())
+
+    return out
 
 def load_never_upscale_split_or_die(path: Path) -> tuple[set[str], set[str]]:
     if not path.is_file():
@@ -2410,6 +2424,15 @@ def main() -> int:
         demastered_nonupscaled_override_stems: set[str] = set()
         if is_upscaled_run:
             never_upscale_stems, demastered_nonupscaled_override_stems = load_never_upscale_split_or_die(NEVER_UPSCALE_PATH)
+
+            shadow_map_stems = load_simple_stem_list_or_die(SHADOW_MAP_STEMS_PATH)
+            if shadow_map_stems:
+                never_upscale_stems.update(shadow_map_stems)
+                demastered_nonupscaled_override_stems.update(shadow_map_stems)
+                log(
+                    f"[UPSCALE] Added {len(shadow_map_stems)} shadow-map stem(s) "
+                    "as never-upscale + demastered non-upscaled overrides"
+                )
 
             if is_demastered_run and demastered_nonupscaled_override_stems:
                 log(
