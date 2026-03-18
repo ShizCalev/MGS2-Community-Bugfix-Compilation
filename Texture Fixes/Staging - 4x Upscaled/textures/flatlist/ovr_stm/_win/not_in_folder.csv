@@ -1594,6 +1594,11 @@ vs10a_sdw13_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Textur
 vs10a_sdw13a_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\power of two\vs10a_sdw13a_alp_ovl.bmp.png
 w00_fog_alp.bmp,
 w00ak_crps_saku_msk.bmp_50b2d5d61891091657d01c88babeca5b,
+w00ak_flrshad1_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\no_mip_fixes\w00ak_flrshad1_sub_alp_ovl.bmp.png
+w00ak_flrshad2_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\no_mip_fixes\w00ak_flrshad2_sub_alp_ovl.bmp.png
+w00ak_flrshad3_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\power of two\no_mip_fixes\w00ak_flrshad3_sub_alp_ovl.bmp.png
+w00ak_flrshad4_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\power of two\no_mip_fixes\w00ak_flrshad4_sub_alp_ovl.bmp.png
+w00ak_flrshad5_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\no_mip_fixes\w00ak_flrshad5_sub_alp_ovl.bmp.png
 w00ak_shd_flor1_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\no_mip_fixes\w00ak_shd_flor1_sub_alp_ovl.bmp.png
 w00b_w01e_flor_shd1_sub_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\OPAQUE\no_mip_fixes\w00b_w01e_flor_shd1_sub_ovl.bmp.tga
 w00brk_f1_shad1_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\no_mip_fixes\w00brk_f1_shad1_sub_alp_ovl.bmp.png
@@ -1646,6 +1651,7 @@ w10c_line00_alp_add_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Te
 w10c_oil_sea_128_alp_ovl.bmp,
 w10c_oil_sea_32_alp_ovl.bmp,
 w10c_oil_sea_64_alp_ovl.bmp,
+w11a0_flrshad1_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\no_mip_fixes\w11a0_flrshad1_sub_alp_ovl.bmp.png
 w11a0_flshd2_alp_sub_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\no_mip_fixes\w11a0_flshd2_alp_sub_ovl.bmp.png
 w11a0_flshd3_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\no_mip_fixes\w11a0_flshd3_sub_alp_ovl.bmp.png
 w11a0_flshd5_sub_alp_ovl.bmp,C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\HAS ALPHA\power of two\no_mip_fixes\w11a0_flshd5_sub_alp_ovl.bmp.png
