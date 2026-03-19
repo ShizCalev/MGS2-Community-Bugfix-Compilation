@@ -20,6 +20,9 @@
     <ClCompile Include="src\resources\stdafx.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="src\cleanup_loose_outdated_files.cpp">
+      <Filter>Version updates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\resources\version.h">
@@ -52,6 +55,18 @@
     <ClInclude Include="src\resources\config_keys.hpp">
       <Filter>Utility\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\cleanup_loose_outdated_files.hpp">
+      <Filter>Version updates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\update_hashes_v2_0_2_to_v2_1_2.hpp">
+      <Filter>Version updates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\update_hashes_v2_1_0_to_v2_1_1.hpp">
+      <Filter>Version updates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\update_hashes_v2_1_1_to_v2_1_2.hpp">
+      <Filter>Version updates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">
@@ -70,6 +85,9 @@
     </Filter>
     <Filter Include="Utility\Headers">
       <UniqueIdentifier>{d0180c24-b496-4966-84d1-635769f94018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Version updates">
+      <UniqueIdentifier>{98578639-c63e-46e4-94aa-68d001b91853}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

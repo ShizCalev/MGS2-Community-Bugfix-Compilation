@@ -51,7 +51,7 @@ namespace Util
     void DumpBytes(uint64_t address);
 #endif
 
-    bool IsProcessRunning(const std::filesystem::path& fullPath);
+    //bool IsProcessRunning(const std::filesystem::path& fullPath);
 
     int findStringInVector(const std::string& str, const std::initializer_list<std::string>& search);
 
@@ -83,6 +83,7 @@ namespace Util
     bool SHA1Check(const std::filesystem::path& filePath, const std::string& expected);
     std::optional<std::array<std::uint8_t, 20>> ComputeSHA1Bytes(const std::filesystem::path& filePath);
     bool SHA1Equals(const std::array<std::uint8_t, 20>& actual, const std::string& expected);
+    bool RemoveMatchedCtxrFilesWithSentinelLast(const std::filesystem::path& baseDir, const std::span<const CtxrHashEntry> entries, const char* logDescription);
 
     void ShutdownSHA1Provider();
 

@@ -16,6 +16,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\resources\version_checking.cpp" />
+    <ClCompile Include="src\cleanup_loose_outdated_files.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bugfix_mod_checks.hpp" />
@@ -28,6 +29,10 @@
     <ClInclude Include="src\resources\submodule_initiailization.hpp" />
     <ClInclude Include="src\resources\version.h" />
     <ClInclude Include="src\resources\version_checking.hpp" />
+    <ClInclude Include="src\cleanup_loose_outdated_files.hpp" />
+    <ClInclude Include="src\update_hashes_v2_0_2_to_v2_1_2.hpp" />
+    <ClInclude Include="src\update_hashes_v2_1_0_to_v2_1_1.hpp" />
+    <ClInclude Include="src\update_hashes_v2_1_1_to_v2_1_2.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MGS2-Community-Bugfix-Compilation.ini" />

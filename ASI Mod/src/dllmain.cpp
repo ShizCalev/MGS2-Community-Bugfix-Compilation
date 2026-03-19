@@ -5,7 +5,7 @@
 #include "logging.hpp"
 #include "submodule_initiailization.hpp"
 #include "version_checking.hpp"
-
+#include "cleanup_loose_outdated_files.hpp"
 
 static bool DetectGame()
 {
@@ -63,7 +63,8 @@ static void InitializeSubsystems()
 
     if (!(eGameType & LAUNCHER))
     {
-        INITIALIZE(VerifyInstallation::Check()); 
+        INITIALIZE(VerifyInstallation::Check());
+        INITIALIZE(CleanupOutdatedModfiles::Check());
         INITIALIZE(CheckForUpdates());
     }
 
