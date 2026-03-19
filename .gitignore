@@ -10,6 +10,8 @@ Texture Fixes/_upscaling_alpha_stripped
 **/_tmp/**
 **_autosave_*.spp
 **/New folder
+/Release Records/*/
+/Release Records/*.zip
 
 *.lnk
 Texture Fixes/Self Remade/Working/arsenal/*.psd
