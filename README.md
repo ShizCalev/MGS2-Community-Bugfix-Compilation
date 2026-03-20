@@ -4,7 +4,7 @@
 
 [Nexus Page](https://www.nexusmods.com/metalgearsolid2mc/mods/52) | **GitHub Repo (You're already here!)**
 
-Support / Development Progress Discord Channel: https://discord.gg/atmgqM8J
+Support / Development Progress Discord Channel: [MetalGear.net #mgs2mgs3-community-bugfix-dev](https://discord.gg/2DNuQamsMT)
 
 
 <br>
