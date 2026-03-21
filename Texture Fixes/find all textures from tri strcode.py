@@ -98,25 +98,29 @@ def build_indexes(
 ) -> tuple[
     dict[str, set[str]],
     dict[str, set[str]],
+    dict[str, set[str]],
     dict[tuple[str, str], set[str]],
     dict[str, set[tuple[str, str]]],
 ]:
     by_tri: dict[str, set[str]] = defaultdict(set)
     by_texture: dict[str, set[str]] = defaultdict(set)
+    by_stage: dict[str, set[str]] = defaultdict(set)
     by_pair: dict[tuple[str, str], set[str]] = defaultdict(set)
     by_name: dict[str, set[tuple[str, str]]] = defaultdict(set)
 
     for row in rows:
         texture_filename = row["texture_filename"]
+        stage = normalize(row["stage"])
         tri_strcode = normalize(row["tri_strcode"])
         texture_strcode = normalize(row["texture_strcode"])
 
         by_tri[tri_strcode].add(texture_filename)
         by_texture[texture_strcode].add(texture_filename)
+        by_stage[stage].add(texture_filename)
         by_pair[(tri_strcode, texture_strcode)].add(texture_filename)
         by_name[normalize(texture_filename)].add((tri_strcode, texture_strcode))
 
-    return by_tri, by_texture, by_pair, by_name
+    return by_tri, by_texture, by_stage, by_pair, by_name
 
 
 def print_header(title: str) -> None:
@@ -225,6 +229,21 @@ def prompt_nonempty(prompt: str) -> str:
         print("Input cannot be empty.")
 
 
+def prompt_stage(prompt: str) -> str:
+    while True:
+        value = safe_input(prompt)
+
+        if is_cancel_input(value):
+            raise ReturnToMenu()
+
+        value = value.strip()
+
+        if value:
+            return normalize(value)
+
+        print("Input cannot be empty.")
+
+
 def prompt_strcode(prompt: str) -> str:
     while True:
         raw_value = safe_input(prompt)
@@ -266,7 +285,7 @@ def prompt_optional_selection(max_index: int) -> int | None:
         return index
 
 
-def option_4_followup(
+def option_5_followup(
     pairs: list[tuple[str, str]],
     by_tri: dict[str, set[str]],
 ) -> None:
@@ -291,6 +310,7 @@ def option_4_followup(
 def menu_loop(
     by_tri: dict[str, set[str]],
     by_texture: dict[str, set[str]],
+    by_stage: dict[str, set[str]],
     by_pair: dict[tuple[str, str], set[str]],
     by_name: dict[str, set[tuple[str, str]]],
 ) -> None:
@@ -298,11 +318,12 @@ def menu_loop(
         print_header("MGS2 Texture Map Lookup")
         print("1. Find unique textures from tri strcode")
         print("2. Find unique textures from texture strcode")
-        print("3. Find unique textures from tri / texture strcode pair")
-        print("4. Find all tri / texture strcode pairs containing texture")
-        print("5. Find all tri / texture strcode pairs that map to multiple textures")
-        print("6. Find all textures that map to multiple tri / texture strcode pairs")
-        print("7. Exit")
+        print("3. Find unique textures from stage")
+        print("4. Find unique textures from tri / texture strcode pair")
+        print("5. Find all tri / texture strcode pairs containing texture")
+        print("6. Find all tri / texture strcode pairs that map to multiple textures")
+        print("7. Find all textures that map to multiple tri / texture strcode pairs")
+        print("8. Exit")
         print()
 
         try:
@@ -330,6 +351,15 @@ def menu_loop(
 
         elif choice == "3":
             try:
+                print_header("Find Unique Textures From Stage")
+                stage = prompt_stage("Enter stage: ")
+                results = by_stage.get(stage, set())
+                print_string_results(results)
+            except ReturnToMenu:
+                continue
+
+        elif choice == "4":
+            try:
                 print_header("Find Unique Textures From Tri / Texture Strcode Pair")
                 tri_strcode = prompt_strcode("Enter tri strcode: ")
                 texture_strcode = prompt_strcode("Enter texture strcode: ")
@@ -338,17 +368,17 @@ def menu_loop(
             except ReturnToMenu:
                 continue
 
-        elif choice == "4":
+        elif choice == "5":
             try:
                 print_header("Find All Tri / Texture Strcode Pairs For Texture")
                 texture_filename = prompt_nonempty("Enter texturename: ")
                 results = by_name.get(normalize(texture_filename), set())
                 sorted_pairs = print_pair_results(results)
-                option_4_followup(sorted_pairs, by_tri)
+                option_5_followup(sorted_pairs, by_tri)
             except ReturnToMenu:
                 continue
 
-        elif choice == "5":
+        elif choice == "6":
             print_header("Find All Tri / Texture Strcode Pairs That Map To Multiple Filenames")
             print_collision_results(
                 mapping=by_pair,
@@ -356,11 +386,11 @@ def menu_loop(
                 title="tri / texture strcode pair collision(s)",
             )
 
-        elif choice == "6":
+        elif choice == "7":
             print_header("Find All Filenames That Map To Multiple Tri / Texture Strcode Pairs")
             print_name_to_pair_collisions(by_name)
 
-        elif choice == "7":
+        elif choice == "8":
             print("Exiting.")
             return
 
@@ -379,12 +409,12 @@ def main() -> int:
         print("No usable rows were found in the CSV.")
         return 1
 
-    by_tri, by_texture, by_pair, by_name = build_indexes(rows)
+    by_tri, by_texture, by_stage, by_pair, by_name = build_indexes(rows)
 
     print(f"Loaded {len(rows)} rows from:")
     print(f"  {CSV_PATH}")
 
-    menu_loop(by_tri, by_texture, by_pair, by_name)
+    menu_loop(by_tri, by_texture, by_stage, by_pair, by_name)
     return 0
 
 
