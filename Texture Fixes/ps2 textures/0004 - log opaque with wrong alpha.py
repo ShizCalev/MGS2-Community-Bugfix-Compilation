@@ -16,7 +16,7 @@ REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 ROOT_DIR = os.path.join(REPO_ROOT, "Texture Fixes", "ps2 textures")
 OPAQUE_DIR = os.path.join(ROOT_DIR, "OPAQUE")
 HAS_ALPHA_DIR = os.path.join(ROOT_DIR, "HAS ALPHA")
-CSV_PATH = os.path.join(REPO_ROOT, "external", "MGS2-PS2-Textures", "u - dumped from substance", "mgs2_mc_dimensions.csv")
+CSV_PATH = os.path.join(REPO_ROOT, "external", "MGS2-PS2-Textures", "Tri-Dumped", "Master Collection", "Metadata", "mgs2_mc_dimensions.csv")
 
 LOG_OPAQUE = os.path.join(ROOT_DIR, "MC_Incorrect_Alpha_Levels_For_Opaque.txt")
 LOG_TRANSP = os.path.join(ROOT_DIR, "MC_Incorrect_Alpha_Levels_For_Transparents.txt")

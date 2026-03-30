@@ -82,65 +82,65 @@ def process_png(png_path, tga_index):
 # MAIN
 # ==========================================================
 def main():
-    print(f"[+] Repo root: {REPO_ROOT}")
-    print("[+] Indexing TGA_DIR recursively...")
-    tga_index = build_index(TGA_DIR)
-    print(f"[+] Indexed {len(tga_index)} unique filenames.")
-
-    print("[+] Scanning PNG_DIR recursively...")
-    png_files = []
-    for root, _, files in os.walk(PNG_DIR):
-        for f in files:
-            if f.lower().endswith(".png"):
-                png_files.append(os.path.join(root, f))
-
-    print(f"[+] Found {len(png_files)} PNGs to process.\n")
-
-    # Clear log file before writing
-    if os.path.exists(LOG_PATH):
-        os.remove(LOG_PATH)
-
-    # Process in parallel
-    with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
-        futures = [executor.submit(process_png, f, tga_index) for f in png_files]
-        for _ in as_completed(futures):
-            pass
-
-    print("\n[+] Done.")
-    print(f"[+] Non-matching PNGs logged to: {LOG_PATH}")
-    
-        # ==========================================================
-    # CLEANUP: Remove PNGs in TGA_DIR that do NOT exist in PNG_DIR
-    # ==========================================================
-    print("[+] Cleaning up orphan PNGs in TGA_DIR...")
-
-    # Build a set of valid PNG basenames from PNG_DIR
-    valid_png_names = set()
-    for root, _, files in os.walk(PNG_DIR):
-        for f in files:
-            if f.lower().endswith(".png"):
-                name = os.path.splitext(f)[0].lower()
-                valid_png_names.add(name)
-
-    removed_count = 0
-
-    for root, _, files in os.walk(TGA_DIR):
-        for f in files:
-            if not f.lower().endswith(".png"):
-                continue
-
-            name = os.path.splitext(f)[0].lower()
-            full_path = os.path.join(root, f)
-
-            if name not in valid_png_names:
-                try:
-                    os.remove(full_path)
-                    removed_count += 1
-                    print(f"[REMOVED ORPHAN] {full_path}")
-                except Exception as e:
-                    print(f"[ERROR] Failed to remove {full_path}: {e}")
-
-    print(f"[+] Removed {removed_count} orphan PNG(s).\n")
+ #   print(f"[+] Repo root: {REPO_ROOT}")
+ #   print("[+] Indexing TGA_DIR recursively...")
+ #   tga_index = build_index(TGA_DIR)
+ #   print(f"[+] Indexed {len(tga_index)} unique filenames.")
+ #
+ #   print("[+] Scanning PNG_DIR recursively...")
+ #   png_files = []
+ #   for root, _, files in os.walk(PNG_DIR):
+ #       for f in files:
+ #           if f.lower().endswith(".png"):
+ #               png_files.append(os.path.join(root, f))
+ #
+ #   print(f"[+] Found {len(png_files)} PNGs to process.\n")
+ #
+ #   # Clear log file before writing
+ #   if os.path.exists(LOG_PATH):
+ #       os.remove(LOG_PATH)
+ #
+ #   # Process in parallel
+ #   with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
+ #       futures = [executor.submit(process_png, f, tga_index) for f in png_files]
+ #       for _ in as_completed(futures):
+ #           pass
+ #
+ #   print("\n[+] Done.")
+ #   print(f"[+] Non-matching PNGs logged to: {LOG_PATH}")
+ #   
+ #       # ==========================================================
+ #   # CLEANUP: Remove PNGs in TGA_DIR that do NOT exist in PNG_DIR
+ #   # ==========================================================
+ #   print("[+] Cleaning up orphan PNGs in TGA_DIR...")
+ #
+ #   # Build a set of valid PNG basenames from PNG_DIR
+ #   valid_png_names = set()
+ #   for root, _, files in os.walk(PNG_DIR):
+ #       for f in files:
+ #           if f.lower().endswith(".png"):
+ #               name = os.path.splitext(f)[0].lower()
+ #               valid_png_names.add(name)
+ #
+ #   removed_count = 0
+ #
+ #   for root, _, files in os.walk(TGA_DIR):
+ #       for f in files:
+ #           if not f.lower().endswith(".png"):
+ #               continue
+ #
+ #           name = os.path.splitext(f)[0].lower()
+ #           full_path = os.path.join(root, f)
+ #
+ #           if name not in valid_png_names:
+ #               try:
+ #                   os.remove(full_path)
+ #                   removed_count += 1
+ #                   print(f"[REMOVED ORPHAN] {full_path}")
+ #               except Exception as e:
+ #                   print(f"[ERROR] Failed to remove {full_path}: {e}")
+ #
+ #   print(f"[+] Removed {removed_count} orphan PNG(s).\n")
 
 
     # --- Run the next script ---

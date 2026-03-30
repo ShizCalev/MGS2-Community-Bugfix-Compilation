@@ -95,7 +95,7 @@ def find_ctxr(target_name, ctxr_index):
 def copy_ctxr(file_path, ctxr_index):
     """Locate and copy ctxr file if found, skip if already exists."""
     rel_path = os.path.relpath(file_path, PS2_ROOT)
-    rel_base = os.path.splitext(rel_path)[0] + ".ctxr"
+    rel_base = os.path.splitext(rel_path)[0].lower() + ".ctxr"
     dest_path = os.path.join(MC_ROOT, rel_base)
 
     if os.path.exists(dest_path):

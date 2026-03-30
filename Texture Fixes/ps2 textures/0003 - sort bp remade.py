@@ -16,7 +16,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 
 # Relative paths from repo root
-CSV_PATH = os.path.join(REPO_ROOT, "external", "MGS2-PS2-Textures", "u - dumped from substance", "mgs2_mc_dimensions.csv")
+CSV_PATH = os.path.join(REPO_ROOT, "external", "MGS2-PS2-Textures", "Tri-Dumped", "Master Collection", "Metadata", "mgs2_mc_dimensions.csv")
 ROOT_DIR = os.path.join(REPO_ROOT, "Texture Fixes", "ps2 textures")
 HAS_ALPHA_DIR = os.path.join(ROOT_DIR, "HAS ALPHA")
 NO_MIP_REGEX_FILE = os.path.join(REPO_ROOT, "Texture Fixes", "no_mip_regex.txt")
@@ -40,7 +40,9 @@ MANUAL_BP_REMADE_FILE = os.path.join(
     REPO_ROOT,
     "external",
     "MGS2-PS2-Textures",
-    "u - dumped from substance",
+    "Tri-Dumped",
+    "Master Collection",
+    "Metadata",
     "mgs2_mc_manually_identified_bp_remade.txt",
 )
 

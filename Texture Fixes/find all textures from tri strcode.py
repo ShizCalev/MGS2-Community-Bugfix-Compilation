@@ -5,7 +5,7 @@ from collections import defaultdict
 from pathlib import Path
 
 
-CSV_PATH = Path(r"C:\Development\Git\MGS2-PS2-Textures\u - dumped from substance\mgs2_texture_map.csv")
+CSV_PATH = Path(r"C:\Development\Git\MGS2-PS2-Textures\Tri-Dumped\Master Collection\Working\mgs2_texture_strcode_mappings.csv")
 
 CANCEL_INPUTS = {
     "",

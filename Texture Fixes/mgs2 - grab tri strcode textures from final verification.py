@@ -18,11 +18,11 @@ except Exception:
 # -----------------------------
 # Config defaults
 # -----------------------------
-DEFAULT_CSV = r"C:\Development\Git\MGS-Tri-Dumper\mgs2_texture_map.csv"
-DEFAULT_PS2_DIR = r"C:\Development\Git\MGS2-PS2-Textures\final_verification_nov22_2025"
+CSV_PATH = Path(r"C:\Development\Git\MGS2-PS2-Textures\Tri-Dumped\Master Collection\Working\mgs2_texture_strcode_mappings.csv")
+DEFAULT_PS2_DIR = r"C:\Development\Git\MGS2-PS2-Textures\Tri-Dumped\Master Collection"
 DEFAULT_MC_ROOT = r"D:\MG Textures\MGS2\Base Textures\Textures by Location"
 
-DEFAULT_PS2_AS_MC_LIST = r"C:\Development\Git\MGS2-PS2-Textures\u - dumped from substance\mgs2_mc_remastered_textures.txt"
+DEFAULT_PS2_AS_MC_LIST = r"C:\Development\Git\MGS2-PS2-Textures\Tri-Dumped\Master Collection\Metadata\mgs2_mc_bp_remade_textures.txt"
 
 CONVERT_TO_PC_COLORSPACE = True
 
