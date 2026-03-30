@@ -2767,6 +2767,7 @@ HAS ALPHA
 	0008bc34
 	00096be0
 	0009bc34
+	0009bc34_b930b4499997afc4e26e408ea169f9c7
 	0009eb6f
 	0009f56f
 	0009f66f
@@ -3182,6 +3183,7 @@ HAS ALPHA
 	00bfbb06
 	00c04ad1
 	00c10972
+	00c12eaf
 	00c24ad1
 	00c2df96
 	00c3e4f6
@@ -3266,6 +3268,7 @@ HAS ALPHA
 	00f60dcd
 	00f64ad0
 	00f64ad1
+	00f65e24
 	00f727bc
 	00f7283c
 	00f728bc
@@ -3315,12 +3318,22 @@ HAS ALPHA
 	ab_alp_ovl.bmp
 	ab_renraku_alp_ovl.bmp
 	acd_alp_ovl.bmp
+	act_telop02_jp_alp_ovl.bmp
+	act_telop03_jp_alp_ovl.bmp
+	act_telop04_jp_alp_ovl.bmp
+	act_telop05_jp_alp_ovl.bmp
+	act_telop06_jp_alp_ovl.bmp
+	act_telop08_jp_alp_ovl.bmp
+	act_telop09_jp_alp_ovl.bmp
 	act_telop10_alp_ovl.bmp
+	act_telop10_jp_alp_ovl.bmp
 	act_telop11_alp_ovl.bmp
+	act_telop11_jp_alp_ovl.bmp
 	act_telop1_alp_ovl.bmp
 	act_telop2_alp_ovl.bmp
 	act_telop3_alp_ovl.bmp
 	act_telop4_alp_ovl.bmp
+	act_telop5_alp_ovl.bmp
 	act_telop5_alp_ovl.bmp_e350349959b1556776f7b5d2e07689fc
 	act_telop6_alp_ovl.bmp
 	act_telop7_alp_ovl.bmp
@@ -3928,6 +3941,7 @@ HAS ALPHA
 	0051a133
 	0051b133
 	0094b3c7
+	00a12eaf
 	00f7f08f
 	00f8f08f
 	angle_alp_ovl.bmp
@@ -3953,6 +3967,8 @@ HAS ALPHA
 	no_use_alp_ovl.bmp
 	nom_alp_ovl.bmp
 	over_menu_alp_ovl.bmp
+	pkg1_eng_alp_ovl.bmp
+	pkg2_eng_alp_ovl.bmp
 	stg00_alp_ovl.bmp
 	title_sol_alp_ovl.bmp
 	walllc1up2.bmp_8bcf03bfb0e39c5e15c0c5a38913842a

@@ -343,38 +343,38 @@ def prune_empty_dirs(root: Path) -> None:
     if not removed_any:
         log("  [INFO] No empty folders to remove under origin.")
 
-
-def load_ps2_origin_dates(csv_path: Path) -> dict[str, float]:
-    mapping: dict[str, float] = {}
-
-    if not csv_path.is_file():
-        log(f"[ERROR] PS2 origin dates CSV not found: {csv_path}")
-        sys.exit(1)
-
-    with csv_path.open(newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        required = {"stem", "origin_date"}
-        if not required.issubset(set(reader.fieldnames or [])):
-            log("[ERROR] PS2 dates CSV missing required headers: stem,origin_date")
-            sys.exit(1)
-
-        for row in reader:
-            stem = (row.get("stem") or "").strip()
-            ts_str = (row.get("origin_date") or "").strip()
-            if not stem or not ts_str:
-                continue
-
-            try:
-                ts = float(ts_str)
-            except ValueError:
-                log(f"[WARN] Invalid PS2 origin_date '{ts_str}' for stem '{stem}'")
-                continue
-
-            mapping[stem.lower()] = ts
-
-    log(f"[INFO] Loaded {len(mapping)} PS2 origin date entries.")
-    add_summary(f"[INFO] Loaded {len(mapping)} PS2 origin date entries.")
-    return mapping
+#
+#def load_ps2_origin_dates(csv_path: Path) -> dict[str, float]:
+#    mapping: dict[str, float] = {}
+#
+#    if not csv_path.is_file():
+#        log(f"[ERROR] PS2 origin dates CSV not found: {csv_path}")
+#        sys.exit(1)
+#
+#    with csv_path.open(newline="", encoding="utf-8") as f:
+#        reader = csv.DictReader(f)
+#        required = {"stem", "origin_date"}
+#        if not required.issubset(set(reader.fieldnames or [])):
+#            log("[ERROR] PS2 dates CSV missing required headers: stem,origin_date")
+#            sys.exit(1)
+#
+#        for row in reader:
+#            stem = (row.get("stem") or "").strip()
+#            ts_str = (row.get("origin_date") or "").strip()
+#            if not stem or not ts_str:
+#                continue
+#
+#            try:
+#                ts = float(ts_str)
+#            except ValueError:
+#                log(f"[WARN] Invalid PS2 origin_date '{ts_str}' for stem '{stem}'")
+#                continue
+#
+#            mapping[stem.lower()] = ts
+#
+#    log(f"[INFO] Loaded {len(mapping)} PS2 origin date entries.")
+#    add_summary(f"[INFO] Loaded {len(mapping)} PS2 origin date entries.")
+#    return mapping
 
 
 def parse_mc_datetime_to_ts(value: str) -> Optional[float]:

@@ -841,7 +841,7 @@ def run_update_local_vortex_folders() -> None:
         print(f"ERROR: {SET_CTXR_DATES_NAME} failed with exit code {result.returncode}")
         sys.exit(result.returncode)
 
-    print("[INFO] set_ctxr_modified_dates.py completed successfully.")
+    print("[INFO] Update All Local Vortex Folders.py completed successfully.")
 
 
 def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:

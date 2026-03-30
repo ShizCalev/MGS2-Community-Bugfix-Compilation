@@ -286,4 +286,5 @@ OPAQUE
 	00a325a6
 	00c5a254
 	fiction_e_alp_ovl.bmp
+	fiction_j_alp_ovl.bmp
 

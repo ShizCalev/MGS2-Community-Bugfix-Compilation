@@ -37,6 +37,7 @@ CTXR_TOOL_SUCCESS_LINE = "Running CtxrTool v1.3: Visit https://github.com/Jayvee
 
 NO_MIP_REGEX_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\no_mip_regex.txt")
 MANUAL_UI_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_ui_textures.txt")
+MANUAL_OPAQUE_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_opaque_textures.txt")
 
 NEVER_UPSCALE_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\never_upscale.txt")
 SHADOW_MAP_STEMS_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\shadow_map_stems.txt")
@@ -804,6 +805,7 @@ def load_conversion_csv_unique_or_die(
 def hash_images_unique_or_die(
     image_files: list[Path],
     workers: int,
+    manual_opaque_textures: set[str],
 ) -> tuple[dict[str, str], dict[str, str], dict[str, bool]]:
     if not image_files:
         log("[WARN] No .png or .tga files found in listed folders.")
@@ -822,7 +824,9 @@ def hash_images_unique_or_die(
 
         opaque_by_path = should_opacity_be_stripped_from_path(str(path))
 
-        if path_contains_self_remade(path):
+        if stem in manual_opaque_textures:
+            opacity_expected = True
+        elif path_contains_self_remade(path):
             opaque_by_pixels = image_is_fully_opaque_or_no_alpha(path)
             opacity_expected = opaque_by_path or opaque_by_pixels
         else:
@@ -2419,6 +2423,7 @@ def main() -> int:
 
         no_mip_regexes = load_no_mip_regexes_or_die(NO_MIP_REGEX_PATH)
         manual_ui_textures = load_manual_ui_textures_or_die(MANUAL_UI_TEXTURES_PATH)
+        manual_opaque_textures = load_simple_stem_list_or_die(MANUAL_OPAQUE_TEXTURES_PATH)
 
         never_upscale_stems: set[str] = set()
         demastered_nonupscaled_override_stems: set[str] = set()
@@ -2501,7 +2506,11 @@ def main() -> int:
         if is_demastered_run:
             image_files = remap_demastered_self_remade_to_ps2(image_files)
 
-        image_hash_by_name, image_origin_by_name, image_opacity_expected_by_name = hash_images_unique_or_die(image_files, workers)
+        image_hash_by_name, image_origin_by_name, image_opacity_expected_by_name = hash_images_unique_or_die(
+            image_files,
+            workers,
+            manual_opaque_textures,
+        )
 
         image_used_nomips_by_name: dict[str, bool] = {}
         for img in image_files:

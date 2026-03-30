@@ -1,6 +1,6 @@
 # Files with alpha >=129 detected
 # Root: C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized
-# Total scanned: 300
+# Total scanned: 306
 # Hits: 36
 
 C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\Dont demaster\00180189.png
