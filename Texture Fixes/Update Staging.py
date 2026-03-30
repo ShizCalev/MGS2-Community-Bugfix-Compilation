@@ -528,7 +528,7 @@ def _build_csv_bytes(rows: list[list[str]]) -> bytes:
 
 def load_dimensions_names(dimensions_csv: Path) -> dict[str, str]:
     """
-    Load texture_name entries from mgs2_ps2_dimensions.csv.
+    Load texture_name entries from mgs2_mc_tri_dumped_metadata.csv.
 
     Returns dict:
         logical_name_lower (full filename including .bmp) -> original texture_name
@@ -1095,8 +1095,10 @@ def main() -> None:
         git_root
         / "external"
         / "MGS2-PS2-Textures"
-        / "u - dumped from substance"
-        / "mgs2_ps2_dimensions.csv"
+        / "Tri-Dumped"
+        / "Master Collection"
+        / "Metadata"
+        / "mgs2_mc_tri_dumped_metadata.csv"
     )
     dim_names = load_dimensions_names(dimensions_csv)
 

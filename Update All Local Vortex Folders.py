@@ -32,7 +32,7 @@ def run_script(script: Path) -> None:
 
 def main() -> None:
     for script in SCRIPTS:
-        run_script(script)
+        #run_script(script)
 
     print("\nAll scripts finished.")
 
