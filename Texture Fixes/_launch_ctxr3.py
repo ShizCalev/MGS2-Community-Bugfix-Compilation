@@ -33,6 +33,7 @@ TEXTURE_FIXES_ROOT = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Te
 # This script will ONLY process images (PNG or TGA) whose stem matches NO-MIP rules (DPF_NOMIPS equivalent)
 NO_MIP_REGEX_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\no_mip_regex.txt")
 MANUAL_UI_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_ui_textures.txt")
+MANUAL_OPAQUE_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_opaque_textures.txt")
 
 TMP_DIR_NAME = "_tmp"
 
@@ -154,14 +155,20 @@ def image_alpha_extrema(path: Path) -> tuple[bool, int, int]:
         return False, 255, 255
 
 
-def should_strip_opacity_and_use_rgb_only(src_path: Path) -> bool:
+def should_strip_opacity_and_use_rgb_only(src_path: Path, manual_opaque: set[str]) -> bool:
     """
     True if we should create an RGB-only temp image to avoid alpha affecting colors:
+      - stem is listed in manual_opaque_textures.txt, OR
       - path contains 'opaque' (case-insensitive), OR
       - no alpha channel, OR
       - all alpha is 128, OR
       - all alpha is 255
     """
+    stem_lower = src_path.stem.lower()
+
+    if stem_lower in manual_opaque:
+        return True
+
     if "opaque" in str(src_path).lower():
         return True
 
@@ -396,6 +403,20 @@ def load_manual_ui_textures_or_die(path: Path) -> set[str]:
     return out
 
 
+def load_manual_opaque_textures_or_die(path: Path) -> set[str]:
+    if not path.is_file():
+        raise RuntimeError(f"manual_opaque_textures.txt not found: {path}")
+
+    out: set[str] = set()
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        out.add(line.lower())
+
+    return out
+
+
 def should_use_nomips(stem_lower: str, rx_list: list[re.Pattern], manual_set: set[str]) -> bool:
     if stem_lower in manual_set:
         return True
@@ -524,6 +545,7 @@ def main() -> int:
     try:
         no_mip_regexes = load_no_mip_regexes_or_die(NO_MIP_REGEX_PATH)
         manual_ui_textures = load_manual_ui_textures_or_die(MANUAL_UI_TEXTURES_PATH)
+        manual_opaque_textures = load_manual_opaque_textures_or_die(MANUAL_OPAQUE_TEXTURES_PATH)
     except Exception as e:
         log(f"ERROR: {e}")
         return pause_and_exit(1)
@@ -589,7 +611,7 @@ def main() -> int:
         before_hash = sha1_file(p)
 
         try:
-            strip = should_strip_opacity_and_use_rgb_only(p)
+            strip = should_strip_opacity_and_use_rgb_only(p, manual_opaque_textures)
         except Exception as e:
             log(f"ERROR: Failed analyzing alpha for {p.name}:\n  {e}")
             return pause_and_exit(1)
