@@ -6,7 +6,7 @@ from PIL import Image
 # ==========================================================
 # CONFIG
 # ==========================================================
-CSV_PATH = Path(r"C:\Development\Git\MGS2-PS2-Textures\u - dumped from substance\pcsx2_confirmed_sha1_metadata.csv")
+CSV_PATH = Path(r"C:\Development\Git\MGS2-PS2-Textures\Tri-Dumped\Master Collection\Metadata\mgs2_mc_tri_dumped_metadata.csv")
 SCRIPT_DIR = Path.cwd()
 
 # ==========================================================
@@ -23,7 +23,7 @@ def load_metadata(csv_path):
             name = row["texture_name"].strip().lower()
 
             # Parse something like "[128]"
-            raw = row["pcsx2_alpha_levels"].strip()
+            raw = row["mc_tri_dumped_alpha_levels"].strip()
             try:
                 arr = ast.literal_eval(raw)
             except Exception:

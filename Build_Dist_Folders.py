@@ -7,7 +7,6 @@ import shutil
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
 from pathlib import Path
 from threading import Lock
 from typing import Dict, Optional
@@ -47,6 +46,7 @@ IGNORED_TARGET_PATH_PREFIXES = {
     Path("logs"),
     Path("assets/gcx"),
 }
+
 
 def log(message: str = "") -> None:
     with LOG_LOCK:
@@ -344,84 +344,69 @@ def prune_empty_dirs(root: Path) -> None:
         log("  [INFO] No empty folders to remove under origin.")
 
 
-def load_ps2_origin_dates(csv_path: Path) -> dict[str, float]:
+def load_ps2_sha1_version_dates(csv_path: Path) -> dict[str, float]:
     mapping: dict[str, float] = {}
 
     if not csv_path.is_file():
-        log(f"[ERROR] PS2 origin dates CSV not found: {csv_path}")
+        log(f"[ERROR] PS2 sha1 version dates CSV not found: {csv_path}")
         sys.exit(1)
 
     with csv_path.open(newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        required = {"stem", "origin_date"}
+        required = {"sha1", "first_seen_unix"}
         if not required.issubset(set(reader.fieldnames or [])):
-            log("[ERROR] PS2 dates CSV missing required headers: stem,origin_date")
+            log("[ERROR] PS2 sha1 version dates CSV missing required headers: sha1,first_seen_unix")
             sys.exit(1)
 
         for row in reader:
-            stem = (row.get("stem") or "").strip()
-            ts_str = (row.get("origin_date") or "").strip()
-            if not stem or not ts_str:
+            sha1 = (row.get("sha1") or "").strip().lower()
+            ts_str = (row.get("first_seen_unix") or "").strip()
+            if not sha1 or not ts_str:
                 continue
 
             try:
                 ts = float(ts_str)
             except ValueError:
-                log(f"[WARN] Invalid PS2 origin_date '{ts_str}' for stem '{stem}'")
+                log(f"[WARN] Invalid first_seen_unix '{ts_str}' for sha1 '{sha1}'")
                 continue
 
-            mapping[stem.lower()] = ts
+            mapping[sha1] = ts
 
-    log(f"[INFO] Loaded {len(mapping)} PS2 origin date entries.")
-    add_summary(f"[INFO] Loaded {len(mapping)} PS2 origin date entries.")
+    log(f"[INFO] Loaded {len(mapping)} PS2 sha1 version date entries.")
+    add_summary(f"[INFO] Loaded {len(mapping)} PS2 sha1 version date entries.")
     return mapping
 
 
-def parse_mc_datetime_to_ts(value: str) -> Optional[float]:
-    if not value:
-        return None
-
-    raw = value.strip()
-    if raw.upper().endswith("UTC"):
-        raw = raw[:-3].strip()
-
-    try:
-        dt = datetime.strptime(raw, "%Y-%m-%d - %H:%M:%S").replace(tzinfo=timezone.utc)
-    except ValueError as exc:
-        log(f"[WARN] Could not parse MC datetime '{value}': {exc}")
-        return None
-
-    return dt.timestamp()
-
-
-def load_mc_origin_dates(csv_path: Path) -> dict[str, float]:
+def load_mc_resaved_dates(csv_path: Path) -> dict[str, float]:
     mapping: dict[str, float] = {}
 
     if not csv_path.is_file():
-        log(f"[ERROR] MC origin dates CSV not found: {csv_path}")
+        log(f"[ERROR] MC dimensions CSV not found: {csv_path}")
         sys.exit(1)
 
     with csv_path.open(newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        required = {"texture_name", "modified_time_utc"}
+        required = {"mc_resaved_sha1", "version_unix_time"}
         if not required.issubset(set(reader.fieldnames or [])):
-            log("[ERROR] MC dates CSV missing required headers: texture_name,modified_time_utc")
+            log("[ERROR] MC dimensions CSV missing required headers: mc_resaved_sha1,version_unix_time")
             sys.exit(1)
 
         for row in reader:
-            name = (row.get("texture_name") or "").strip()
-            ts_str = (row.get("modified_time_utc") or "").strip()
-            if not name or not ts_str:
+            sha1 = (row.get("mc_resaved_sha1") or "").strip().lower()
+            ts_str = (row.get("version_unix_time") or "").strip()
+            if not sha1 or not ts_str:
                 continue
 
-            ts = parse_mc_datetime_to_ts(ts_str)
-            if ts is None:
+            try:
+                ts = float(ts_str)
+            except ValueError:
+                log(f"[WARN] Invalid version_unix_time '{ts_str}' for mc_resaved_sha1 '{sha1}'")
                 continue
 
-            mapping[name.lower()] = ts
+            mapping[sha1] = ts
 
-    log(f"[INFO] Loaded {len(mapping)} MC origin date entries.")
-    add_summary(f"[INFO] Loaded {len(mapping)} MC origin date entries.")
+    log(f"[INFO] Loaded {len(mapping)} MC resaved sha1 date entries.")
+    add_summary(f"[INFO] Loaded {len(mapping)} MC resaved sha1 date entries.")
     return mapping
 
 
@@ -460,44 +445,49 @@ def load_self_remade_dates(csv_path: Path) -> dict[str, float]:
 
 def build_ctxr_mtime_map(
     origin_root: Path,
-    ps2_dates: dict[str, float],
-    mc_dates: dict[str, float],
+    ps2_sha1_dates: dict[str, float],
+    mc_resaved_dates: dict[str, float],
     self_remade_dates: dict[str, float],
 ) -> dict[str, float]:
     ctxr_mtime_map: dict[str, float] = {}
     csv_count = 0
     rows_used = 0
 
+    ps2_fallback_ts = 1503360000.0  # 2017-08-22 00:00:00 UTC
+
     for csv_path in origin_root.rglob("conversion_hashes.csv"):
         csv_count += 1
+
         with csv_path.open(newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
-            required = {"filename", "origin_folder"}
+            required = {"filename", "before_hash", "origin_folder"}
             if not required.issubset(set(reader.fieldnames or [])):
                 log(
                     f"[WARN] conversion_hashes.csv at {csv_path} missing "
-                    f"filename/origin_folder columns, skipping."
+                    f"filename/before_hash/origin_folder columns, skipping."
                 )
                 continue
 
             for row in reader:
                 filename = (row.get("filename") or "").strip()
+                before_hash = (row.get("before_hash") or "").strip().lower()
                 origin_folder = (row.get("origin_folder") or "").strip().lower()
 
-                if not filename or not origin_folder:
+                if not filename:
                     continue
-
-                csv_key = filename.lower()
 
                 ts: Optional[float] = None
-                if origin_folder.startswith("ps2 textures"):
-                    ts = ps2_dates.get(csv_key)
-                elif origin_folder.startswith("mc textures"):
-                    ts = mc_dates.get(csv_key)
-                elif origin_folder.startswith("self remade"):
-                    ts = self_remade_dates.get(csv_key)
-                else:
-                    continue
+
+                if before_hash:
+                    ts = ps2_sha1_dates.get(before_hash)
+                    if ts is None:
+                        ts = mc_resaved_dates.get(before_hash)
+
+                if ts is None:
+                    if origin_folder.startswith("ps2 textures"):
+                        ts = ps2_fallback_ts
+                    else:
+                        ts = self_remade_dates.get(filename.lower())
 
                 if ts is None:
                     continue
@@ -519,7 +509,7 @@ def build_ctxr_mtime_map(
     if csv_count:
         log(
             f"[INFO] Built ctxr_mtime_map from {csv_count} conversion_hashes.csv files, "
-            f"{rows_used} ctxr files with PS2/MC/Self Remade timestamps."
+            f"{rows_used} ctxr files with PS2/MC/Self Remade/fallback timestamps."
         )
     else:
         log("[INFO] No conversion_hashes.csv found under origin for ctxr mtime mapping.")
@@ -755,6 +745,7 @@ def should_ignore_target_rel(rel_path: Path) -> bool:
 
     return False
 
+
 def sha1_file(path: Path) -> str:
     h = hashlib.sha1()
     with path.open("rb") as f:
@@ -803,6 +794,7 @@ def copy_with_mtime(src: Path, dst: Path, mtime: Optional[float], dry_run: bool)
         set_mtime(dst, mtime)
 
     return existed_already
+
 
 def delete_path(path: Path, dry_run: bool) -> None:
     if dry_run:
@@ -1163,18 +1155,21 @@ def main() -> None:
 
     any_pruned = any(prune_flag for (_, _, _, prune_flag) in mappings)
     if any_pruned:
-        external_dir = (
+        metadata_dir = (
             git_root
             / "external"
             / "MGS2-PS2-Textures"
-            / "u - dumped from substance"
+            / "Tri-Dumped"
+            / "Master Collection"
+            / "Metadata"
         )
-        ps2_dates_csv = external_dir / "mgs2_ps2_substance_version_dates.csv"
-        mc_dates_csv = external_dir / "mgs2_mc_real_dates.csv"
+
+        ps2_dates_csv = metadata_dir / "mgs2_ps2_sha1_version_dates.csv"
+        mc_dates_csv = metadata_dir / "mgs2_mc_dimensions.csv"
         self_remade_csv = git_root / "self_remade_modified_dates.csv"
 
-        ps2_dates = load_ps2_origin_dates(ps2_dates_csv)
-        mc_dates = load_mc_origin_dates(mc_dates_csv)
+        ps2_dates = load_ps2_sha1_version_dates(ps2_dates_csv)
+        mc_dates = load_mc_resaved_dates(mc_dates_csv)
         self_remade_dates = load_self_remade_dates(self_remade_csv)
     else:
         ps2_dates = {}

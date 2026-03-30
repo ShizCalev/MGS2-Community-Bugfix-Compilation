@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 STEMS_TXT = Path(
-    r"C:\Development\Git\MGS2-PS2-Textures\u - dumped from substance\mgs2_mc_remastered_textures.txt"
+    r"C:\Development\Git\MGS2-PS2-Textures\Tri-Dumped\Master Collection\Metadata\mgs2_mc_bp_remade_textures.txt"
 )
 
 SRC_DIR = Path(

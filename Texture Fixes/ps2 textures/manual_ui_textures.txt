@@ -1083,3 +1083,9 @@ sr23j_alp_ovl.bmp
 sr24j_alp_ovl.bmp
 sr25j_alp_ovl.bmp
 
+
+snake_tales_ltitlee_alp_ovl.bmp
+snake_tales_ltitlea_alp_ovl.bmp
+snake_tales_ltitleb_alp_ovl.bmp
+snake_tales_ltitlec_alp_ovl.bmp
+snake_tales_ltitled_alp_ovl.bmp

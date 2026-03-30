@@ -2720,11 +2720,6 @@ HAS ALPHA
 	ros_hi_eyemc_ovl_sub_alp.bmp
 	ros_hi_eyermc_ovl_sub_alp.bmp
 	ros_hi_facemc_ovl_sub_alp.bmp
-	snake_tales_ltitlea_alp_ovl.bmp
-	snake_tales_ltitleb_alp_ovl.bmp
-	snake_tales_ltitlec_alp_ovl.bmp
-	snake_tales_ltitled_alp_ovl.bmp
-	snake_tales_ltitlee_alp_ovl.bmp
 	sol_hi_face02_ovl_sub_alp.bmp
 	sol_hi_face_d1_ovl_sub_alp.bmp
 	sol_hi_face_d2_ovl_sub_alp.bmp
@@ -3463,6 +3458,11 @@ HAS ALPHA
 	sensou_03_alp_ovl.bmp
 	shv_alp_ovl.bmp
 	smoke_alp_ovl.bmp
+	snake_tales_ltitlea_alp_ovl.bmp
+	snake_tales_ltitleb_alp_ovl.bmp
+	snake_tales_ltitlec_alp_ovl.bmp
+	snake_tales_ltitled_alp_ovl.bmp
+	snake_tales_ltitlee_alp_ovl.bmp
 	sp_alp_ovl.bmp
 	sr00e_alp_ovl.bmp
 	sr00j_alp_ovl.bmp
