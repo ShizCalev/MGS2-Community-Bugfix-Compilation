@@ -249,6 +249,63 @@ def verify_manual_ui_covered_by_no_mip_regex() -> None:
 
 
 # ==========================================================
+# CTXR SIZE SAFETY CHECK
+# ==========================================================
+MAX_CTXR_SIZE_BYTES = 86 * 1024 * 1024
+
+
+def scan_oversized_ctxr_files(roots: list[Path], max_size_bytes: int) -> list[tuple[Path, int]]:
+    oversized: list[tuple[Path, int]] = []
+
+    for root in roots:
+        if not root.is_dir():
+            continue
+
+        print(f"[INFO] Scanning for oversized .ctxr files: {root}")
+
+        for path in root.rglob("*.ctxr"):
+            if not path.is_file():
+                continue
+
+            try:
+                size = path.stat().st_size
+            except OSError as e:
+                print(f"[ERROR] Failed to stat {path}: {e}")
+                pause_and_exit(1)
+
+            if size > max_size_bytes:
+                oversized.append((path, size))
+
+    oversized.sort(key=lambda x: str(x[0]).lower())
+    return oversized
+
+
+def _format_size_mib(size_bytes: int) -> str:
+    return f"{size_bytes / (1024 * 1024):.2f} MiB"
+
+
+def fail_if_oversized_ctxr_files_exist(phase_label: str) -> None:
+    print("#################################################")
+    oversized = scan_oversized_ctxr_files(STAGING_ROOTS, MAX_CTXR_SIZE_BYTES)
+    if not oversized:
+        print(f"[INFO] CTXR size check passed at {phase_label}. No files exceed 86 MiB.")
+        print("#################################################")
+        return
+
+    print()
+    print("#################################################")
+    print(f"[ERROR] Oversized .ctxr files detected at {phase_label}")
+    print(f"        Limit: {_format_size_mib(MAX_CTXR_SIZE_BYTES)}")
+    print(f"        !!! ADD THESE FILES TO NEVER_UPSCALE.TXT !!!")
+    print("#################################################")
+
+    for path, size in oversized:
+        print(f"{_format_size_mib(size)} | {size} bytes | {path}")
+
+    print("#################################################")
+    pause_and_exit(1)
+
+# ==========================================================
 # BUILD_DIST_FOLDERS.py SYNC HELPERS
 # ==========================================================
 
@@ -1078,6 +1135,8 @@ def write_self_remade_modified_dates() -> None:
 # MAIN
 # ==========================================================
 def main() -> None:
+    fail_if_oversized_ctxr_files_exist("start of script")
+
     verify_manual_ui_covered_by_no_mip_regex()
 
     run_find_unconverted()
@@ -1127,7 +1186,8 @@ def main() -> None:
     print()
     print("[INFO] All staging roots processed.")
 
-    
+    fail_if_oversized_ctxr_files_exist("end of script")
+
     write_self_remade_modified_dates()
     run_update_local_vortex_folders() #update local vortex folders.
 

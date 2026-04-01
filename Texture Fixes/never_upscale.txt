@@ -12,6 +12,14 @@ title_logo_mono_alp_ovl.bmp
 0076fe1a
 logo_konami.bmp
 00b60372
+0096c7c2
+0096b7c2
+0014c79b
+0014b79b
+00d6c78e
+00d6b78e
+00d5c792
+00d5b792
 #end-native-ui
 
 #liqmix water stuff
@@ -481,3 +489,23 @@ pdray_number_b04_alp_ovl.bmp
 pdray_number_b03_alp_ovl.bmp
 pdray_number_b02_alp_ovl.bmp
 pdray_number_b01_alp_ovl.bmp
+
+
+foot_shadow2_sub_ovl.bmp
+foot_shadow_alp.bmp
+car_shadow_01.bmp
+
+sna_shadow.bmp
+shadow_rev_alp.bmp
+shadow_alp.bmp
+
+
+taisa_gb_alp_ovl.bmp
+taisa_msx_alp_ovl.bmp
+taisa_mgs1_alp_ovl.bmp
+animal_alp_ovl.bmp
+
+00d57f22
+00d47f22
+00d37f22
+00d27f22
