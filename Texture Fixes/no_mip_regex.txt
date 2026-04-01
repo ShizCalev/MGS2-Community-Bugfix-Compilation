@@ -35,6 +35,8 @@ _bmap
 ^w24c_overguy_alp_ovl\.bmp$
 ^web
 _bg\.bmp$
+^kictme\.bmp$
+^kictme\.bmp_fafb163149953d777997f9fa0d4f83f8$
 //Manual UI stuff
 ^0002936b$
 ^001087b3$
