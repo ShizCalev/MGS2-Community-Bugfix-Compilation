@@ -2478,4 +2478,3 @@ w00ak_flrshad4_sub_alp_ovl.bmp
 w00ak_flrshad3_sub_alp_ovl.bmp
 w00ak_flrshad2_sub_alp_ovl.bmp
 w00ak_flrshad1_sub_alp_ovl.bmp
-

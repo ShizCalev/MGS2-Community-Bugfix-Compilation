@@ -490,16 +490,6 @@ pdray_number_b03_alp_ovl.bmp
 pdray_number_b02_alp_ovl.bmp
 pdray_number_b01_alp_ovl.bmp
 
-
-foot_shadow2_sub_ovl.bmp
-foot_shadow_alp.bmp
-car_shadow_01.bmp
-
-sna_shadow.bmp
-shadow_rev_alp.bmp
-shadow_alp.bmp
-
-
 taisa_gb_alp_ovl.bmp
 taisa_msx_alp_ovl.bmp
 taisa_mgs1_alp_ovl.bmp

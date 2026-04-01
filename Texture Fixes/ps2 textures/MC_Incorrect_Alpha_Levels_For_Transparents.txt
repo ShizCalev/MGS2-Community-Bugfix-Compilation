@@ -3,7 +3,6 @@ HAS ALPHA
 ========================================
 
 ---------- HAS ALPHA ----------
-	00002016
 	1wallsh_alp_ovl.bmp
 	1wallsh_alp_ovl.bmp_0632d8b69677918c5ecab5a7bf5e3589
 	234284_alp_ovl.bmp
@@ -2159,7 +2158,6 @@ HAS ALPHA
 	wa_be_sh_alp_ovl.bmp
 	wc_alp_ovl.bmp
 	wep_dot_alp_ovl_decal.bmp
-	win_alp_ovl.bmp
 	window00_alp.bmp
 	window00_alp.bmp_b6b4e5482f0d2c79212fb315ca632a72
 	window01_alp.bmp
@@ -2539,12 +2537,8 @@ HAS ALPHA
 	00c1181b
 
 ---------- HAS ALPHA\bp_remade ----------
-	002e7dff
-	0065a618
 	006baeb5
 	006c9021
-	006d97ed
-	0086a618
 	cfr_wire_alp.bmp
 	chi01_alp.bmp
 	cyp_lens_rgb_alp_ovl.bmp
@@ -2822,6 +2816,7 @@ HAS ALPHA
 	002e7de3
 	002e7de4
 	002e7de5
+	002e7dff
 	002e8486
 	002ee672
 	002ee6f2
@@ -2995,6 +2990,7 @@ HAS ALPHA
 	0064f82e_923078466946a3acdea05dbf22e0f6e7
 	0064f82e_db973ad91fc30e3c42f866a3eb7d4d74
 	006597ed
+	0065a618
 	0065f82e
 	0065f82e_599e1a822c915823a768daf1f6ee7174
 	00667ab6
@@ -3029,6 +3025,7 @@ HAS ALPHA
 	006caeb5
 	006cc7ed
 	006d9021
+	006d97ed
 	006daeb5
 	006e6ff1
 	006e99ea
@@ -3085,6 +3082,7 @@ HAS ALPHA
 	00824ad1
 	00829016
 	0083fa46
+	0086a618
 	00885728
 	0088b898
 	0088c589
@@ -3936,6 +3934,7 @@ HAS ALPHA
 	wtd_petbottle2_mt_ovl_alp_sub_01.bmp
 
 ---------- HAS ALPHA\no_mip_fixes\ui ----------
+	00002016
 	00304bdd
 	00314bdb
 	0051a133
@@ -3972,5 +3971,6 @@ HAS ALPHA
 	stg00_alp_ovl.bmp
 	title_sol_alp_ovl.bmp
 	walllc1up2.bmp_8bcf03bfb0e39c5e15c0c5a38913842a
+	win_alp_ovl.bmp
 	zoom_alp_ovl.bmp
 

@@ -1089,3 +1089,14 @@ snake_tales_ltitlea_alp_ovl.bmp
 snake_tales_ltitleb_alp_ovl.bmp
 snake_tales_ltitlec_alp_ovl.bmp
 snake_tales_ltitled_alp_ovl.bmp
+
+
+0086a618
+008ba618
+006d97ed
+
+002e7dff
+0065a618
+00002016
+cd_err_alp_ovl.bmp
+win_alp_ovl.bmp
