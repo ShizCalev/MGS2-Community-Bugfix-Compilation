@@ -1100,3 +1100,9 @@ snake_tales_ltitled_alp_ovl.bmp
 00002016
 cd_err_alp_ovl.bmp
 win_alp_ovl.bmp
+
+
+009fbc16
+006c9021
+006baeb5
+00fa15d7

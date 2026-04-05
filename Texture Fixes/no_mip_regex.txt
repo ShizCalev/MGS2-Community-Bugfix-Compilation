@@ -1097,3 +1097,7 @@ _bg\.bmp$
 ^00002016$
 ^cd_err_alp_ovl\.bmp$
 ^win_alp_ovl\.bmp$
+^006baeb5$
+^006c9021$
+^009fbc16$
+^00fa15d7$

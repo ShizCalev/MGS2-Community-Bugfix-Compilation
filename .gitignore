@@ -2,7 +2,9 @@
 hash_differences.txt
 _dist/
 Texture Fixes/_upscaling
+Texture Fixes/_upscaling_extra
 Texture Fixes/_upscaling_alpha_stripped
+Texture Fixes/_upscaling_extra_alpha_stripped
 /Texture\ Fixes/Staging/**/**/*.png
 /Texture\ Fixes/Staging - 2x Upscaled/**/**/*.png
 /Texture\ Fixes/Staging - 4x Upscaled/**/**/*.png

@@ -2537,8 +2537,6 @@ HAS ALPHA
 	00c1181b
 
 ---------- HAS ALPHA\bp_remade ----------
-	006baeb5
-	006c9021
 	cfr_wire_alp.bmp
 	chi01_alp.bmp
 	cyp_lens_rgb_alp_ovl.bmp
@@ -3018,9 +3016,11 @@ HAS ALPHA
 	006b508f
 	006b97ed
 	006ba618
+	006baeb5
 	006bcf85
 	006bcf85_3bbce8b6d10a47883f9038737995145a
 	006bf7fe
+	006c9021
 	006c97ed
 	006caeb5
 	006cc7ed

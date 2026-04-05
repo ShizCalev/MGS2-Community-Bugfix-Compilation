@@ -41,14 +41,20 @@ MANUAL_OPAQUE_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compi
 
 NEVER_UPSCALE_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\never_upscale.txt")
 SHADOW_MAP_STEMS_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\shadow_map_stems.txt")
+FORCE_EXTRA_SMOOTH_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\force_extra_upscale_smoothing.txt")
 
 UPSCALE_STAGING_DIR = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\_upscaling")
 UPSCALE_STAGING_DIR_STRIPPED_OPACITY = Path(
     r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\_upscaling_alpha_stripped"
 )
+UPSCALE_STAGING_DIR_EXTRA = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\_upscaling_extra")
+UPSCALE_STAGING_DIR_EXTRA_STRIPPED_OPACITY = Path(
+    r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\_upscaling_extra_alpha_stripped"
+)
 
 # Root for PS2 textures used as override source in Demastered runs
 PS2_TEXTURES_ROOT = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures")
+MC_TRI_DUMPED_METADATA_CSV_PATH = Path(r"C:\Development\Git\MGS2-PS2-Textures\Tri-Dumped\Master Collection\Metadata\mgs2_mc_tri_dumped_metadata.csv")
 
 CHAINNER_EXE = Path(r"C:\Users\cmkoo\AppData\Local\chaiNNer\chaiNNer.exe")
 CHAINNER_PROJECT_2X = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\2x Upscaling.chn")
@@ -56,6 +62,12 @@ CHAINNER_PROJECT_4X = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\T
 
 CHAINNER_PROJECT_2X_STRIPPED_OPACITY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\2x Upscaling - Strip Alpha.chn")
 CHAINNER_PROJECT_4X_STRIPPED_OPACITY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\4x Upscaling - Strip Alpha.chn")
+
+CHAINNER_PROJECT_2X_DEMASTERED = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Chains\2x Upscaling_Extra.chn")
+CHAINNER_PROJECT_4X_DEMASTERED = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Chains\4x Upscaling_Extra.chn")
+
+CHAINNER_PROJECT_2X_STRIPPED_OPACITY_DEMASTERED = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Chains\2x Upscaling - Strip Alpha_Extra.chn")
+CHAINNER_PROJECT_4X_STRIPPED_OPACITY_DEMASTERED = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Chains\4x Upscaling - Strip Alpha_Extra.chn")
 
 # 0 = v1 release
 # 1 = corrected opaque texture alpha stripping for upscaling
@@ -141,17 +153,24 @@ def staging_folder_is_demastered() -> bool:
     return "demastered" in str(STAGING_FOLDER).lower()
 
 
-def get_chainner_project_for_staging(stripped_opacity: bool) -> Path:
+def get_chainner_project_for_staging(stripped_opacity: bool, use_extra: bool) -> Path:
     path_lower = str(STAGING_FOLDER).lower()
 
     if " - 2x upscaled" in path_lower:
+        if use_extra:
+            return CHAINNER_PROJECT_2X_STRIPPED_OPACITY_DEMASTERED if stripped_opacity else CHAINNER_PROJECT_2X_DEMASTERED
         return CHAINNER_PROJECT_2X_STRIPPED_OPACITY if stripped_opacity else CHAINNER_PROJECT_2X
+
+    if use_extra:
+        return CHAINNER_PROJECT_4X_STRIPPED_OPACITY_DEMASTERED if stripped_opacity else CHAINNER_PROJECT_4X_DEMASTERED
 
     return CHAINNER_PROJECT_4X_STRIPPED_OPACITY if stripped_opacity else CHAINNER_PROJECT_4X
 
 
-def get_current_upscaler_metadata_for_run(is_upscaled_run: bool) -> tuple[str, str]:
+def get_current_upscaler_metadata_for_run(is_upscaled_run: bool, use_extra: bool) -> tuple[str, str]:
     if is_upscaled_run:
+        if use_extra:
+            return (UPSCALE_PROCESS_VERSION, "remarci_4x_extra_smooth")
         return (UPSCALE_PROCESS_VERSION, "remarci_4x")
     return ("0", "none")
 
@@ -174,9 +193,11 @@ def get_effective_upscaler_metadata_for_stem(
     stem_lower: str,
     staging_is_upscaled: bool,
     nonupscaled_override_stems: set[str],
+    extra_smooth_stems: set[str],
 ) -> tuple[str, str]:
     return get_current_upscaler_metadata_for_run(
-        get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems)
+        get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems),
+        stem_lower in extra_smooth_stems,
     )
 
 
@@ -188,6 +209,104 @@ def get_effective_non_upscaled_version_for_stem(
     return get_current_non_upscaled_version_for_run(
         get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems)
     )
+
+
+def load_mc_tri_dumped_dimensions_or_die(csv_path: Path) -> dict[str, tuple[int, int]]:
+    if not csv_path.is_file():
+        raise RuntimeError(f"MC tri-dumped metadata CSV not found: {csv_path}")
+
+    mc_dims: dict[str, tuple[int, int]] = {}
+
+    with csv_path.open("r", encoding="utf8", newline="") as f:
+        rdr = csv.DictReader(f)
+        if rdr.fieldnames is None:
+            raise RuntimeError(f"MC tri-dumped metadata CSV has no header row: {csv_path}")
+
+        required = {"texture_name", "mc_tri_dumped_width", "mc_tri_height"}
+        header_lower = {h.strip().lower() for h in rdr.fieldnames}
+        missing = sorted(required - header_lower)
+        if missing:
+            raise RuntimeError(f"MC tri-dumped metadata CSV missing required column(s): {', '.join(missing)}")
+
+        for row in rdr:
+            stem = (row.get("texture_name") or "").strip().lower()
+            if not stem:
+                continue
+
+            width_raw = (row.get("mc_tri_dumped_width") or "").strip()
+            height_raw = (row.get("mc_tri_height") or "").strip()
+            if not width_raw or not height_raw:
+                continue
+
+            try:
+                dims = (int(width_raw), int(height_raw))
+            except ValueError:
+                continue
+
+            prev = mc_dims.get(stem)
+            if prev is None:
+                mc_dims[stem] = dims
+            elif prev != dims:
+                raise RuntimeError(f"Conflicting MC tri-dumped dimensions for stem: {stem}")
+
+    return mc_dims
+
+
+def origin_is_under_root(origin_folder: str, root_name: str) -> bool:
+    origin_lower = (origin_folder or "").strip().lower()
+    root_lower = root_name.strip().lower()
+    return origin_lower == root_lower or origin_lower.startswith(root_lower + "\\")
+
+
+def build_extra_smooth_stems(
+    staging_is_upscaled: bool,
+    is_demastered_run: bool,
+    nonupscaled_override_stems: set[str],
+    image_origin_by_name: dict[str, str],
+    image_dimensions_by_name: dict[str, tuple[int, int]],
+    mc_tri_dumped_dims_by_name: dict[str, tuple[int, int]],
+    force_extra_smooth_stems: set[str],
+) -> set[str]:
+    extra_smooth_stems: set[str] = set()
+
+    if not staging_is_upscaled:
+        return extra_smooth_stems
+
+    for stem_lower, origin_folder in image_origin_by_name.items():
+        if stem_lower not in force_extra_smooth_stems:
+            continue
+
+        if not get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems):
+            continue
+
+        origin_lower = (origin_folder or "").strip().lower()
+
+        if is_demastered_run:
+            extra_smooth_stems.add(stem_lower)
+            continue
+
+        if origin_is_under_root(origin_lower, "ps2 textures"):
+            extra_smooth_stems.add(stem_lower)
+            continue
+
+        if "dont demaster" in origin_lower and "self remastered" not in origin_lower:
+            extra_smooth_stems.add(stem_lower)
+            continue
+
+        if origin_is_under_root(origin_lower, "mc textures"):
+            continue
+
+        dims = image_dimensions_by_name.get(stem_lower)
+        expected = mc_tri_dumped_dims_by_name.get(stem_lower)
+        if dims is None or expected is None:
+            continue
+
+        if dims == expected:
+            extra_smooth_stems.add(stem_lower)
+
+    log(f"[INFO] Force extra smoothing list: {len(force_extra_smooth_stems)}")
+    log(f"[INFO] Extra-smooth upscaled stems: {len(extra_smooth_stems)}")
+    return extra_smooth_stems
 
 
 # ==========================================================
@@ -806,18 +925,19 @@ def hash_images_unique_or_die(
     image_files: list[Path],
     workers: int,
     manual_opaque_textures: set[str],
-) -> tuple[dict[str, str], dict[str, str], dict[str, bool]]:
+) -> tuple[dict[str, str], dict[str, str], dict[str, bool], dict[str, tuple[int, int]]]:
     if not image_files:
         log("[WARN] No .png or .tga files found in listed folders.")
-        return {}, {}, {}
+        return {}, {}, {}, {}
 
     log(f"[INFO] Hashing {len(image_files)} png/tga files\n")
 
     hashes_by_name: dict[str, set[str]] = {}
     origin_by_name: dict[str, set[str]] = {}
     opacity_expected_by_name: dict[str, set[bool]] = {}
+    dimensions_by_name: dict[str, set[tuple[int, int]]] = {}
 
-    def worker(path: Path) -> tuple[str, str, str, bool]:
+    def worker(path: Path) -> tuple[str, str, str, bool, tuple[int, int]]:
         stem = path.stem.lower()
         digest = sha1_file(path)
         origin = origin_relative_to_required_subpath_or_die(path)
@@ -832,14 +952,17 @@ def hash_images_unique_or_die(
         else:
             opacity_expected = opaque_by_path
 
-        return (stem, digest, origin, opacity_expected)
+        with Image.open(path) as im:
+            dims = im.size
+
+        return (stem, digest, origin, opacity_expected, dims)
 
     progress = ProgressTracker(len(image_files), "Hash images")
 
     with ThreadPoolExecutor(max_workers=workers) as ex:
         futures = [ex.submit(worker, p) for p in image_files]
         for fut in as_completed(futures):
-            name, digest, origin, opacity_expected = fut.result()
+            name, digest, origin, opacity_expected, dims = fut.result()
 
             s = hashes_by_name.get(name)
             if s is None:
@@ -859,6 +982,12 @@ def hash_images_unique_or_die(
                 opacity_expected_by_name[name] = oe
             oe.add(opacity_expected)
 
+            dd = dimensions_by_name.get(name)
+            if dd is None:
+                dd = set()
+                dimensions_by_name[name] = dd
+            dd.add(dims)
+
             progress.update()
 
     progress.finish()
@@ -866,10 +995,12 @@ def hash_images_unique_or_die(
     bad_hash: list[tuple[str, list[str]]] = []
     bad_origin: list[tuple[str, list[str]]] = []
     bad_opacity: list[str] = []
+    bad_dims: list[str] = []
 
     out_hash: dict[str, str] = {}
     out_origin: dict[str, str] = {}
     out_opacity_expected: dict[str, bool] = {}
+    out_dimensions: dict[str, tuple[int, int]] = {}
 
     for name, digests in hashes_by_name.items():
         if len(digests) > 1:
@@ -888,6 +1019,12 @@ def hash_images_unique_or_die(
             bad_opacity.append(name)
             continue
         out_opacity_expected[name] = next(iter(vals))
+
+    for name, vals in dimensions_by_name.items():
+        if len(vals) > 1:
+            bad_dims.append(name)
+            continue
+        out_dimensions[name] = next(iter(vals))
 
     if bad_hash:
         log("[FATAL] The same filename appeared with multiple different image hashes.")
@@ -911,8 +1048,14 @@ def hash_images_unique_or_die(
             log(f"  {n}")
         raise RuntimeError("Duplicate image filenames with conflicting opaque detection")
 
+    if bad_dims:
+        log("[FATAL] The same filename appeared with conflicting dimensions.")
+        for n in sorted(bad_dims):
+            log(f"  {n}")
+        raise RuntimeError("Duplicate image filenames with conflicting dimensions")
+
     log(f"[INFO] Collected {len(out_hash)} unique image names (stems)\n")
-    return out_hash, out_origin, out_opacity_expected
+    return out_hash, out_origin, out_opacity_expected, out_dimensions
 
 
 # ==========================================================
@@ -1530,6 +1673,7 @@ def run_nvtt_exports_or_die(
     conversion_header: list[str],
     ctxr3_required_stems: set[str],
     nonupscaled_override_stems: set[str],
+    extra_smooth_stems: set[str],
 ) -> None:
     if not NVTT_EXPORT_EXE.is_file():
         raise RuntimeError(f"nvtt_export.exe not found: {NVTT_EXPORT_EXE}")
@@ -1586,6 +1730,8 @@ def run_nvtt_exports_or_die(
 
     chain_alpha: list[Path] = []
     chain_normal: list[Path] = []
+    chain_alpha_extra: list[Path] = []
+    chain_normal_extra: list[Path] = []
     nonupscaled_direct: list[Path] = []
 
     for img in missing:
@@ -1596,19 +1742,35 @@ def run_nvtt_exports_or_die(
             nonupscaled_direct.append(img)
             continue
 
-        if image_opacity_expected_by_name.get(stem_lower, False):
+        use_extra = stem_lower in extra_smooth_stems
+        is_alpha = image_opacity_expected_by_name.get(stem_lower, False)
+
+        if is_alpha and use_extra:
+            chain_alpha_extra.append(img)
+        elif is_alpha:
             chain_alpha.append(img)
+        elif use_extra:
+            chain_normal_extra.append(img)
         else:
             chain_normal.append(img)
 
     mapping_normal: dict[Path, Path] = {}
     mapping_alpha: dict[Path, Path] = {}
+    mapping_normal_extra: dict[Path, Path] = {}
+    mapping_alpha_extra: dict[Path, Path] = {}
 
-    if chain_normal or chain_alpha:
-        log(f"[UPSCALE] Preparing {len(chain_normal) + len(chain_alpha)} image(s) for external upscaling.")
+    if chain_normal or chain_alpha or chain_normal_extra or chain_alpha_extra:
+        log(
+            f"[UPSCALE] Preparing "
+            f"{len(chain_normal) + len(chain_alpha) + len(chain_normal_extra) + len(chain_alpha_extra)} "
+            "image(s) for external upscaling."
+        )
 
         if chain_normal:
             mapping_normal = copy_images_for_upscaling_or_die(chain_normal, UPSCALE_STAGING_DIR)
+
+        if chain_normal_extra:
+            mapping_normal_extra = copy_images_for_upscaling_or_die(chain_normal_extra, UPSCALE_STAGING_DIR_EXTRA)
 
         if chain_alpha:
             mapping_alpha = copy_images_for_upscaling_or_die(chain_alpha, UPSCALE_STAGING_DIR_STRIPPED_OPACITY)
@@ -1654,8 +1816,54 @@ def run_nvtt_exports_or_die(
                 except Exception as e:
                     raise RuntimeError(f"Failed pre-upscale opacity stripping for {ups}: {e}")
 
+        if chain_alpha_extra:
+            mapping_alpha_extra = copy_images_for_upscaling_or_die(chain_alpha_extra, UPSCALE_STAGING_DIR_EXTRA_STRIPPED_OPACITY)
+
+            for orig, ups in list(mapping_alpha_extra.items()):
+                stem_lower = orig.stem.lower()
+                opacity_expected = image_opacity_expected_by_name.get(stem_lower, False)
+                if not opacity_expected:
+                    continue
+
+                rgb_dest = ups.with_suffix(".png")
+
+                try:
+                    if rgb_dest.resolve() == ups.resolve():
+                        tmp = ups.with_name(ups.name + ".rgbtmp.png")
+                        if tmp.is_file():
+                            tmp.unlink()
+
+                        make_rgb_only_copy_named_or_die(ups, tmp)
+                        tmp.replace(ups)
+
+                        mapping_alpha_extra[orig] = ups
+                        log(f"[UPSCALE OPACITY] Stripped alpha before upscaling (in-place PNG): {orig.name} -> {ups.name}")
+                    else:
+                        if rgb_dest.is_file():
+                            rgb_dest.unlink()
+
+                        make_rgb_only_copy_named_or_die(ups, rgb_dest)
+
+                        for ext in (".tga", ".png"):
+                            candidate = ups.with_suffix(ext)
+                            if candidate.resolve() == rgb_dest.resolve():
+                                continue
+                            if candidate.is_file():
+                                try:
+                                    candidate.unlink()
+                                except Exception as e:
+                                    log(f"[UPSCALE OPACITY WARN] Failed deleting {candidate}: {e}")
+
+                        mapping_alpha_extra[orig] = rgb_dest
+                        log(f"[UPSCALE OPACITY] Stripped alpha before upscaling: {orig.name} -> {rgb_dest.name}")
+
+                except Exception as e:
+                    raise RuntimeError(f"Failed pre-upscale opacity stripping for {ups}: {e}")
+
         dims_before_normal: dict[Path, tuple[int, int]] = {}
         dims_before_alpha: dict[Path, tuple[int, int]] = {}
+        dims_before_normal_extra: dict[Path, tuple[int, int]] = {}
+        dims_before_alpha_extra: dict[Path, tuple[int, int]] = {}
 
         for orig, ups in mapping_normal.items():
             try:
@@ -1671,17 +1879,41 @@ def run_nvtt_exports_or_die(
             except Exception as e:
                 raise RuntimeError(f"Failed reading dimensions before upscaling for {ups}: {e}")
 
+        for orig, ups in mapping_normal_extra.items():
+            try:
+                with Image.open(ups) as im:
+                    dims_before_normal_extra[orig] = im.size
+            except Exception as e:
+                raise RuntimeError(f"Failed reading dimensions before upscaling for {ups}: {e}")
+
+        for orig, ups in mapping_alpha_extra.items():
+            try:
+                with Image.open(ups) as im:
+                    dims_before_alpha_extra[orig] = im.size
+            except Exception as e:
+                raise RuntimeError(f"Failed reading dimensions before upscaling for {ups}: {e}")
+
         if mapping_normal:
-            run_chaiNNer_or_die(get_chainner_project_for_staging(stripped_opacity=False))
+            run_chaiNNer_or_die(get_chainner_project_for_staging(stripped_opacity=False, use_extra=False))
             remap_chainner_tgas_to_png(mapping_normal)
 
         if mapping_alpha:
-            run_chaiNNer_or_die(get_chainner_project_for_staging(stripped_opacity=True))
+            run_chaiNNer_or_die(get_chainner_project_for_staging(stripped_opacity=True, use_extra=False))
             remap_chainner_tgas_to_png(mapping_alpha)
+
+        if mapping_normal_extra:
+            run_chaiNNer_or_die(get_chainner_project_for_staging(stripped_opacity=False, use_extra=True))
+            remap_chainner_tgas_to_png(mapping_normal_extra)
+
+        if mapping_alpha_extra:
+            run_chaiNNer_or_die(get_chainner_project_for_staging(stripped_opacity=True, use_extra=True))
+            remap_chainner_tgas_to_png(mapping_alpha_extra)
 
         failed_factor: list[Path] = []
         dims_after_normal: dict[Path, tuple[int, int]] = {}
         dims_after_alpha: dict[Path, tuple[int, int]] = {}
+        dims_after_normal_extra: dict[Path, tuple[int, int]] = {}
+        dims_after_alpha_extra: dict[Path, tuple[int, int]] = {}
 
         def validate_mapping(
             mapping: dict[Path, Path],
@@ -1706,6 +1938,8 @@ def run_nvtt_exports_or_die(
 
         validate_mapping(mapping_normal, dims_before_normal, dims_after_normal)
         validate_mapping(mapping_alpha, dims_before_alpha, dims_after_alpha)
+        validate_mapping(mapping_normal_extra, dims_before_normal_extra, dims_after_normal_extra)
+        validate_mapping(mapping_alpha_extra, dims_before_alpha_extra, dims_after_alpha_extra)
 
         if failed_factor:
             log("[UPSCALE WARN] The following image(s) failed the expected upscaling factor check and will be skipped:")
@@ -1713,26 +1947,47 @@ def run_nvtt_exports_or_die(
             failed_set = set(failed_factor)
 
             for p in sorted(failed_set, key=lambda x: x.name.lower()):
-                b = dims_before_normal.get(p) or dims_before_alpha.get(p) or ("?", "?")
-                a = dims_after_normal.get(p) or dims_after_alpha.get(p) or ("?", "?")
+                b = (
+                    dims_before_normal.get(p)
+                    or dims_before_alpha.get(p)
+                    or dims_before_normal_extra.get(p)
+                    or dims_before_alpha_extra.get(p)
+                    or ("?", "?")
+                )
+                a = (
+                    dims_after_normal.get(p)
+                    or dims_after_alpha.get(p)
+                    or dims_after_normal_extra.get(p)
+                    or dims_after_alpha_extra.get(p)
+                    or ("?", "?")
+                )
                 log(f"  {p}  ({b[0]}x{b[1]} -> {a[0]}x{a[1]}) expected ~{upscale_factor}x")
 
             for orig in failed_set:
-                ups = mapping_normal.get(orig) or mapping_alpha.get(orig)
+                ups = (
+                    mapping_normal.get(orig)
+                    or mapping_alpha.get(orig)
+                    or mapping_normal_extra.get(orig)
+                    or mapping_alpha_extra.get(orig)
+                )
                 if ups is not None:
                     delete_upscaled_image_pair_if_exists(ups)
 
             chain_normal = [img for img in chain_normal if img not in failed_set]
             chain_alpha = [img for img in chain_alpha if img not in failed_set]
+            chain_normal_extra = [img for img in chain_normal_extra if img not in failed_set]
+            chain_alpha_extra = [img for img in chain_alpha_extra if img not in failed_set]
 
             log(f"[UPSCALE] {len(failed_set)} image(s) failed factor check and were removed.")
 
         merged_mapping: dict[Path, Path] = {}
         merged_mapping.update(mapping_normal)
         merged_mapping.update(mapping_alpha)
+        merged_mapping.update(mapping_normal_extra)
+        merged_mapping.update(mapping_alpha_extra)
 
         upscaled_missing_final: list[Path] = []
-        for orig in chain_normal + chain_alpha:
+        for orig in chain_normal + chain_alpha + chain_normal_extra + chain_alpha_extra:
             ups = merged_mapping.get(orig)
             if ups is None:
                 log(f"[UPSCALE WARN] No upscaled file found for {orig} in mapping; skipping.")
@@ -1785,6 +2040,7 @@ def run_nvtt_exports_or_die(
             stem_lower,
             staging_is_upscaled,
             nonupscaled_override_stems,
+            extra_smooth_stems,
         )
         non_upscaled_version = get_effective_non_upscaled_version_for_stem(
             stem_lower,
@@ -2404,6 +2660,8 @@ def main() -> int:
     try:
         delete_upscale_staging_dir_if_exists(UPSCALE_STAGING_DIR)
         delete_upscale_staging_dir_if_exists(UPSCALE_STAGING_DIR_STRIPPED_OPACITY)
+        delete_upscale_staging_dir_if_exists(UPSCALE_STAGING_DIR_EXTRA)
+        delete_upscale_staging_dir_if_exists(UPSCALE_STAGING_DIR_EXTRA_STRIPPED_OPACITY)
 
         log(f"[INFO] STAGING_FOLDER: {STAGING_FOLDER}")
         is_upscaled_run = get_staging_upscaled_bool()
@@ -2424,6 +2682,7 @@ def main() -> int:
         no_mip_regexes = load_no_mip_regexes_or_die(NO_MIP_REGEX_PATH)
         manual_ui_textures = load_manual_ui_textures_or_die(MANUAL_UI_TEXTURES_PATH)
         manual_opaque_textures = load_simple_stem_list_or_die(MANUAL_OPAQUE_TEXTURES_PATH)
+        force_extra_smooth_stems = load_simple_stem_list_or_die(FORCE_EXTRA_SMOOTH_PATH)
 
         never_upscale_stems: set[str] = set()
         demastered_nonupscaled_override_stems: set[str] = set()
@@ -2506,10 +2765,21 @@ def main() -> int:
         if is_demastered_run:
             image_files = remap_demastered_self_remade_to_ps2(image_files)
 
-        image_hash_by_name, image_origin_by_name, image_opacity_expected_by_name = hash_images_unique_or_die(
+        image_hash_by_name, image_origin_by_name, image_opacity_expected_by_name, image_dimensions_by_name = hash_images_unique_or_die(
             image_files,
             workers,
             manual_opaque_textures,
+        )
+
+        mc_tri_dumped_dims_by_name = load_mc_tri_dumped_dimensions_or_die(MC_TRI_DUMPED_METADATA_CSV_PATH)
+        extra_smooth_stems = build_extra_smooth_stems(
+            staging_is_upscaled=is_upscaled_run,
+            is_demastered_run=is_demastered_run,
+            nonupscaled_override_stems=demastered_nonupscaled_override_stems,
+            image_origin_by_name=image_origin_by_name,
+            image_dimensions_by_name=image_dimensions_by_name,
+            mc_tri_dumped_dims_by_name=mc_tri_dumped_dims_by_name,
+            force_extra_smooth_stems=force_extra_smooth_stems,
         )
 
         image_used_nomips_by_name: dict[str, bool] = {}
@@ -2575,6 +2845,7 @@ def main() -> int:
                     filename_lower,
                     is_upscaled_run,
                     demastered_nonupscaled_override_stems,
+                    extra_smooth_stems,
                 )
                 default_nuv = get_effective_non_upscaled_version_for_stem(
                     filename_lower,
@@ -2751,6 +3022,7 @@ def main() -> int:
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                extra_smooth_stems,
             )
             current_non_upscaled_version = get_effective_non_upscaled_version_for_stem(
                 name,
@@ -2882,6 +3154,7 @@ def main() -> int:
                 conversion_header=conversion_header,
                 ctxr3_required_stems=ctxr3_required_stems,
                 nonupscaled_override_stems=demastered_nonupscaled_override_stems,
+                extra_smooth_stems=extra_smooth_stems,
             )
 
             if ctxr3_required_stems:
@@ -2948,6 +3221,7 @@ def main() -> int:
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                extra_smooth_stems,
             )
             current_non_upscaled_version = get_effective_non_upscaled_version_for_stem(
                 name,
@@ -3018,6 +3292,7 @@ def main() -> int:
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                extra_smooth_stems,
             )
             current_non_upscaled_version = get_effective_non_upscaled_version_for_stem(
                 name,
@@ -3156,6 +3431,7 @@ def main() -> int:
             conversion_header=conversion_header,
             ctxr3_required_stems=ctxr3_required_stems,
             nonupscaled_override_stems=demastered_nonupscaled_override_stems,
+            extra_smooth_stems=extra_smooth_stems,
         )
 
         if ctxr3_required_stems:
