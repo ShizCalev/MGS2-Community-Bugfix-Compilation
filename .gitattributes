@@ -1,4 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-"GCX Fixes/**/*.csv" -text
+"GCX Fixes/**/*.csv" text eol=lf
+"SDT Fixes/Script CSVs/**/*.csv" text eol=lf
