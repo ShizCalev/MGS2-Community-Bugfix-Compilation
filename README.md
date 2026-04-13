@@ -94,7 +94,7 @@ Recommended Mod Load Order (from first to last):
  
 ### Bug Fixes:
 
-- Fixed compression artifacting/pixelization present with 11970 textures (an issue originally introduced in the 2011 PS3 HD Collection) by re-exporting all 15221 textures from each of the original PS2 versions of MGS3, and fully rebuilding the game's file structure. [2011 HDC]
+- Fixed compression artifacting/pixelization present with 11970 textures (an issue originally introduced in the 2011 PS3 HD Collection) by re-exporting all 15221 textures from each of the original PS2 versions of MGS2, and fully rebuilding the game's file structure. [2011 HDC]
 
 	- These higher quality PS2 NPOT textures are released under GPL-3.0 for other mod makers to use for their own mods as part of [MGS2-PS2-Textures](https://github.com/dotlessone/MGS2-PS2-Textures). Textures sorted by remade status, and mipmap requirements can also be found [here](https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/tree/main/Texture%20Fixes/ps2%20textures).
 
