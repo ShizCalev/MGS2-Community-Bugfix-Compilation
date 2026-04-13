@@ -2,13 +2,14 @@
 
 [![Releases](https://img.shields.io/github/v/release/ShizCalev/MGS2-Community-Bugfix-Compilation)](https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/releases) [![Downloads](https://img.shields.io/github/downloads/ShizCalev/MGS2-Community-Bugfix-Compilation/total)](https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/releases) ![Commits](https://img.shields.io/github/commit-activity/t/ShizCalev/MGS2-Community-Bugfix-Compilation) ![License](https://img.shields.io/github/license/ShizCalev/MGS2-Community-Bugfix-Compilation)
 
-[Nexus Page](https://www.nexusmods.com/metalgearsolid2mc/mods/52) | **GitHub Repo (You're already here!)**
+#### MGS2 Community Bugfix: [Nexus Page](https://www.nexusmods.com/metalgearsolid2mc/mods/52) | **GitHub Repo (You're already here!)**
+
+#### MGS3 Community Bugfix: [Nexus Page](https://www.nexusmods.com/metalgearsolid3mc/mods/189) | [GitHub Repo](https://github.com/ShizCalev/MGS3-Community-Bugfix-Compilation)
 
 Support / Development Progress Discord Channel: [MetalGear.net #mgs2mgs3-community-bugfix-dev](https://discord.gg/2DNuQamsMT)
 
 
-<br>
-
+--------------
 
 <br>
 
@@ -16,13 +17,10 @@ A community-driven bugfix pack fixing invisible textures/models, missing audio, 
 
 **Created, curated, and maintained by Afevis.**
 
-
+<br>
 
 This compilation should be considered a perpetual work-in-progress. (I love MGS2 and find new things to fix up CONSTANTLY.)
 
-
-<br>
-<br>
 <br>
 
 ## Community contributions to the pack are absolutely encouraged.
@@ -87,22 +85,18 @@ Recommended Mod Load Order (from first to last):
 
 - As this pack already replaces nearly all of the game's textures, our upscaled packs do **FULLY REPLACE** LiqMix's AI Slop texture packs.
 
-------------
 
 <br>
-<br>
 
-## List of fixes [brackets denote what version the bug was introduced, ie Sons of Liberty, Substance, HD Collection, Master Collection]. Contributors will be listed afterward version seperated by a “|”. If no contributor is listed, the fix was made by Afevis:
+## List of fixes:
 
+ [Brackets denote what version the bug was introduced, ie Snake Eater, Subsistence, HD Collection, Master Collection]. Contributors will be listed afterward version seperated by a “|”. If no contributor is listed, the fix was made by Afevis
+ 
 ### Bug Fixes:
 
-- Fixed compression artifacting/pixelization present with 11970 textures (an issue originally introduced in the 2002 Xbox port of Substance) by re-exporting all 15221 textures from each of the original PS2 versions of MGS2, manually identifying each texture, and fully rebuilding the game's file structure. (This process took hundreds of hours over of the course of a year and a half to complete.) [2002 Xbox]
+- Fixed compression artifacting/pixelization present with 11970 textures (an issue originally introduced in the 2011 PS3 HD Collection) by re-exporting all 15221 textures from each of the original PS2 versions of MGS3, and fully rebuilding the game's file structure. [2011 HDC]
 
-	- For a technical explanation of how the issue originated; its roots span back to the 2002 Xbox Substance port.
-
-	- The vast majority of textures in the original PS2 version of MGS2 had dimensions that were not a power of 2, ie 2, 4, 8, 16, 32, 64, 128, 256, 512, ect. Early DirectX & OpenGL rendering did not support textures with non-^2 dimensions (referred to as arbitrary dimension textures, or [NPOT Textures](https://www.khronos.org/opengl/wiki/NPOT_Texture)) until OpenGL 2.0's release in 2004 which added the ARB_texture_non_power_of_two extension, well after both ports were created, and GPU's at the time ALSO had to be upgraded to support that new OpenGL feature level. As such, to even support the majority of console & PC hardware at the time - the team that handled the ports to the Xbox & PC ran all the textures through an automatic resizer, resizing all the textures' dimensions up to the next power of 2 (for example, a 130x70 texture would be sized up to 256x128), which introduced significant JPEG-type artifacting / haloing, blurred (and in some cases outright removed) fine details, and added randomly color lines along the edges of a LOT of the game's textures.
-	
-	- Bluepoint used these corrupted texture for the HD Remaster, and all versions of MGS2 released from the 2011 HD Collection onward all have this same issue with their textures.
+	- These higher quality PS2 NPOT textures are released under GPL-3.0 for other mod makers to use for their own mods as part of [MGS2-PS2-Textures](https://github.com/dotlessone/MGS2-PS2-Textures). Textures sorted by remade status, and mipmap requirements can also be found [here](https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation/tree/main/Texture%20Fixes/ps2%20textures).
 
 - Stripped the unused alpha channel from 9505 opaque textures, a leftover from PS2 versions, which resulted in increased VRAM usage and z-fighting problems. [2011 HDC]
 
@@ -168,7 +162,9 @@ Recommended Mod Load Order (from first to last):
 
 - Fixed rogue black pixel on Shell 1 Core doors. (door_b00.bmp) [2011 HDC]
 
-- Fixed the EU PS1 MGS1 Special Missions CD being shown instead of the US MGS1 VR Missions disc. [2011 HDC]
+- Fixed the EU PS1 MGS1 Special Missions CD being shown instead of the US MGS1 VR Missions disc when playing US version. [2011 HDC]
+
+- Fixed the US PS1 MGS1 VR Missions CD being shown instead of the JP MGS1 Integral disc when playing JP version. [2011 HDC]
 
 - Fixed rogue black pixels along the texture seams on Olga's back. [2001 SoL]
 
