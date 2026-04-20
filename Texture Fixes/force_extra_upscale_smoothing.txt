@@ -6,8 +6,8 @@ tnc_gost_face_ovl_alp.bmp
 tnc_eri_bd.bmp
 tnc_eri.bmp
 augm_stabbed_tnc_body.bmp
-vmp_hri_face01.bmp.png
-vmp_hi_face_ss.bmp.png
+vmp_hri_face01.bmp
+vmp_hi_face_ss.bmp
 vmp_hi_face_dead.bmp
 val_face_r.bmp
 val_face_f2.bmp
@@ -102,8 +102,6 @@ cam_face_re.bmp
 cam_face_dt_skl_alp_ovl.bmp
 gw_face.bmp_fb42da3206768c3c1fb1fa4d0ebef94e
 gw_face.bmp
-vmp_hri_face01.bmp
-vmp_hi_face_ss.bmp
 orp_face_retach.bmp
 sna_neck2.bmp
 sna_neck.bmp
@@ -112,3 +110,17 @@ sna_mf1.bmp
 tnc_gost_body_ovl_alp.bmp
 tnc_gost_body_c_ovl_alp.bmp
 tnc_gost_body_b_ovl_alp.bmp
+
+
+
+vmp_naked_rarm_bmap.bmp
+vmp_naked_body_bmap.bmp
+vmp_naked_arm_bmap.bmp
+rev_pl_liq_arm_bmap.bmp
+rev_liq_hi_hand2_bmap.bmp
+rev_liq_hi_hand1_bmap.bmp
+rev_liq_face_ss_bmap.bmp
+rev_liq_arm_bmap.bmp
+fat_hi_hand1_bmap.bmp
+fat_face_bmap.bmp
+dgtg_bmap.bmp

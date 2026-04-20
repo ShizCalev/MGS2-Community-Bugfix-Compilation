@@ -356,6 +356,9 @@ pdray_number_a03_alp_ovl.bmp
 pdray_number_a04_alp_ovl.bmp
 pdray_number_a05_alp_ovl.bmp
 pdray_number_w42_alp_ovl.bmp
+#fixed w44 ray number - self remade 
+pdray_number_w44_alp_ovl.bmp
+#end fixed w44 ray number
 pdray_seal_mgrpdm_alp_ovl.bmp
 ray_marines_alp_ovl.bmp
 s1_a_1f_alp_ovl.bmp
