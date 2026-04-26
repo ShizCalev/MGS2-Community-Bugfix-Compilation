@@ -72,7 +72,8 @@ CHAINNER_PROJECT_4X_STRIPPED_OPACITY_DEMASTERED = Path(r"C:\Development\Git\Afev
 # 0 = v1 release
 # 1 = corrected opaque texture alpha stripping for upscaling
 # 2 = wavelet color fix!!!!! oh dang
-UPSCALE_PROCESS_VERSION = "2"
+# 3 = clamped alpha instead of split
+UPSCALE_PROCESS_VERSION = "3"
 
 # - normal non-upscaled nvtt -> CtxrTool flow
 # - non-upscaled ctxr3 flow
@@ -81,7 +82,11 @@ UPSCALE_PROCESS_VERSION = "2"
 # - Don't forget to update this in launch_ctxr3 too.
 # 0 = v1 release
 # 1 = fixed crash in ovr_jp's w01a01box. almost all opaque have a different hash too, so reconverted everything (i'd assume my mtime fuckery messed something up at some point.)
-NON_UPSCALED_PROCESS_VERSION = "1"
+# 2 = alpha clamped instead of split.
+NON_UPSCALED_PROCESS_VERSION = "2"
+
+SKIP_GOOD_ALPHA_FILES = False #if true, 128 alpha is treated as opaque. if false, alpha channel gets stripped entirely if all alpha >= 128
+SPAM_LOG_WITH_GOOD_ALPHA = False
 
 CSV_FLUSH_SECONDS = 5.0
 
@@ -174,29 +179,61 @@ def get_current_upscaler_metadata_for_run(is_upscaled_run: bool, use_extra: bool
         return (UPSCALE_PROCESS_VERSION, "remarci_4x")
     return ("0", "none")
 
-
 def get_current_non_upscaled_version_for_run(is_upscaled_run: bool) -> str:
     if is_upscaled_run:
         return "0"
     return NON_UPSCALED_PROCESS_VERSION
 
 
-def stem_treated_as_upscaled(stem_lower: str, staging_is_upscaled: bool, nonupscaled_override_stems: set[str]) -> bool:
-    return staging_is_upscaled and (stem_lower not in nonupscaled_override_stems)
+def stem_forced_nonupscaled_by_origin(
+    stem_lower: str,
+    image_origin_by_name: dict[str, str],
+) -> bool:
+    origin = (image_origin_by_name.get(stem_lower) or "").strip().lower().replace("/", "\\")
 
+    if origin.startswith(r"self remade\finalized\dxt5"):
+        return True
 
-def get_effective_upscaled_flag_for_stem(stem_lower: str, staging_is_upscaled: bool, nonupscaled_override_stems: set[str]) -> bool:
-    return stem_treated_as_upscaled(stem_lower, staging_is_upscaled, nonupscaled_override_stems)
+    if "hires backports" in origin:
+        return True
+
+    if origin.endswith(r"\4k") or origin.endswith(r"\1080p"):
+        return True
+
+    return False
+
+def get_effective_upscaled_flag_for_stem(
+    stem_lower: str,
+    staging_is_upscaled: bool,
+    nonupscaled_override_stems: set[str],
+    image_origin_by_name: dict[str, str],
+) -> bool:
+    if not staging_is_upscaled:
+        return False
+
+    if stem_forced_nonupscaled_by_origin(stem_lower, image_origin_by_name):
+        return False
+
+    if stem_lower in nonupscaled_override_stems:
+        return False
+
+    return True
 
 
 def get_effective_upscaler_metadata_for_stem(
     stem_lower: str,
     staging_is_upscaled: bool,
     nonupscaled_override_stems: set[str],
+    image_origin_by_name: dict[str, str],
     extra_smooth_stems: set[str],
 ) -> tuple[str, str]:
     return get_current_upscaler_metadata_for_run(
-        get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems),
+        get_effective_upscaled_flag_for_stem(
+            stem_lower,
+            staging_is_upscaled,
+            nonupscaled_override_stems,
+            image_origin_by_name,
+        ),
         stem_lower in extra_smooth_stems,
     )
 
@@ -205,9 +242,15 @@ def get_effective_non_upscaled_version_for_stem(
     stem_lower: str,
     staging_is_upscaled: bool,
     nonupscaled_override_stems: set[str],
+    image_origin_by_name: dict[str, str],
 ) -> str:
     return get_current_non_upscaled_version_for_run(
-        get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems)
+        get_effective_upscaled_flag_for_stem(
+            stem_lower,
+            staging_is_upscaled,
+            nonupscaled_override_stems,
+            image_origin_by_name,
+        )
     )
 
 
@@ -276,7 +319,12 @@ def build_extra_smooth_stems(
         if stem_lower not in force_extra_smooth_stems:
             continue
 
-        if not get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems):
+        if not get_effective_upscaled_flag_for_stem(
+            stem_lower,
+            staging_is_upscaled,
+            nonupscaled_override_stems,
+            image_origin_by_name,
+        ):
             continue
 
         origin_lower = (origin_folder or "").strip().lower()
@@ -437,6 +485,234 @@ def gather_image_files_non_recursive(folders: list[Path]) -> list[Path]:
 
 
 # ==========================================================
+# PREMADE DXT5 CTXR HELPERS
+# ==========================================================
+PREMADE_DXT5_PREFIX = r"self remade\finalized\dxt5"
+
+
+def _normalize_rel_folder_str(path_str: str) -> str:
+    return (path_str or "").strip().replace("/", "\\").strip("\\").lower()
+
+
+def is_premade_dxt5_origin_folder(origin_folder: str) -> bool:
+    norm = _normalize_rel_folder_str(origin_folder)
+    return norm == PREMADE_DXT5_PREFIX or norm.startswith(PREMADE_DXT5_PREFIX + "\\")
+
+
+def list_premade_dxt5_ctxr_files_non_recursive(folder: Path) -> list[Path]:
+    if not folder.is_dir():
+        log(f"[WARN] Not a directory: {folder}")
+        return []
+
+    folder_origin = origin_relative_to_required_subpath_or_die(folder / "__folder_probe__.ctxr")
+    if not is_premade_dxt5_origin_folder(folder_origin):
+        return []
+
+    out: list[Path] = []
+    bad_inputs: list[Path] = []
+
+    try:
+        for p in folder.iterdir():
+            if not p.is_file():
+                continue
+
+            suf = p.suffix.lower()
+            if suf == ".ctxr":
+                out.append(p)
+            elif suf == ".png" or suf == ".tga":
+                bad_inputs.append(p)
+    except Exception as e:
+        raise RuntimeError(f"Failed scanning premade DXT5 folder {folder}: {e}")
+
+    if bad_inputs:
+        log("[FATAL] Premade DXT5 folders must contain only final .ctxr files.")
+        for p in sorted(bad_inputs, key=lambda x: x.name.lower()):
+            log(f"  INVALID INPUT: {p}")
+        raise RuntimeError("Premade DXT5 folders contained png/tga inputs")
+
+    out.sort(key=lambda x: x.name.lower())
+    return out
+
+
+def gather_premade_dxt5_ctxr_files_non_recursive(folders: list[Path]) -> list[Path]:
+    out: list[Path] = []
+    for folder in folders:
+        out.extend(list_premade_dxt5_ctxr_files_non_recursive(folder))
+    out.sort(key=lambda p: p.name.lower())
+    return out
+
+
+def hash_premade_dxt5_ctxr_unique_or_die(
+    ctxr_files: list[Path],
+    workers: int,
+) -> tuple[dict[str, str], dict[str, str], dict[str, bool]]:
+    if not ctxr_files:
+        return {}, {}, {}
+
+    log(f"[INFO] Hashing {len(ctxr_files)} premade DXT5 ctxr files\n")
+
+    hashes_by_name: dict[str, set[str]] = {}
+    origin_by_name: dict[str, set[str]] = {}
+    opacity_by_name: dict[str, set[bool]] = {}
+
+    def worker(path: Path) -> tuple[str, str, str, bool]:
+        stem = path.stem.lower()
+        digest = sha1_file(path)
+        origin = origin_relative_to_required_subpath_or_die(path)
+        opacity_expected = should_opacity_be_stripped_from_path(origin)
+        return (stem, digest, origin, opacity_expected)
+
+    progress = ProgressTracker(len(ctxr_files), "Hash premade dxt5 ctxr")
+
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futures = [ex.submit(worker, p) for p in ctxr_files]
+        for fut in as_completed(futures):
+            stem, digest, origin, opacity_expected = fut.result()
+
+            hashes_by_name.setdefault(stem, set()).add(digest)
+            origin_by_name.setdefault(stem, set()).add(origin)
+            opacity_by_name.setdefault(stem, set()).add(opacity_expected)
+
+            progress.update()
+
+    progress.finish()
+
+    out_hash: dict[str, str] = {}
+    out_origin: dict[str, str] = {}
+    out_opacity: dict[str, bool] = {}
+
+    bad_hash: list[str] = []
+    bad_origin: list[str] = []
+    bad_opacity: list[str] = []
+
+    for stem, vals in hashes_by_name.items():
+        if len(vals) != 1:
+            bad_hash.append(stem)
+        else:
+            out_hash[stem] = next(iter(vals))
+
+    for stem, vals in origin_by_name.items():
+        if len(vals) != 1:
+            bad_origin.append(stem)
+        else:
+            out_origin[stem] = next(iter(vals))
+
+    for stem, vals in opacity_by_name.items():
+        if len(vals) != 1:
+            bad_opacity.append(stem)
+        else:
+            out_opacity[stem] = next(iter(vals))
+
+    if bad_hash:
+        raise RuntimeError("Duplicate premade DXT5 stems with conflicting ctxr hashes: " + ", ".join(sorted(bad_hash)))
+    if bad_origin:
+        raise RuntimeError("Duplicate premade DXT5 stems with conflicting origins: " + ", ".join(sorted(bad_origin)))
+    if bad_opacity:
+        raise RuntimeError("Duplicate premade DXT5 stems with conflicting opacity flags: " + ", ".join(sorted(bad_opacity)))
+
+    return out_hash, out_origin, out_opacity
+
+
+def sync_premade_dxt5_ctxr_to_staging_or_die(
+    ctxr_files: list[Path],
+    workers: int,
+) -> dict[str, str]:
+    if not ctxr_files:
+        return {}
+
+    log(f"[PREMADE DXT5] Syncing {len(ctxr_files)} premade ctxr file(s) directly to staging\n")
+
+    synced_hash_by_name: dict[str, str] = {}
+
+    def worker(src: Path) -> tuple[str, str]:
+        stem = src.stem.lower()
+        dst = STAGING_FOLDER / f"{stem}.ctxr"
+
+        shutil.copy2(src, dst)
+
+        src_hash = sha1_file(src)
+        dst_hash = sha1_file(dst)
+
+        if src_hash != dst_hash:
+            raise RuntimeError(
+                "Premade DXT5 sync hash mismatch:\n"
+                f"  src={src}\n"
+                f"  dst={dst}\n"
+                f"  src_hash={src_hash}\n"
+                f"  dst_hash={dst_hash}"
+            )
+
+        return (stem, dst_hash)
+
+    progress = ProgressTracker(len(ctxr_files), "Sync premade dxt5 ctxr")
+
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futures = [ex.submit(worker, p) for p in ctxr_files]
+        for fut in as_completed(futures):
+            stem, digest = fut.result()
+            synced_hash_by_name[stem] = digest
+            progress.update()
+
+    progress.finish()
+    return synced_hash_by_name
+
+
+def upsert_premade_dxt5_rows(
+    conversion_rows: list[dict[str, str]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool]],
+    conversion_header: list[str],
+    premade_ctxr_hash_by_name: dict[str, str],
+    premade_origin_by_name: dict[str, str],
+    premade_opacity_by_name: dict[str, bool],
+) -> None:
+    if not premade_ctxr_hash_by_name:
+        return
+
+    rows_by_name: dict[str, dict[str, str]] = {}
+    for row in conversion_rows:
+        filename = (row.get("filename") or row.get("Filename") or row.get("FILENAME") or "").strip().lower()
+        if filename:
+            rows_by_name[filename] = row
+
+    for stem, ctxr_hash in premade_ctxr_hash_by_name.items():
+        origin_folder = premade_origin_by_name[stem]
+        opacity_stripped = premade_opacity_by_name[stem]
+
+        row = rows_by_name.get(stem)
+        if row is None:
+            row = {}
+            conversion_rows.append(row)
+            rows_by_name[stem] = row
+
+        row["filename"] = stem
+        row["before_hash"] = ctxr_hash
+        row["ctxr_hash"] = ctxr_hash
+        row["mipmaps"] = "true"
+        row["origin_folder"] = origin_folder
+        row["opacity_stripped"] = bool_to_csv(opacity_stripped)
+        row["upscaled"] = "false"
+        row["upscaler_version"] = "0"
+        row["upscaler_type"] = "none"
+        row["non_upscaled_version"] = NON_UPSCALED_PROCESS_VERSION
+        row["ctxr3_converted"] = "false"
+
+        conversion_map[stem] = (
+            ctxr_hash,
+            ctxr_hash,
+            False,
+            origin_folder,
+            opacity_stripped,
+            False,
+            "0",
+            "none",
+            NON_UPSCALED_PROCESS_VERSION,
+            True,
+            False,
+            False,
+        )
+
+
+# ==========================================================
 # NO-MIP / UI / UPSCALE FILTERS
 # ==========================================================
 def load_no_mip_regexes_or_die(path: Path) -> list[re.Pattern]:
@@ -532,11 +808,17 @@ def get_effective_used_nomips_for_stem(
     stem_lower: str,
     staging_is_upscaled: bool,
     nonupscaled_override_stems: set[str],
+    image_origin_by_name: dict[str, str],
     rx_list: list[re.Pattern],
     manual_ui_textures: set[str],
 ) -> bool:
     used_nomips = should_use_nomips(stem_lower, rx_list, manual_ui_textures)
-    effective_upscaled = get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems)
+    effective_upscaled = get_effective_upscaled_flag_for_stem(
+        stem_lower,
+        staging_is_upscaled,
+        nonupscaled_override_stems,
+        image_origin_by_name,
+    )
 
     if effective_upscaled and stem_lower in manual_ui_textures:
         used_nomips = False
@@ -567,6 +849,31 @@ def image_is_fully_opaque_or_no_alpha(path: Path) -> bool:
             return (mn == mx) and (mn == 255 or mn == 128)
     except Exception as e:
         raise RuntimeError(f"Failed checking alpha opacity for {path}: {e}")
+
+
+def image_alpha_is_exactly_128_everywhere(path: Path) -> bool:
+    try:
+        with Image.open(path) as im:
+            if "A" not in im.getbands():
+                return False
+
+            rgba = im.convert("RGBA")
+            a = rgba.getchannel("A")
+            mn, mx = a.getextrema()
+            return mn == 128 and mx == 128
+    except Exception as e:
+        raise RuntimeError(f"Failed checking for exact 128 alpha in {path}: {e}")
+
+
+def should_skip_nonupscaled_nondemastered_bp_remade(path: Path) -> bool:
+    if not SKIP_GOOD_ALPHA_FILES:
+        return False
+
+    parent_lower = str(path.parent).lower().replace("/", "\\")
+    return (
+        parent_lower.endswith(r"mc textures\opaque\bp_remade")
+        and image_alpha_is_exactly_128_everywhere(path)
+    )
 
 
 def build_nonupscaled_ctxr3_required_stems(
@@ -602,8 +909,60 @@ def build_ctxr3_required_stems_for_override_subset(
     manual_ui_textures: set[str],
     is_demastered_run: bool,
 ) -> set[str]:
-    subset = [img for img in image_files if img.stem.lower() in override_stems]
-    return build_nonupscaled_ctxr3_required_stems(subset, no_mip_regexes, manual_ui_textures, is_demastered_run)
+    subset: list[Path] = []
+
+    for img in image_files:
+        stem_lower = img.stem.lower()
+        origin_lower = str(img.parent).lower().replace("/", "\\")
+
+        if stem_lower in override_stems:
+            subset.append(img)
+            continue
+
+        if is_demastered_run:
+            if origin_lower.endswith(r"\1080p"):
+                subset.append(img)
+                continue
+        else:
+            if origin_lower.endswith(r"\4k"):
+                subset.append(img)
+                continue
+
+    return build_nonupscaled_ctxr3_required_stems(
+        subset,
+        no_mip_regexes,
+        manual_ui_textures,
+        is_demastered_run,
+    )
+
+def build_ctxr3_required_stems_for_effective_nonupscaled_subset(
+    image_files: list[Path],
+    staging_is_upscaled: bool,
+    nonupscaled_override_stems: set[str],
+    image_origin_by_name: dict[str, str],
+    no_mip_regexes: list[re.Pattern],
+    manual_ui_textures: set[str],
+    is_demastered_run: bool,
+) -> set[str]:
+    subset: list[Path] = []
+
+    for img in image_files:
+        stem_lower = img.stem.lower()
+        if get_effective_upscaled_flag_for_stem(
+            stem_lower,
+            staging_is_upscaled,
+            nonupscaled_override_stems,
+            image_origin_by_name,
+        ):
+            continue
+        subset.append(img)
+
+    return build_nonupscaled_ctxr3_required_stems(
+        subset,
+        no_mip_regexes,
+        manual_ui_textures,
+        is_demastered_run,
+    )
 
 
 # ==========================================================
@@ -654,9 +1013,17 @@ def remap_demastered_self_remade_to_ps2(image_files: list[Path]) -> list[Path]:
     skipped: list[Path] = []
 
     for img in image_files:
-        path_lower = str(img).lower()
+        path_lower = str(img).lower().replace("/", "\\")
 
-        if path_contains_self_remade(img) and "demaster fixed" not in path_lower:
+        if "hires backports" in path_lower:
+            #skipped.append(img)
+            log(f"[DEMASTERED SKIP] Skipping hires backports texture: {img}")
+            continue
+
+        if (
+            path_contains_self_remade(img)
+            and "demaster fixed" not in path_lower
+        ):
             stem_lower = img.stem.lower()
             ps2_path = ps2_map.get(stem_lower)
 
@@ -1392,13 +1759,22 @@ def make_temp_rgb_only_copy_or_die(src: Path, tmp_dir: Path) -> Path:
     tmp_path = tmp_dir / f"{src.stem.lower()}__rgb_tmp.png"
 
     with Image.open(src) as im:
-        rgba = im.convert("RGBA")
-        r, g, b, _a = rgba.split()
-        rgb = Image.merge("RGB", (r, g, b))
-        rgb.save(tmp_path, format="PNG", optimize=False)
+        if SKIP_GOOD_ALPHA_FILES:
+            # Clamp alpha to 128
+            rgba = im.convert("RGBA")
+            alpha_128 = Image.new("L", rgba.size, 128)
+            rgba.putalpha(alpha_128)
+            out = rgba
+        else:
+            # Strip alpha completely
+            rgba = im.convert("RGBA")
+            r, g, b, _ = rgba.split()
+            out = Image.merge("RGB", (r, g, b))
+
+        out.save(tmp_path, format="PNG", optimize=False)
 
     if not tmp_path.is_file():
-        raise RuntimeError(f"Failed creating RGB-only temp copy: {tmp_path}")
+        raise RuntimeError(f"Failed creating temp copy with clamped alpha: {tmp_path}")
 
     return tmp_path
 
@@ -1492,12 +1868,97 @@ def copy_images_for_upscaling_or_die(images: list[Path], dest_dir: Path) -> dict
         raise RuntimeError(f"Failed copying {failed} image(s) to upscaling folder")
 
     return mapping
+    
+    
+CHAINNER_EMBEDDED_PYTHON_EXE = Path(
+    r"C:\Users\cmkoo\AppData\Roaming\chaiNNer\python\python\python.exe"
+)
+
+
+def _normalize_windows_path(path_str: str) -> str:
+    return os.path.normcase(os.path.normpath(path_str.strip().strip('"')))
+
+
+def _get_process_image_paths_by_name(exe_name: str) -> dict[int, str]:
+    try:
+        p = subprocess.run(
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                (
+                    "Get-CimInstance Win32_Process "
+                    f"| Where-Object {{ $_.Name -ieq '{exe_name}' }} "
+                    "| Select-Object ProcessId, ExecutablePath "
+                    "| ConvertTo-Csv -NoTypeInformation"
+                ),
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            encoding="utf8",
+            errors="replace",
+            check=False,
+        )
+    except Exception:
+        return {}
+
+    out: dict[int, str] = {}
+    text_out = (p.stdout or "").strip()
+    if not text_out:
+        return out
+
+    reader = csv.DictReader(text_out.splitlines())
+    for row in reader:
+        pid_raw = (row.get("ProcessId") or "").strip()
+        exe_path = (row.get("ExecutablePath") or "").strip()
+
+        if not pid_raw or not exe_path:
+            continue
+
+        try:
+            pid = int(pid_raw)
+        except ValueError:
+            continue
+
+        out[pid] = exe_path
+
+    return out
+
+
+def _get_chainner_embedded_python_pids() -> set[int]:
+    target = _normalize_windows_path(str(CHAINNER_EMBEDDED_PYTHON_EXE))
+    found = _get_process_image_paths_by_name("python.exe")
+
+    out: set[int] = set()
+
+    for pid, exe_path in found.items():
+        try:
+            if _normalize_windows_path(exe_path) == target:
+                out.add(pid)
+        except Exception:
+            continue
+
+    return out
+
+
+def _kill_pids_force(pids: set[int]) -> None:
+    for pid in sorted(pids):
+        try:
+            subprocess.run(
+                ["taskkill", "/PID", str(pid), "/F"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
+            )
+        except Exception:
+            pass
 
 
 def _is_chainner_running() -> bool:
     try:
         out = subprocess.check_output(
-            ["tasklist", "/FI", "IMAGENAME eq chaiNNer.exe"],
+            ["tasklist", "/FI", "IMAGENAME eq chaiNNer.exe", "/FO", "CSV", "/NH"],
             stderr=subprocess.DEVNULL,
             text=True,
             encoding="utf8",
@@ -1506,7 +1967,12 @@ def _is_chainner_running() -> bool:
     except Exception:
         return False
 
-    return "chaiNNer.exe" in out
+    for line in out.splitlines():
+        line = line.strip()
+        if line.startswith('"chaiNNer.exe",'):
+            return True
+
+    return False
 
 
 def run_chaiNNer_or_die(project: Path) -> None:
@@ -1516,39 +1982,116 @@ def run_chaiNNer_or_die(project: Path) -> None:
     if not project.is_file():
         raise RuntimeError(f"chaiNNer project file not found: {project}")
 
-    log(f"[UPSCALE] Launching chaiNNer with project:")
+    if not CHAINNER_EMBEDDED_PYTHON_EXE.is_file():
+        raise RuntimeError(
+            f"chaiNNer embedded python.exe not found: {CHAINNER_EMBEDDED_PYTHON_EXE}"
+        )
+
+    if _is_chainner_running():
+        raise RuntimeError(
+            "chaiNNer.exe is already running before CLI launch.\n"
+            "This is unsafe and will cause overlapping runs.\n"
+            "Close chaiNNer and retry."
+        )
+
+    args = [
+        str(CHAINNER_EXE),
+        "run",
+        str(project),
+    ]
+
+    before_embedded_python = _get_chainner_embedded_python_pids()
+
+    log("[UPSCALE] Running chaiNNer CLI project:")
     log(f"         {project}")
 
+    p: subprocess.Popen[str] | None = None
+    out = ""
+
     try:
-        subprocess.Popen(
-            [str(CHAINNER_EXE), str(project)],
+        p = subprocess.Popen(
+            args,
             cwd=str(project.parent),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            encoding="utf8",
+            errors="replace",
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
+        )
+
+        out, _ = p.communicate()
+        rc = p.returncode if p.returncode is not None else -1
+
+    except Exception as e:
+        if p is not None:
+            try:
+                subprocess.run(
+                    ["taskkill", "/PID", str(p.pid), "/T", "/F"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    check=False,
+                )
+            except Exception:
+                pass
+
+        time.sleep(2.0)
+
+        after_embedded_python = _get_chainner_embedded_python_pids()
+        leaked_embedded_python = after_embedded_python - before_embedded_python
+        if leaked_embedded_python:
+            log(
+                "[UPSCALE CLEANUP] Killing leaked chaiNNer embedded python PID(s) after exception: "
+                f"{sorted(leaked_embedded_python)}"
+            )
+            _kill_pids_force(leaked_embedded_python)
+
+        raise RuntimeError(f"Failed to run chaiNNer CLI: {e}")
+
+    if out:
+        log("[UPSCALE OUT]")
+        log(out.rstrip())
+
+    try:
+        subprocess.run(
+            ["taskkill", "/PID", str(p.pid), "/T", "/F"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
+            check=False,
         )
-    except Exception as e:
-        raise RuntimeError(f"Failed to launch chaiNNer with project: {e}")
+    except Exception:
+        pass
 
-    log("[UPSCALE] Waiting for chaiNNer.exe to appear...")
-    started = False
-    start_wait_deadline = time.time() + 30.0
+    time.sleep(2.0)
 
-    while time.time() < start_wait_deadline:
-        if _is_chainner_running():
-            started = True
-            break
-        time.sleep(1.0)
+    after_embedded_python = _get_chainner_embedded_python_pids()
+    leaked_embedded_python = after_embedded_python - before_embedded_python
 
-    if not started:
-        log("[UPSCALE WARN] chaiNNer.exe never appeared in tasklist; continuing WITHOUT waiting.")
-        return
+    if leaked_embedded_python:
+        log(
+            "[UPSCALE CLEANUP] Killing leaked chaiNNer embedded python PID(s): "
+            f"{sorted(leaked_embedded_python)}"
+        )
+        _kill_pids_force(leaked_embedded_python)
+        time.sleep(0.5)
 
-    log("[UPSCALE] chaiNNer detected. Waiting for it to close...")
-    while _is_chainner_running():
-        time.sleep(5.0)
+        final_embedded_python = _get_chainner_embedded_python_pids()
+        still_leaked = final_embedded_python - before_embedded_python
 
-    log("[UPSCALE] chaiNNer closed, continuing.")
+        if still_leaked:
+            log(
+                "[UPSCALE CLEANUP WARN] chaiNNer embedded python PID(s) still remain: "
+                f"{sorted(still_leaked)}"
+            )
+        else:
+            log("[UPSCALE CLEANUP] No leaked chaiNNer embedded python processes remain.")
+    else:
+        log("[UPSCALE CLEANUP] No leaked chaiNNer embedded python processes detected.")
 
+    if rc != 0:
+        raise RuntimeError(f"chaiNNer CLI failed with exit code {rc}: {project}")
+
+    log("[UPSCALE] chaiNNer CLI finished successfully.")
 
 # ==========================================================
 # UPSCALED RESAVE TO POWER-OF-TWO (NO HASH CHANGES)
@@ -1701,7 +2244,12 @@ def run_nvtt_exports_or_die(
 
     for img in image_files:
         name = img.stem.lower()
-        effective_upscaled = get_effective_upscaled_flag_for_stem(name, staging_is_upscaled, nonupscaled_override_stems)
+        effective_upscaled = get_effective_upscaled_flag_for_stem(
+            name,
+            staging_is_upscaled,
+            nonupscaled_override_stems,
+            image_origin_by_name,
+        )
 
         if (not effective_upscaled) and (name in ctxr3_required_stems):
             skipped_ctxr3_managed_nonupscaled.append(img)
@@ -1736,7 +2284,12 @@ def run_nvtt_exports_or_die(
 
     for img in missing:
         stem_lower = img.stem.lower()
-        effective_upscaled = get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems)
+        effective_upscaled = get_effective_upscaled_flag_for_stem(
+            stem_lower,
+            staging_is_upscaled,
+            nonupscaled_override_stems,
+            image_origin_by_name,
+        )
 
         if not effective_upscaled:
             nonupscaled_direct.append(img)
@@ -2035,17 +2588,24 @@ def run_nvtt_exports_or_die(
         out_ctxr = PARAM_FOLDER / f"{stem_lower}.ctxr"
 
         tmp_rgb_path: Path | None = None
-        effective_upscaled = get_effective_upscaled_flag_for_stem(stem_lower, staging_is_upscaled, nonupscaled_override_stems)
+        effective_upscaled = get_effective_upscaled_flag_for_stem(
+            stem_lower,
+            staging_is_upscaled,
+            nonupscaled_override_stems,
+            image_origin_by_name,
+        )
         upscaler_version, upscaler_type = get_effective_upscaler_metadata_for_stem(
             stem_lower,
             staging_is_upscaled,
             nonupscaled_override_stems,
+            image_origin_by_name,
             extra_smooth_stems,
         )
         non_upscaled_version = get_effective_non_upscaled_version_for_stem(
             stem_lower,
             staging_is_upscaled,
             nonupscaled_override_stems,
+            image_origin_by_name,
         )
 
         def cleanup_param_ctxr():
@@ -2070,6 +2630,7 @@ def run_nvtt_exports_or_die(
             stem_lower,
             staging_is_upscaled,
             nonupscaled_override_stems,
+            image_origin_by_name,
             no_mip_regexes,
             manual_ui_textures,
         )
@@ -2706,30 +3267,33 @@ def main() -> int:
                 )
 
         original_image_files = gather_image_files_non_recursive(folders)
+        premade_dxt5_ctxr_files = gather_premade_dxt5_ctxr_files_non_recursive(folders)
+        if premade_dxt5_ctxr_files:
+            log(f"[PREMADE DXT5] Found {len(premade_dxt5_ctxr_files)} premade final ctxr file(s)")
 
-        ctxr3_required_stems: set[str] = set()
-        if not is_upscaled_run:
-            ctxr3_required_stems = build_nonupscaled_ctxr3_required_stems(
-                original_image_files,
-                no_mip_regexes,
-                manual_ui_textures,
-                is_demastered_run,
-            )
-            if ctxr3_required_stems:
-                log(f"[CTXR3] NON-upscaled ctxr3-managed stems discovered: {len(ctxr3_required_stems)}")
-        elif is_demastered_run and demastered_nonupscaled_override_stems:
-            ctxr3_required_stems = build_ctxr3_required_stems_for_override_subset(
-                original_image_files,
-                demastered_nonupscaled_override_stems,
-                no_mip_regexes,
-                manual_ui_textures,
-                True,
-            )
-            if ctxr3_required_stems:
+        skipped_bp_remade_meta_mismatch_stems: set[str] = set()
+
+        if (not is_upscaled_run) and (not is_demastered_run):
+            filtered_original_image_files: list[Path] = []
+
+            for img in original_image_files:
+                if should_skip_nonupscaled_nondemastered_bp_remade(img):
+                    skipped_bp_remade_meta_mismatch_stems.add(img.stem.lower())
+                    if SPAM_LOG_WITH_GOOD_ALPHA:
+                        log(f"[SKIP - ALPHA GOOD] {img}")
+                        
+                    continue
+
+                filtered_original_image_files.append(img)
+
+            if skipped_bp_remade_meta_mismatch_stems:
                 log(
-                    f"[CTXR3] Demastered upscaled override stems requiring NON-upscaled ctxr3 handling: "
-                    f"{len(ctxr3_required_stems)}"
+                    "[INFO] Skipped "
+                    f"{len(skipped_bp_remade_meta_mismatch_stems)} "
+                    "non-demastered, non-upscaled bp_remade texture(s) with exact 128 alpha"
                 )
+
+            original_image_files = filtered_original_image_files
 
         image_files = list(original_image_files)
 
@@ -2737,6 +3301,7 @@ def main() -> int:
             filtered: list[Path] = []
             skipped = 0
             kept_nonupscaled_override = 0
+            kept_origin_forced_nonupscaled = 0
 
             for img in image_files:
                 stem_lower = img.stem.lower()
@@ -2745,6 +3310,17 @@ def main() -> int:
                     filtered.append(img)
                     continue
 
+                origin_folder = origin_relative_to_required_subpath_or_die(img)
+                origin_lower = origin_folder.strip().lower().replace("/", "\\")
+
+                if (
+                    "hires backports" in origin_lower
+                    or origin_lower.endswith(r"\4k")
+                    or origin_lower.endswith(r"\1080p")
+                ):
+                    filtered.append(img)
+                    kept_origin_forced_nonupscaled += 1
+                    continue
                 if is_demastered_run and stem_lower in demastered_nonupscaled_override_stems:
                     filtered.append(img)
                     kept_nonupscaled_override += 1
@@ -2756,10 +3332,17 @@ def main() -> int:
 
             if skipped:
                 log(f"[UPSCALE] Skipped {skipped} image(s) listed in never_upscale.txt for upscaled staging run")
+
             if kept_nonupscaled_override:
                 log(
                     f"[UPSCALE] Kept {kept_nonupscaled_override} image(s) from the post-#end-native-ui section "
                     "for NON-upscaled demaster processing"
+                )
+
+            if kept_origin_forced_nonupscaled:
+                log(
+                    f"[UPSCALE] Kept {kept_origin_forced_nonupscaled} image(s) from never_upscale.txt "
+                    "for full NON-upscaled processing due to origin folder rule"
                 )
 
         if is_demastered_run:
@@ -2770,6 +3353,42 @@ def main() -> int:
             workers,
             manual_opaque_textures,
         )
+
+        premade_ctxr_hash_by_name, premade_origin_by_name, premade_opacity_by_name = hash_premade_dxt5_ctxr_unique_or_die(
+            premade_dxt5_ctxr_files,
+            workers,
+        )
+
+        for stem, digest in premade_ctxr_hash_by_name.items():
+            if stem in image_hash_by_name:
+                raise RuntimeError(f"Premade DXT5 stem conflicts with image-input stem: {stem}")
+            image_hash_by_name[stem] = digest
+            image_origin_by_name[stem] = premade_origin_by_name[stem]
+            image_opacity_expected_by_name[stem] = premade_opacity_by_name[stem]
+
+        ctxr3_required_stems: set[str] = set()
+        if not is_upscaled_run:
+            ctxr3_required_stems = build_nonupscaled_ctxr3_required_stems(
+                original_image_files,
+                no_mip_regexes,
+                manual_ui_textures,
+                is_demastered_run,
+            )
+            if ctxr3_required_stems:
+                log(f"[CTXR3] NON-upscaled ctxr3-managed stems discovered: {len(ctxr3_required_stems)}")
+        else:
+            ctxr3_required_stems = build_ctxr3_required_stems_for_override_subset(
+                original_image_files,
+                demastered_nonupscaled_override_stems,
+                no_mip_regexes,
+                manual_ui_textures,
+                is_demastered_run,
+            )
+            if ctxr3_required_stems:
+                log(
+                    "[CTXR3] Upscaled-run stems requiring NON-upscaled ctxr3 handling: "
+                    f"{len(ctxr3_required_stems)}"
+                )
 
         mc_tri_dumped_dims_by_name = load_mc_tri_dumped_dimensions_or_die(MC_TRI_DUMPED_METADATA_CSV_PATH)
         extra_smooth_stems = build_extra_smooth_stems(
@@ -2790,12 +3409,60 @@ def main() -> int:
                     stem_lower,
                     is_upscaled_run,
                     demastered_nonupscaled_override_stems,
+                    image_origin_by_name,
                     no_mip_regexes,
                     manual_ui_textures,
                 )
                 image_used_nomips_by_name[stem_lower] = used_nomips
 
+        for stem in premade_ctxr_hash_by_name.keys():
+            image_used_nomips_by_name[stem] = False
+
         conversion_map, conversion_rows, conversion_header, header_has_upscaler_cols = load_conversion_csv_unique_or_die(conversion_csv)
+
+        if skipped_bp_remade_meta_mismatch_stems:
+            pruned_rows: list[dict[str, str]] = []
+            removed = 0
+            delete_failures = 0
+
+            for row in conversion_rows:
+                filename_raw = (row.get("filename") or row.get("Filename") or row.get("FILENAME") or "").strip()
+                filename_lower = filename_raw.lower()
+
+                if filename_lower and filename_lower in skipped_bp_remade_meta_mismatch_stems:
+                    removed += 1
+                    continue
+
+                pruned_rows.append(row)
+
+            if removed:
+                conversion_rows[:] = pruned_rows
+
+                for stem in list(conversion_map.keys()):
+                    if stem in skipped_bp_remade_meta_mismatch_stems:
+                        del conversion_map[stem]
+
+                write_conversion_csv_atomic(conversion_csv, conversion_header, conversion_rows)
+                log(
+                    f"[CSV] Removed {removed} row(s) from {CONVERSION_CSV} "
+                    "for skipped bp_remade exact-128-alpha metadata mismatches"
+                )
+
+            for stem in sorted(skipped_bp_remade_meta_mismatch_stems):
+                ctxr_path = STAGING_FOLDER / f"{stem}.ctxr"
+                if not ctxr_path.is_file():
+                    continue
+
+                try:
+                    ctxr_path.unlink()
+                    log(f"[DEL META-MISMATCH] {ctxr_path.name}")
+                except Exception as e:
+                    log(f"[FAIL META-MISMATCH] {ctxr_path.name} (delete error: {e})")
+                    delete_failures += 1
+
+            if delete_failures:
+                return pause_and_exit(1)
+
         if not conversion_header:
             conversion_header = [
                 "filename",
@@ -2840,17 +3507,20 @@ def main() -> int:
                     filename_lower,
                     is_upscaled_run,
                     demastered_nonupscaled_override_stems,
+                    image_origin_by_name,
                 )
                 default_uv, default_ut = get_effective_upscaler_metadata_for_stem(
                     filename_lower,
                     is_upscaled_run,
                     demastered_nonupscaled_override_stems,
+                    image_origin_by_name,
                     extra_smooth_stems,
                 )
                 default_nuv = get_effective_non_upscaled_version_for_stem(
                     filename_lower,
                     is_upscaled_run,
                     demastered_nonupscaled_override_stems,
+                    image_origin_by_name,
                 )
 
                 if "upscaler_version" not in row or not (row.get("upscaler_version") or "").strip():
@@ -2879,6 +3549,23 @@ def main() -> int:
             write_conversion_csv_atomic(conversion_csv, conversion_header, conversion_rows)
             log(f"[CSV] Rewrote {CONVERSION_CSV} to add missing columns")
 
+            conversion_map, conversion_rows, conversion_header, header_has_upscaler_cols = load_conversion_csv_unique_or_die(conversion_csv)
+
+        if premade_dxt5_ctxr_files:
+            sync_premade_dxt5_ctxr_to_staging_or_die(
+                premade_dxt5_ctxr_files,
+                workers,
+            )
+            upsert_premade_dxt5_rows(
+                conversion_rows,
+                conversion_map,
+                conversion_header,
+                premade_ctxr_hash_by_name,
+                premade_origin_by_name,
+                premade_opacity_by_name,
+            )
+            write_conversion_csv_atomic(conversion_csv, conversion_header, conversion_rows)
+            log(f"[PREMADE DXT5] Upserted {len(premade_ctxr_hash_by_name)} row(s) into {CONVERSION_CSV}")
             conversion_map, conversion_rows, conversion_header, header_has_upscaler_cols = load_conversion_csv_unique_or_die(conversion_csv)
 
         case_mismatch_names: set[str] = set()
@@ -3017,17 +3704,24 @@ def main() -> int:
                 early_mismatch_names.add(name)
                 continue
 
-            current_upscaled = get_effective_upscaled_flag_for_stem(name, is_upscaled_run, demastered_nonupscaled_override_stems)
+            current_upscaled = get_effective_upscaled_flag_for_stem(
+                name,
+                is_upscaled_run,
+                demastered_nonupscaled_override_stems,
+                image_origin_by_name,
+            )
             current_upscaler_version, current_upscaler_type = get_effective_upscaler_metadata_for_stem(
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                image_origin_by_name,
                 extra_smooth_stems,
             )
             current_non_upscaled_version = get_effective_non_upscaled_version_for_stem(
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                image_origin_by_name,
             )
 
             origin_ok = (str(csv_origin).strip().lower() == str(img_origin).strip().lower())
@@ -3216,17 +3910,24 @@ def main() -> int:
             current_origin = image_origin_by_name.get(name, "")
             current_used_nomips = image_used_nomips_by_name.get(name, False)
             current_opacity_expected = image_opacity_expected_by_name.get(name, False)
-            current_upscaled = get_effective_upscaled_flag_for_stem(name, is_upscaled_run, demastered_nonupscaled_override_stems)
+            current_upscaled = get_effective_upscaled_flag_for_stem(
+                name,
+                is_upscaled_run,
+                demastered_nonupscaled_override_stems,
+                image_origin_by_name,
+            )
             current_upscaler_version, current_upscaler_type = get_effective_upscaler_metadata_for_stem(
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                image_origin_by_name,
                 extra_smooth_stems,
             )
             current_non_upscaled_version = get_effective_non_upscaled_version_for_stem(
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                image_origin_by_name,
             )
 
             before_ok = (expected_before == (img_digest or "").lower())
@@ -3287,17 +3988,24 @@ def main() -> int:
             current_origin = image_origin_by_name.get(name, "")
             current_used_nomips = image_used_nomips_by_name.get(name, False)
             current_opacity_expected = image_opacity_expected_by_name.get(name, False)
-            current_upscaled = get_effective_upscaled_flag_for_stem(name, is_upscaled_run, demastered_nonupscaled_override_stems)
+            current_upscaled = get_effective_upscaled_flag_for_stem(
+                name,
+                is_upscaled_run,
+                demastered_nonupscaled_override_stems,
+                image_origin_by_name,
+            )
             current_upscaler_version, current_upscaler_type = get_effective_upscaler_metadata_for_stem(
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                image_origin_by_name,
                 extra_smooth_stems,
             )
             current_non_upscaled_version = get_effective_non_upscaled_version_for_stem(
                 name,
                 is_upscaled_run,
                 demastered_nonupscaled_override_stems,
+                image_origin_by_name,
             )
 
             expected_before = ""

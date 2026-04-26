@@ -85,9 +85,11 @@ STAGING_ROOTS: list[Path] = [
     UPSCALED_UI_ROOT / "Staging - 4x Upscaled",
 ]
 
-# Self Remade Finalized folder and output CSV name
+# Self Remade Finalized folders and output CSV name
 SELF_REMADE_FINALIZED_DIR = BUGFIX_ROOT / "Self Remade" / "Finalized"
+SELF_REMADE_FINALIZED_HIRES_DIR = BUGFIX_ROOT / "Self Remade" / "Finalized - HighRes"
 SELF_REMADE_MODIFIED_DATES_CSV_NAME = "self_remade_modified_dates.csv"
+SELF_REMADE_HASH_THREADS = max(1, os.cpu_count() or 1)
 
 # ==========================================================
 # BUILD_DIST_FOLDERS.py FILE SYNC
@@ -901,6 +903,33 @@ def run_update_local_vortex_folders() -> None:
     print("[INFO] Update All Local Vortex Folders.py completed successfully.")
 
 
+def _transform_4x_folders_txt_for_2x(data_4x: bytes, source_path: Path) -> bytes:
+    try:
+        text_4x = data_4x.decode("utf-8")
+    except UnicodeDecodeError as e:
+        print(f"[ERROR] Failed to decode {source_path} as UTF-8: {e}")
+        raise
+
+    target_prefix = (
+        r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Self Remade\Finalized\DXT5"
+    )
+    target_prefix_lower = target_prefix.lower()
+
+    transformed_lines: list[str] = []
+
+    for line in text_4x.splitlines(keepends=True):
+        stripped = line.rstrip("\r\n")
+        newline = line[len(stripped):]
+        stripped_lower = stripped.lower()
+
+        if stripped_lower.startswith(target_prefix_lower) and stripped_lower.endswith(r"\4x"):
+            stripped = stripped[:-3] + r"\2x"
+
+        transformed_lines.append(stripped + newline)
+
+    return "".join(transformed_lines).encode("utf-8")
+
+
 def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
     if not root_2x.is_dir():
         print(f"[INFO] 2x staging root does not exist, skipping 2x sync: {root_2x}")
@@ -948,12 +977,17 @@ def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
             print(f"[ERROR] Failed to read one of the paired files {txt_2x} / {txt_4x}: {e}")
             continue
 
-        if data_2x != data_4x:
-            print(f"[INFO] Updating 2x '{FOLDERS_TXT_NAME}' to match 4x: {txt_2x}")
+        try:
+            transformed_4x_bytes = _transform_4x_folders_txt_for_2x(data_4x, txt_4x)
+        except UnicodeDecodeError:
+            continue
+
+        if data_2x != transformed_4x_bytes:
+            print(f"[INFO] Updating 2x '{FOLDERS_TXT_NAME}' from transformed 4x data: {txt_2x}")
             try:
-                txt_2x.write_bytes(data_4x)
+                txt_2x.write_bytes(transformed_4x_bytes)
             except OSError as e:
-                print(f"[ERROR] Failed to overwrite {txt_2x} with {txt_4x}: {e}")
+                print(f"[ERROR] Failed to overwrite {txt_2x} with transformed 4x data: {e}")
 
     for rel in rel_paths_4x:
         if rel in seen_rel_2x:
@@ -963,9 +997,20 @@ def _sync_2x_4x_pair(root_2x: Path, root_4x: Path) -> None:
         dst = root_2x / rel
 
         try:
+            data_4x = src.read_bytes()
+        except OSError as e:
+            print(f"[ERROR] Failed to read missing 4x file {src}: {e}")
+            continue
+
+        try:
+            transformed_4x_bytes = _transform_4x_folders_txt_for_2x(data_4x, src)
+        except UnicodeDecodeError:
+            continue
+
+        try:
             dst.parent.mkdir(parents=True, exist_ok=True)
-            dst.write_bytes(src.read_bytes())
-            print(f"[INFO] Added missing 2x '{FOLDERS_TXT_NAME}': {dst}")
+            dst.write_bytes(transformed_4x_bytes)
+            print(f"[INFO] Added missing 2x '{FOLDERS_TXT_NAME}' from transformed 4x data: {dst}")
         except OSError as e:
             print(f"[ERROR] Failed to copy missing 4x file to 2x: {src} -> {dst}: {e}")
 
@@ -1057,11 +1102,30 @@ def generate_not_in_folder_for_tier(
         write_not_in_folder_csv(job_dir, dim_names, ps2_texture_index, never_upscale_stems)
 
 
-def write_self_remade_modified_dates() -> None:
-    target_dir = SELF_REMADE_FINALIZED_DIR
+def _collect_self_remade_modified_entry(path: Path) -> tuple[str, str, int] | None:
+    try:
+        stat = path.stat()
+        mtime = int(stat.st_mtime)
+        ctime = int(stat.st_ctime)
+        chosen_time = ctime if ctime < mtime else mtime
+        sha1 = _sha1_file(path)
+        return (path.stem, sha1, chosen_time)
+    except OSError as e:
+        print(f"[ERROR] Failed to process {path}: {e}")
+        return None
 
-    if not target_dir.is_dir():
-        print(f"[WARN] Self Remade Finalized directory does not exist: {target_dir}")
+
+def write_self_remade_modified_dates() -> None:
+    target_dirs: list[Path] = [
+        SELF_REMADE_FINALIZED_DIR,
+        SELF_REMADE_FINALIZED_HIRES_DIR,
+    ]
+
+    existing_target_dirs = [p for p in target_dirs if p.is_dir()]
+    if not existing_target_dirs:
+        print("[WARN] No Self Remade finalized directories exist:")
+        for p in target_dirs:
+            print(f"  - {p}")
         return
 
     output_roots: list[Path] = []
@@ -1076,57 +1140,75 @@ def write_self_remade_modified_dates() -> None:
 
     print()
     print("#################################################")
-    print(f"Collecting modified dates for Self Remade Finalized under: {target_dir}")
-    print(f"Skipping: {target_dir / 'Source Files'}")
+    print("Collecting modified dates for Self Remade Finalized under:")
+    for target_dir in existing_target_dirs:
+        print(f"  - {target_dir}")
+        print(f"    Skipping: {target_dir / 'Source Files'}")
+    print(f"Hashing with {SELF_REMADE_HASH_THREADS} thread(s)")
     print("Will write self_remade_modified_dates.csv to:")
     for out_root in output_roots:
         print(f"  - {out_root / SELF_REMADE_MODIFIED_DATES_CSV_NAME}")
     print("#################################################")
 
-    stem_to_time: dict[str, int] = {}
-
+    candidate_files: list[Path] = []
     skip_dir_name = "source files"
 
-    for root_dir, dirnames, filenames in os.walk(target_dir):
-        dirnames[:] = [d for d in dirnames if d.lower() != skip_dir_name]
+    for target_dir in existing_target_dirs:
+        for root_dir, dirnames, filenames in os.walk(target_dir):
+            dirnames[:] = [d for d in dirnames if d.lower() != skip_dir_name]
 
-        base = Path(root_dir)
-        for fname in filenames:
-            path = base / fname
-            if not path.is_file():
-                continue
+            base = Path(root_dir)
+            for fname in filenames:
+                path = base / fname
+                if not path.is_file():
+                    continue
 
-            suffix = path.suffix.lower()
-            if suffix not in {".png", ".tga"}:
-                continue
+                suffix = path.suffix.lower()
+                if suffix not in {".png", ".tga", ".ctxr"}:
+                    continue
 
-            try:
-                stat = path.stat()
-                mtime = int(stat.st_mtime)
-                ctime = int(stat.st_ctime)
-                chosen_time = ctime if ctime < mtime else mtime
-            except OSError as e:
-                print(f"[ERROR] Failed to stat {path}: {e}")
-                continue
+                candidate_files.append(path)
 
-            stem = path.stem
-            existing = stem_to_time.get(stem)
-            if existing is None or chosen_time < existing:
-                stem_to_time[stem] = chosen_time
+    candidate_files.sort(key=lambda p: str(p).lower())
 
-    rows = sorted(stem_to_time.items(), key=lambda r: r[0])
+    entries: dict[tuple[str, str], int] = {}
+
+    if candidate_files:
+        with ThreadPoolExecutor(max_workers=min(SELF_REMADE_HASH_THREADS, len(candidate_files))) as executor:
+            future_map = {
+                executor.submit(_collect_self_remade_modified_entry, path): path
+                for path in candidate_files
+            }
+
+            for future in as_completed(future_map):
+                result = future.result()
+                if result is None:
+                    continue
+
+                stem, sha1, chosen_time = result
+                key = (stem, sha1)
+
+                existing = entries.get(key)
+                if existing is None or chosen_time < existing:
+                    entries[key] = chosen_time
+
+    rows = sorted(entries.items(), key=lambda r: (r[0][0], r[0][1]))
+
+    csv_rows: list[list[str]] = [["stem", "sha1", "modified_unix_time"]]
+    for (stem, sha1), mtime in rows:
+        csv_rows.append([stem, sha1, str(mtime)])
+
+    csv_bytes = _build_csv_bytes(csv_rows)
 
     for out_root in output_roots:
         csv_path = out_root / SELF_REMADE_MODIFIED_DATES_CSV_NAME
 
         try:
-            with csv_path.open("w", encoding="utf-8", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow(["stem", "modified_unix_time"])
-                for stem, mtime in rows:
-                    writer.writerow([stem, mtime])
-
-            print(f"[INFO] Wrote {len(rows)} entries to {csv_path}")
+            wrote = _write_bytes_if_changed(csv_path, csv_bytes)
+            if wrote:
+                print(f"[INFO] Wrote {len(rows)} entries to {csv_path}")
+            else:
+                print(f"[INFO] Skipped unchanged {csv_path} ({len(rows)} entries)")
         except OSError as e:
             print(f"[ERROR] Failed to write {csv_path}: {e}")
 

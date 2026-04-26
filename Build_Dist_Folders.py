@@ -33,7 +33,7 @@ UNKNOWN_PREFIXES_SEEN: set[str] = set()
 
 # Local sync target prefixes when NOT running in CI.
 # These are PREFIXES, not full folder names.
-VORTEX_MODS_DIR = Path(r"C:\Users\cmkoo\OneDrive\Vortex\metalgearsolid2mc\mods")
+VORTEX_MODS_DIR = Path(r"C:\Vortex\metalgearsolid2mc\mods")
 
 LOCAL_SYNC_PREFIXES: dict[str, str] = {
     "dist": "MGS2 Community Bugfix Compilation - Base",
@@ -419,27 +419,29 @@ def load_self_remade_dates(csv_path: Path) -> dict[str, float]:
 
     with csv_path.open(newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        required = {"stem", "modified_unix_time"}
+        required = {"sha1", "modified_unix_time"}
         if not required.issubset(set(reader.fieldnames or [])):
-            log("[ERROR] Self Remade dates CSV missing required headers: stem,modified_unix_time")
+            log("[ERROR] Self Remade dates CSV missing required headers: sha1,modified_unix_time")
             sys.exit(1)
 
         for row in reader:
-            stem = (row.get("stem") or "").strip()
+            sha1 = (row.get("sha1") or "").strip().lower()
             ts_str = (row.get("modified_unix_time") or "").strip()
-            if not stem or not ts_str:
+            if not sha1 or not ts_str:
                 continue
 
             try:
                 ts = float(ts_str)
             except ValueError:
-                log(f"[WARN] Invalid Self Remade modified_unix_time '{ts_str}' for stem '{stem}'")
+                log(f"[WARN] Invalid Self Remade modified_unix_time '{ts_str}' for sha1 '{sha1}'")
                 continue
 
-            mapping[stem.lower()] = ts
+            existing = mapping.get(sha1)
+            if existing is None or ts < existing:
+                mapping[sha1] = ts
 
-    log(f"[INFO] Loaded {len(mapping)} Self Remade date entries.")
-    add_summary(f"[INFO] Loaded {len(mapping)} Self Remade date entries.")
+    log(f"[INFO] Loaded {len(mapping)} Self Remade sha1 date entries.")
+    add_summary(f"[INFO] Loaded {len(mapping)} Self Remade sha1 date entries.")
     return mapping
 
 
@@ -482,15 +484,26 @@ def build_ctxr_mtime_map(
                     ts = ps2_sha1_dates.get(before_hash)
                     if ts is None:
                         ts = mc_resaved_dates.get(before_hash)
+                    if ts is None:
+                        ts = self_remade_dates.get(before_hash)
+
+                if ts is None and origin_folder.startswith("ps2 textures"):
+                    ts = ps2_fallback_ts
 
                 if ts is None:
-                    if origin_folder.startswith("ps2 textures"):
-                        ts = ps2_fallback_ts
-                    else:
-                        ts = self_remade_dates.get(filename.lower())
-
-                if ts is None:
-                    continue
+                    log("[ERROR] Failed to resolve timestamp for conversion row:")
+                    log(f"        CSV:          {csv_path}")
+                    log(f"        filename:     {filename}")
+                    log(f"        before_hash:  {before_hash or '<empty>'}")
+                    log(f"        origin_folder:{origin_folder or '<empty>'}")
+                    log("")
+                    log("Unable to match before_hash against:")
+                    log("  - mgs2_ps2_sha1_version_dates.csv")
+                    log("  - mgs2_mc_dimensions.csv (mc_resaved_sha1)")
+                    log("  - self_remade_modified_dates.csv (sha1)")
+                    log("")
+                    input("Press Enter to exit...")
+                    sys.exit(1)
 
                 ctxr_filename = f"{filename}.ctxr"
                 ctxr_path = (csv_path.parent / ctxr_filename).resolve()

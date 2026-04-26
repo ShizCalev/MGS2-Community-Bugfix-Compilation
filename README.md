@@ -25,7 +25,7 @@ This compilation should be considered a perpetual work-in-progress. (I love MGS2
 
 ## Community contributions to the pack are absolutely encouraged.
 
-*Files generated/upscaled through AI upscaling will NOT be accepted into the base pack.
+* Files generated/upscaled through AI upscaling will NOT be accepted into the base pack.
 
 The repo IS set up to easily contribute corrections (via CSV files) for **ALL** translations of the game. If you know of any typos in the French, Spanish, Japanese, ect versions, PLEASE feel free to submit those corrections as well!
 

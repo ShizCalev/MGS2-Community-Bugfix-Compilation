@@ -7,6 +7,9 @@ import os
 import re
 import shutil
 import subprocess
+import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
 from pathlib import Path
 from threading import Lock
 
@@ -16,15 +19,11 @@ from PIL import Image
 # ==========================================================
 # CONFIG
 # ==========================================================
-CTXR3_EXE = Path(r"J:\Mega\Games\MG Master Collection\Self made mods\Tooling\CTXR3\CTXR-Converter 1.6\ctxr3.exe")
+CTXR_CLI_PY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Chains\ctxr_cli.py")
+CTXR_TEMPLATE = Path(r"C:\Users\cmkoo\OneDrive\Desktop\loading_jp.ctxr")
 
-# Kept for compatibility, but ctxr_list.txt now lists source image filenames only (png/tga), one per line.
-PREFIX = "mgs2/textures/flatlist/_win"
+NON_UPSCALED_PROCESS_VERSION = "2"
 
-NON_UPSCALED_PROCESS_VERSION = "1"
-
-
-OUT_CTXR_LIST_TXT = "ctxr_list.txt"
 DEPLOY_DIRS_TXT = "deploy_directories.txt"
 CONVERSION_CSV = "conversion_hashes.csv"
 
@@ -37,7 +36,18 @@ MANUAL_OPAQUE_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compi
 
 TMP_DIR_NAME = "_tmp"
 
+DEFAULT_MAX_WORKERS = max(1, min(16, os.cpu_count() or 8))
+
 PRINT_LOCK = Lock()
+
+
+@dataclass
+class ConversionResult:
+    stem_lower: str
+    conv_path: Path
+    expected_ctxr: Path
+    ok: bool
+    output: str
 
 
 def log(msg: str) -> None:
@@ -55,7 +65,7 @@ def pause_and_exit(code: int = 1) -> int:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Launch CTXR3 conversion for NO-MIPS textures and deploy results."
+        description="Launch CTXR CLI conversion for NO-MIPS textures and deploy results."
     )
     parser.add_argument(
         "-targetdir",
@@ -71,17 +81,27 @@ def parse_args() -> argparse.Namespace:
         required=False,
         help="Override origin_folder written to conversion_hashes.csv (relative to Texture Fixes root).",
     )
+    parser.add_argument(
+        "-workers",
+        dest="workers",
+        type=int,
+        required=False,
+        default=DEFAULT_MAX_WORKERS,
+        help=f"Number of parallel CTXR CLI workers. Default: {DEFAULT_MAX_WORKERS}",
+    )
     return parser.parse_args()
 
 
 def sha1_file(path: Path, chunk_size: int = 8 * 1024 * 1024) -> str:
     h = hashlib.sha1()
+
     with path.open("rb") as f:
         while True:
             b = f.read(chunk_size)
             if not b:
                 break
             h.update(b)
+
     return h.hexdigest()
 
 
@@ -89,15 +109,22 @@ def _lower_key(s: str) -> str:
     return (s or "").strip().lower()
 
 
+def safe_unlink(path: Path) -> None:
+    try:
+        if path.exists():
+            path.unlink()
+    except FileNotFoundError:
+        pass
+
+
 def safe_rmtree(path: Path) -> None:
     if not path.exists():
         return
+
     if not path.is_dir():
-        try:
-            path.unlink()
-        except Exception:
-            pass
+        safe_unlink(path)
         return
+
     shutil.rmtree(path, ignore_errors=False)
 
 
@@ -420,9 +447,11 @@ def load_manual_opaque_textures_or_die(path: Path) -> set[str]:
 def should_use_nomips(stem_lower: str, rx_list: list[re.Pattern], manual_set: set[str]) -> bool:
     if stem_lower in manual_set:
         return True
+
     for rx in rx_list:
         if rx.search(stem_lower) is not None:
             return True
+
     return False
 
 
@@ -430,9 +459,8 @@ def is_truthy(s: str) -> bool:
     return (s or "").strip().lower() == "true"
 
 
-# tex_meta maps stem_lower ->
-#   (before_hash, opacity_stripped, original_source_path, source_path_for_conversion)
 TexMeta = dict[str, tuple[str, str, Path, Path]]
+# before_hash, opacity_stripped, original_source_path, source_path_for_conversion
 
 
 def purge_stale_deploy_entries_and_decide_needed(
@@ -455,7 +483,7 @@ def purge_stale_deploy_entries_and_decide_needed(
 
             row_ctxr3 = is_truthy(row.get("ctxr3_converted", "false"))
             row_before = _lower_key(row.get("before_hash", ""))
-            before_match = (row_before == before_hash.lower())
+            before_match = row_before == before_hash.lower()
 
             if (not row_ctxr3) or (not before_match):
                 deployed_ctxr = d / f"{stem_lower}.ctxr"
@@ -485,28 +513,81 @@ def expected_ctxr_path_for_source(src_for_conv: Path) -> Path:
     return src_for_conv.parent / (src_for_conv.stem + ".ctxr")
 
 
-def write_ctxr_list_fullpaths(cwd: Path, stems: list[str], tex_meta: TexMeta) -> Path:
-    ctxr_list_path = cwd / OUT_CTXR_LIST_TXT
-    lines: list[str] = []
-    for stem_lower in stems:
-        _before_hash, _opacity_stripped, _orig_path, conv_path = tex_meta[stem_lower]
-        lines.append(str(conv_path.resolve()))
-    ctxr_list_path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
-    return ctxr_list_path
+def cleanup_failed_output(expected_ctxr: Path) -> None:
+    try:
+        if expected_ctxr.is_file():
+            expected_ctxr.unlink()
+            log(f"  [CLEANUP] Deleted failed output: {expected_ctxr}")
+    except Exception as e:
+        log(f"  [CLEANUP WARN] Failed deleting bad output:\n    {expected_ctxr}\n    {e}")
 
 
-def write_ctxr_list_original_names(cwd: Path, stems: list[str], tex_meta: TexMeta) -> Path:
-    """
-    When finishing/closing with remaining work, write ONLY original filenames (with extension),
-    one per line, lowercased. No paths, no _tmp references.
-    """
-    ctxr_list_path = cwd / OUT_CTXR_LIST_TXT
-    lines: list[str] = []
-    for stem_lower in stems:
-        _before_hash, _opacity_stripped, orig_path, _conv_path = tex_meta[stem_lower]
-        lines.append(orig_path.name.lower())
-    ctxr_list_path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
-    return ctxr_list_path
+def run_ctxr_cli_for_one(src_path: Path, expected_ctxr: Path) -> tuple[bool, str]:
+    cmd = [
+        sys.executable,
+        str(CTXR_CLI_PY),
+        str(CTXR_TEMPLATE),
+        str(src_path),
+    ]
+
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=str(CTXR_CLI_PY.parent),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            shell=False,
+        )
+    except Exception as e:
+        cleanup_failed_output(expected_ctxr)
+        return False, f"Failed launching ctxr_cli.py: {e}"
+
+    output_parts: list[str] = []
+    if proc.stdout:
+        output_parts.append(proc.stdout.rstrip())
+    if proc.stderr:
+        output_parts.append(proc.stderr.rstrip())
+
+    combined_output = "\n".join(part for part in output_parts if part).strip()
+
+    if proc.returncode != 0:
+        cleanup_failed_output(expected_ctxr)
+        if combined_output:
+            return False, f"ctxr_cli.py exited with code {proc.returncode}\n{combined_output}"
+        return False, f"ctxr_cli.py exited with code {proc.returncode}"
+
+    if not expected_ctxr.is_file():
+        return False, f"Expected output was not created: {expected_ctxr}"
+
+    return True, combined_output
+
+
+def conversion_worker(stem_lower: str, conv_path: Path) -> ConversionResult:
+    expected = expected_ctxr_path_for_source(conv_path)
+
+    if expected.is_file():
+        try:
+            expected.unlink()
+        except Exception as e:
+            return ConversionResult(
+                stem_lower=stem_lower,
+                conv_path=conv_path,
+                expected_ctxr=expected,
+                ok=False,
+                output=f"Failed deleting pre-existing output before conversion: {expected}\n{e}",
+            )
+
+    ok, output = run_ctxr_cli_for_one(conv_path, expected)
+
+    return ConversionResult(
+        stem_lower=stem_lower,
+        conv_path=conv_path,
+        expected_ctxr=expected,
+        ok=ok,
+        output=output,
+    )
 
 
 def main() -> int:
@@ -514,21 +595,28 @@ def main() -> int:
     cwd = Path.cwd()
     tmp_dir = cwd / TMP_DIR_NAME
 
+    if args.workers < 1:
+        log("ERROR: -workers must be at least 1.")
+        return pause_and_exit(1)
+
     try:
         cleanup_existing_ctxrs(cwd)
     except Exception as e:
         log(str(e))
         return pause_and_exit(1)
 
-    # Always hard-delete tmp at start
     try:
         cleanup_tmp_dir(cwd)
     except Exception as e:
         log(f"ERROR: Failed deleting {TMP_DIR_NAME} at start:\n  {e}")
         return pause_and_exit(1)
 
-    if not CTXR3_EXE.is_file():
-        log(f"ERROR: ctxr3.exe not found:\n{CTXR3_EXE}")
+    if not CTXR_CLI_PY.is_file():
+        log(f"ERROR: ctxr_cli.py not found:\n{CTXR_CLI_PY}")
+        return pause_and_exit(1)
+
+    if not CTXR_TEMPLATE.is_file():
+        log(f"ERROR: Template CTXR not found:\n{CTXR_TEMPLATE}")
         return pause_and_exit(1)
 
     if args.originfolder:
@@ -598,10 +686,10 @@ def main() -> int:
 
     if not tex_paths:
         log("ERROR: After NO-MIPS filtering, there are 0 images to process in CWD.")
-        log("This script now only processes textures that would use DPF_NOMIPS.")
+        log("This script now only processes textures that would use NO-MIPS.")
         return pause_and_exit(1)
 
-    log("\nHashing source images + deciding rgb-only temp usage...")
+    log("\nHashing source images + deciding temp conversion usage...")
 
     tex_meta: TexMeta = {}
     stems_need_tmp: set[str] = set()
@@ -622,10 +710,9 @@ def main() -> int:
         else:
             opacity_stripped = "true" if not image_has_any_transparency(p) else "false"
 
-        # conv_path starts as original; may become _tmp path for this run
         tex_meta[stem_lower] = (before_hash, opacity_stripped, p, p)
 
-    log("\nChecking deploy directories for stale or missing ctxr3 conversions...")
+    log("\nChecking deploy directories for stale or missing conversions...")
     needs_convert = purge_stale_deploy_entries_and_decide_needed(deploy_dirs, tex_meta)
 
     stems_to_convert = sorted({p.stem.lower() for p in tex_paths if p.stem.lower() in needs_convert})
@@ -634,19 +721,17 @@ def main() -> int:
         log("Done.")
         return 0
 
-    # Create tmp RGB-only sources only for ones we're converting this run
     created_tmp_files: list[Path] = []
     if any(s in stems_need_tmp for s in stems_to_convert):
-        log("\n[TMP] Creating rgb-only temp sources for conversion...")
+        log("\n[TMP] Creating temp sources for conversion...")
         try:
             tmp_dir.mkdir(parents=True, exist_ok=True)
         except Exception as e:
             log(f"ERROR: Failed to create tmp directory:\n  {tmp_dir}\n  {e}")
             return pause_and_exit(1)
 
-        # Generate tmp for only stems_to_convert that need it
         stems_to_convert_set = set(stems_to_convert)
-        for stem_lower, (before_hash, opacity_stripped, orig_path, conv_path) in list(tex_meta.items()):
+        for stem_lower, (before_hash, opacity_stripped, orig_path, _conv_path) in list(tex_meta.items()):
             if stem_lower not in stems_to_convert_set:
                 continue
             if stem_lower not in stems_need_tmp:
@@ -658,43 +743,53 @@ def main() -> int:
                 tex_meta[stem_lower] = (before_hash, opacity_stripped, orig_path, out_path)
                 log(f"  [TMP] {orig_path.name} -> {out_path}")
             except Exception as e:
-                log(f"ERROR: Failed creating rgb-only temp for:\n  {orig_path}\n  {e}")
+                log(f"ERROR: Failed creating temp image for:\n  {orig_path}\n  {e}")
                 return pause_and_exit(1)
 
-    # Write ctxr_list.txt with FULL paths for conversion (tmp path if used)
-    ctxr_list_path = write_ctxr_list_fullpaths(cwd, stems_to_convert, tex_meta)
-    log(f"\nWrote {len(stems_to_convert)} full path(s) to: {ctxr_list_path}")
-
-    os.startfile(ctxr_list_path)
-
-    log(f"\nLaunching CTXR3 and waiting for it to close:\n{CTXR3_EXE}")
-    proc = subprocess.Popen([str(CTXR3_EXE)], cwd=CTXR3_EXE.parent, shell=False)
-    exit_code = proc.wait()
-    log(f"CTXR3 exited with code: {exit_code}")
-
-    # Partial-job support: deploy whatever exists
     processed_ctxr_files: list[Path] = []
     processed_stems: set[str] = set()
-    missing_ctxrs: list[tuple[str, Path, Path]] = []
+    failed_conversions: list[tuple[str, Path, str]] = []
 
+    worker_jobs: list[tuple[str, Path]] = []
     for stem_lower in stems_to_convert:
         _before_hash, _opacity_stripped, _orig_path, conv_path = tex_meta[stem_lower]
-        expected = expected_ctxr_path_for_source(conv_path)
-        if expected.is_file():
-            processed_ctxr_files.append(expected)
-            processed_stems.add(stem_lower)
-        else:
-            missing_ctxrs.append((stem_lower, conv_path, expected))
+        worker_jobs.append((stem_lower, conv_path))
+
+    log(f"\nRunning ctxr_cli.py in parallel with {args.workers} worker(s)...")
+
+    future_to_job: dict = {}
+    completed_count = 0
+
+    with ThreadPoolExecutor(max_workers=args.workers) as executor:
+        for stem_lower, conv_path in worker_jobs:
+            future = executor.submit(conversion_worker, stem_lower, conv_path)
+            future_to_job[future] = (stem_lower, conv_path)
+
+        for future in as_completed(future_to_job):
+            completed_count += 1
+            stem_lower, conv_path = future_to_job[future]
+
+            try:
+                result = future.result()
+            except Exception as e:
+                failed_conversions.append((stem_lower, conv_path, str(e)))
+                log(f"[{completed_count}/{len(worker_jobs)}] [FAIL] {conv_path.name}")
+                log(str(e))
+                continue
+
+            if result.ok:
+                processed_ctxr_files.append(result.expected_ctxr)
+                processed_stems.add(result.stem_lower)
+                log(f"[{completed_count}/{len(worker_jobs)}] [OK] {result.expected_ctxr.name}")
+            else:
+                failed_conversions.append((result.stem_lower, result.conv_path, result.output))
+                log(f"[{completed_count}/{len(worker_jobs)}] [FAIL] {result.conv_path.name}")
+                if result.output:
+                    log(result.output)
 
     if not processed_ctxr_files:
-        log("ERROR: No expected .ctxr outputs were found after CTXR3 run. Nothing to deploy.")
-        if missing_ctxrs:
-            for stem_lower, conv_path, expected in missing_ctxrs[:50]:
-                log(f"  stem={stem_lower} input={conv_path} expected_out={expected}")
-            if len(missing_ctxrs) > 50:
-                log(f"  ...and {len(missing_ctxrs) - 50} more")
+        log("ERROR: No expected .ctxr outputs were found after ctxr_cli.py run. Nothing to deploy.")
 
-        # tmp ALWAYS gets deleted on close
         try:
             cleanup_tmp_dir(cwd)
         except Exception as e:
@@ -702,22 +797,22 @@ def main() -> int:
 
         return pause_and_exit(1)
 
-    if missing_ctxrs:
-        log(f"[WARN] Only {len(processed_ctxr_files)}/{len(stems_to_convert)} ctxr(s) were produced. Continuing with partial deploy.")
-        for stem_lower, conv_path, expected in missing_ctxrs[:50]:
-            log(f"  [MISSING] stem={stem_lower} input={conv_path} expected_out={expected}")
-        if len(missing_ctxrs) > 50:
-            log(f"  ...and {len(missing_ctxrs) - 50} more")
+    if failed_conversions:
+        log(f"\n[WARN] Only {len(processed_ctxr_files)}/{len(stems_to_convert)} ctxr(s) were produced. Continuing with partial deploy.")
+        for stem_lower, conv_path, err in failed_conversions[:50]:
+            log(f"  [FAILED] stem={stem_lower} input={conv_path}")
+            if err:
+                log(f"           {err}")
+        if len(failed_conversions) > 50:
+            log(f"  ...and {len(failed_conversions) - 50} more")
 
-    log(f"\nFound {len(processed_ctxr_files)} .ctxr file(s) to deploy (located next to their inputs).")
+    log(f"\nFound {len(processed_ctxr_files)} .ctxr file(s) to deploy.")
 
-    # Hash ctxrs
     log("\nHashing CTXRs...")
     ctxr_hashes: dict[str, str] = {}
     for p in processed_ctxr_files:
         ctxr_hashes[p.stem.lower()] = sha1_file(p)
 
-    # Deploy and update CSVs ONLY for processed stems
     log("\nDeploying...")
     for d in deploy_dirs:
         copied = 0
@@ -727,9 +822,7 @@ def main() -> int:
         for ctxr_file in processed_ctxr_files:
             stem_lower = ctxr_file.stem.lower()
 
-            lower_name = (ctxr_file.stem.lower() + ".ctxr")
-            dst_ctxr = d / lower_name
-
+            dst_ctxr = d / f"{stem_lower}.ctxr"
             shutil.copy2(ctxr_file, dst_ctxr)
             copied += 1
 
@@ -755,10 +848,8 @@ def main() -> int:
         log(f"  Deployed {copied} ctxr file(s) -> {d}")
         log(f"  Updated -> {csv_path}")
 
-    # Delete produced ctxrs from wherever they were generated (tmp or original dirs)
     delete_ctxrs(processed_ctxr_files)
 
-    # tmp ALWAYS gets deleted on close
     try:
         cleanup_tmp_dir(cwd)
         if created_tmp_files:
@@ -766,24 +857,7 @@ def main() -> int:
     except Exception as e:
         log(f"\nWARNING: Failed deleting {TMP_DIR_NAME}:\n  {e}")
 
-    # Rewrite ctxr_list.txt for remaining work:
-    # - If none remaining: delete ctxr_list.txt
-    # - If remaining: write original filenames only (no paths, no _tmp)
-    remaining_stems = [s for s in stems_to_convert if s not in processed_stems]
-
-    if not remaining_stems:
-        try:
-            (cwd / OUT_CTXR_LIST_TXT).unlink()
-            log(f"\nAll done. Deleted {OUT_CTXR_LIST_TXT}.")
-        except Exception:
-            pass
-
-        log("\nDone.")
-        return 0
-
-    write_ctxr_list_original_names(cwd, remaining_stems, tex_meta)
-    log(f"\nUpdated {OUT_CTXR_LIST_TXT} with {len(remaining_stems)} remaining file(s) (original filenames only).")
-    log("\nDone (partial).")
+    log("\nDone.")
     return 0
 
 
