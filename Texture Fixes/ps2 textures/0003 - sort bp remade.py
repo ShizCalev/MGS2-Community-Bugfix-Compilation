@@ -66,8 +66,8 @@ IMAGE_EXTENSIONS = {".png", ".tga"}
 
 PRIMARY_BUCKETS = {
     "manual",
+    "same sha1",
     "mismatched sha1",
-    "power of two",
     "bp_mismatch",
     "bp_remade",
 }
@@ -75,7 +75,6 @@ PRIMARY_BUCKETS = {
 NO_MIP_ROOT = "no_mip_fixes"
 NO_MIP_CHILDREN = {"ui", "not_regex_matched_ui"}
 
-# Manual blacklist (filenames without extension)
 MANUAL_LIST = {
     "0015d707",
     "0015d707_cd82fa959c0f81d19f22c0b0fdf8d230",
@@ -321,7 +320,7 @@ def detect_existing_primary_buckets(rel_parts):
     return buckets
 
 
-def classify_primary_buckets(file_path, stem, dims_map, manual_bp_remade_set, bucket_name):
+def classify_primary_buckets(file_path, stem, dims_map, manual_bp_remade_set):
     buckets = []
 
     if stem in MANUAL_LIST:
@@ -341,8 +340,7 @@ def classify_primary_buckets(file_path, stem, dims_map, manual_bp_remade_set, bu
         mc_resaved_sha1 = entry["mc_resaved_sha1"]
 
         if mc_resaved_sha1 and file_sha1 == mc_resaved_sha1:
-            if bucket_name != "OPAQUE":
-                buckets.append("power of two")
+            buckets.append("same sha1")
             return buckets
 
         with Image.open(file_path) as img:
@@ -422,7 +420,6 @@ def compute_final_dest(file_path, dims_map, dxt5_stems, manual_bp_remade_set, pa
         stem=stem,
         dims_map=dims_map,
         manual_bp_remade_set=manual_bp_remade_set,
-        bucket_name=bucket_name,
     )
 
     if primary_buckets:

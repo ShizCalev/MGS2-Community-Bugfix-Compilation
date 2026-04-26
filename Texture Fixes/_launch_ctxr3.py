@@ -22,14 +22,14 @@ from PIL import Image
 CTXR_CLI_PY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Chains\ctxr_cli.py")
 CTXR_TEMPLATE = Path(r"C:\Users\cmkoo\OneDrive\Desktop\loading_jp.ctxr")
 
-NON_UPSCALED_PROCESS_VERSION = "2"
+NON_UPSCALED_PROCESS_VERSION = "3"
 
 DEPLOY_DIRS_TXT = "deploy_directories.txt"
 CONVERSION_CSV = "conversion_hashes.csv"
 
 TEXTURE_FIXES_ROOT = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes")
 
-# This script will ONLY process images (PNG or TGA) whose stem matches NO-MIP rules (DPF_NOMIPS equivalent)
+# This script will ONLY process images (PNG or TGA) whose stem matches NO-MIP rules
 NO_MIP_REGEX_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\no_mip_regex.txt")
 MANUAL_UI_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_ui_textures.txt")
 MANUAL_OPAQUE_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_opaque_textures.txt")
@@ -139,7 +139,7 @@ def cleanup_tmp_dir(cwd: Path) -> None:
 
 def image_has_any_transparency(path: Path) -> bool:
     """
-    True if image contains any alpha < 255 anywhere (any transparency).
+    True if image contains any alpha < 255 anywhere.
     Supports PNG, TGA, and other formats PIL can open.
     """
     with Image.open(path) as im:
@@ -184,7 +184,7 @@ def image_alpha_extrema(path: Path) -> tuple[bool, int, int]:
 
 def should_strip_opacity_and_use_rgb_only(src_path: Path, manual_opaque: set[str]) -> bool:
     """
-    True if we should create an RGB-only temp image to avoid alpha affecting colors:
+    True if we should create a temp image with forced 128 alpha for all pixels:
       - stem is listed in manual_opaque_textures.txt, OR
       - path contains 'opaque' (case-insensitive), OR
       - no alpha channel, OR
@@ -214,7 +214,7 @@ def should_strip_opacity_and_use_rgb_only(src_path: Path, manual_opaque: set[str
 
 def write_rgb_only_temp(src_path: Path, tmp_dir: Path) -> Path:
     """
-    Split RGB and alpha, and save RGB only (no alpha) to tmp_dir with same filename (lowercased).
+    Preserve RGB and force alpha channel to 128 for all pixels.
     """
     tmp_dir.mkdir(parents=True, exist_ok=True)
 
@@ -223,29 +223,23 @@ def write_rgb_only_temp(src_path: Path, tmp_dir: Path) -> Path:
 
     with Image.open(src_path) as im:
         if im.mode == "P":
-            if "transparency" in im.info:
-                im = im.convert("RGBA")
-            else:
-                im = im.convert("RGB")
-        elif im.mode in ("RGBA", "LA"):
-            if im.mode != "RGBA":
-                im = im.convert("RGBA")
-        else:
-            im = im.convert("RGB")
+            im = im.convert("RGBA")
+        elif im.mode != "RGBA":
+            im = im.convert("RGBA")
 
-        if im.mode == "RGBA":
-            r, g, b, _a = im.split()
-            rgb = Image.merge("RGB", (r, g, b))
-        else:
-            rgb = im.convert("RGB")
+        alpha_128 = Image.new("L", im.size, 128)
+        im.putalpha(alpha_128)
 
         ext = src_path.suffix.lower()
         if ext == ".png":
-            rgb.save(out_path, format="PNG")
+            im.save(out_path, format="PNG", optimize=False)
         elif ext == ".tga":
-            rgb.save(out_path, format="TGA")
+            im.save(out_path, format="TGA")
         else:
-            rgb.save(out_path)
+            raise RuntimeError(f"Unsupported temp image format: {src_path}")
+
+    if not out_path.is_file():
+        raise RuntimeError(f"Failed creating temp image: {out_path}")
 
     return out_path
 

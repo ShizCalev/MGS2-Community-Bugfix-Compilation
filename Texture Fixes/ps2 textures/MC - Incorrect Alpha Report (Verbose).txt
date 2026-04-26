@@ -4246,7 +4246,7 @@ cam_fh_ovl_alp_mod1120_emap.bmp					PS2: [108, 117, 119, 120, 128]					MC: [105,
 
 ###############################################################
 
-###################  NOT IN MC DIMENSIONS CSV YET  (Count: 0)  ################
+###################  NOT IN TRI-DUMPED CSV YET  (Count: 52)  ################
 
 ###############################################################
 ===== BP REMADE (Total: 0) =====
@@ -4264,7 +4264,7 @@ None
 None
 
 
-===== OG PS2 FILES (Total: 0) =====
+===== OG PS2 FILES (Total: 52) =====
 
 ----- NEEDS MIPS STRIPPED - Power of 2 (Count: 0) -----
 None
@@ -4275,8 +4275,59 @@ None
 ----- MIPS CORRECT - Power of 2 (LOW PRIORITY) (Count: 0) -----
 None
 
------ MIPS CORRECT - NPOT (NPOT) (Count: 0) -----
-None
+----- MIPS CORRECT - NPOT (NPOT) (Count: 52) -----
+mgs2_arrow_l_00
+mgs2_arrow_l_01
+mgs2_arrow_l_02
+mgs2_arrow_r_00
+mgs2_arrow_r_01
+mgs2_arrow_r_02
+mgs2_ctrlset_btn_base_00
+mgs2_ctrlset_btn_base_01
+mgs2_ctrlset_btn_base_02
+mgs2_ctrlset_cursor00
+mgs2_keyass_btn_base_00
+mgs2_keyass_btn_base_01
+mgs2_keyass_btn_base_02
+mgs2_keyass_btn_base_03
+mgs2_keyass_btn_base_switch_00_en
+mgs2_keyass_btn_base_switch_00_fr
+mgs2_keyass_btn_base_switch_00_gr
+mgs2_keyass_btn_base_switch_00_it
+mgs2_keyass_btn_base_switch_00_jp
+mgs2_keyass_btn_base_switch_00_sp
+mgs2_keyass_btn_base_switch_01_en
+mgs2_keyass_btn_base_switch_01_fr
+mgs2_keyass_btn_base_switch_01_gr
+mgs2_keyass_btn_base_switch_01_it
+mgs2_keyass_btn_base_switch_01_jp
+mgs2_keyass_btn_base_switch_01_sp
+mgs2_keyass_btn_base_switch_03_en
+mgs2_keyass_btn_base_switch_03_fr
+mgs2_keyass_btn_base_switch_03_gr
+mgs2_keyass_btn_base_switch_03_it
+mgs2_keyass_btn_base_switch_03_jp
+mgs2_keyass_btn_base_switch_03_sp
+mgs2_keyass_cursor_00
+mgs2_keyass_cursor_01
+mgs2_keyass_line_00
+mgs2_keyass_line_01
+mgs2_keyass_page_00
+mgs2_keyass_page_01
+pausemenu_arrow_l
+pausemenu_arrow_r
+pausemenu_btn_00
+pausemenu_btn_01
+pausemenu_dialog_00
+pausemenu_head_line
+pausemenu_head_subitem
+pausemenu_icon_mute
+pausemenu_icon_volume
+pausemenu_line_00
+pausemenu_volume_00
+pausemenu_volume_01
+pausemenu_volume_cursor
+volume_setting_01
 
 
 ###############################################################
@@ -4290,9 +4341,9 @@ BP REMADE | MIPS CORRECT - NPOT (NEED TO FIND): 0
 OG PS2 FILES | NEEDS MIPS STRIPPED - POT (NEED TO FIND): 0
 OG PS2 FILES | NEEDS MIPS STRIPPED - NPOT (NEED TO FIND): 0
 OG PS2 FILES | MIPS CORRECT - POT (LOW PRIORITY): 0
-OG PS2 FILES | MIPS CORRECT - NPOT (NEED TO FIND): 0
+OG PS2 FILES | MIPS CORRECT - NPOT (NEED TO FIND): 52
 
 TOTAL MIPS CORRECT (POT): 0
-ALL OTHER CATEGORIES: 0
-COMBINED TOTAL: 0
-OG PS2 LEFT TO FIND: 0
+ALL OTHER CATEGORIES: 52
+COMBINED TOTAL: 52
+OG PS2 LEFT TO FIND: 52

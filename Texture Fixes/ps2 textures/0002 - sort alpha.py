@@ -241,9 +241,20 @@ def main():
         and os.path.isfile(os.path.join(ROOT_DIR, f))
     ]
 
-    files_to_process = reevaluate_paths + root_files
+    has_alpha_files = [
+        os.path.join(HAS_ALPHA_DIR, f)
+        for f in os.listdir(HAS_ALPHA_DIR)
+        if f.lower().endswith(VALID_EXTENSIONS)
+        and os.path.isfile(os.path.join(HAS_ALPHA_DIR, f))
+    ] if os.path.isdir(HAS_ALPHA_DIR) else []
+
+    files_to_process = list(
+        dict.fromkeys(reevaluate_paths + root_files + has_alpha_files)
+    )
+
     total = len(files_to_process)
     print(f"[+] Found {len(root_files)} top-level candidate file(s).")
+    print(f"[+] Found {len(has_alpha_files)} HAS ALPHA candidate file(s).")
     print(f"[+] Total files to process this run: {total}")
 
     counter = {"processed": 0}
@@ -286,7 +297,7 @@ def main():
     stop_event.set()
     monitor_thread.join()
 
-    write_manual_moves_log(MANUAL_MOVES_LOG, new_manual_entries)
+    #write_manual_moves_log(MANUAL_MOVES_LOG, new_manual_entries)
 
     print()
     print(f"[+] Moved {opaque} alpha-validated opaque/128 image(s) to '{OPAQUE_DIR}'")

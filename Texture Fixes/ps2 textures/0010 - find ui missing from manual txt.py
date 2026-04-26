@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+import subprocess
 import csv
 import sys
 from pathlib import Path
@@ -86,8 +88,23 @@ def write_issues_txt(path: Path, rows: list[dict[str, str]]) -> None:
             f.write(stem + "\n")
 
 
+def run_next_stage(script_path):
+    print(f"\n[+] Launching next stage: {os.path.basename(script_path)}")
+    try:
+        subprocess.run(["python", script_path], check=True)
+        print(f"[✓] Stage completed successfully: {os.path.basename(script_path)}")
+    except subprocess.CalledProcessError as e:
+        print(f"[!] Stage failed with non-zero exit code ({e.returncode}): {script_path}")
+    except FileNotFoundError:
+        print(f"[!] Stage script not found: {script_path}")
+    except Exception as e:
+        print(f"[!] Failed to launch next stage ({script_path}): {e}")
+
+
 def main() -> None:
     manual_stems = load_manual_ui_stems(MANUAL_UI_TXT)
+
+    #NEXT_SCRIPT = os.path.join(SCRIPT_DIR, "0011 - mirror hires files.py")
 
     print(f"Loaded manual UI stems: {len(manual_stems)}")
     print(f"Scanning: {SCRIPT_DIR}")
@@ -158,7 +175,8 @@ def main() -> None:
         print("No issues found.")
         print("No log file was written.")
     
-    return 0
+    #run_next_stage(NEXT_SCRIPT)
+
 
 
 if __name__ == "__main__":

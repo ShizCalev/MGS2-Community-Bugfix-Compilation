@@ -73,7 +73,7 @@ CHAINNER_PROJECT_4X_STRIPPED_OPACITY_DEMASTERED = Path(r"C:\Development\Git\Afev
 # 1 = corrected opaque texture alpha stripping for upscaling
 # 2 = wavelet color fix!!!!! oh dang
 # 3 = clamped alpha instead of split
-UPSCALE_PROCESS_VERSION = "3"
+UPSCALE_PROCESS_VERSION = "4"
 
 # - normal non-upscaled nvtt -> CtxrTool flow
 # - non-upscaled ctxr3 flow
@@ -83,9 +83,9 @@ UPSCALE_PROCESS_VERSION = "3"
 # 0 = v1 release
 # 1 = fixed crash in ovr_jp's w01a01box. almost all opaque have a different hash too, so reconverted everything (i'd assume my mtime fuckery messed something up at some point.)
 # 2 = alpha clamped instead of split.
-NON_UPSCALED_PROCESS_VERSION = "2"
+NON_UPSCALED_PROCESS_VERSION = "3"
 
-SKIP_GOOD_ALPHA_FILES = False #if true, 128 alpha is treated as opaque. if false, alpha channel gets stripped entirely if all alpha >= 128
+SKIP_GOOD_ALPHA_FILES = True #if true, 128 alpha is treated as opaque. if false, alpha channel gets stripped entirely if all alpha >= 128
 SPAM_LOG_WITH_GOOD_ALPHA = False
 
 CSV_FLUSH_SECONDS = 5.0
