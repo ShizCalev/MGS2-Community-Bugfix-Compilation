@@ -22,7 +22,7 @@ from PIL import Image
 CTXR_CLI_PY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Chains\ctxr_cli.py")
 CTXR_TEMPLATE = Path(r"C:\Users\cmkoo\OneDrive\Desktop\loading_jp.ctxr")
 
-NON_UPSCALED_PROCESS_VERSION = "3"
+NON_UPSCALED_PROCESS_VERSION = "4"
 
 DEPLOY_DIRS_TXT = "deploy_directories.txt"
 CONVERSION_CSV = "conversion_hashes.csv"
@@ -330,8 +330,8 @@ def write_conversion_csv(csv_path: Path, rows_by_filename: dict[str, dict[str, s
         "upscaler_type",
         "ctxr3_converted",
         "non_upscaled_version",
+        "npot_resized",
     ]
-
     tmp_path = csv_path.with_suffix(csv_path.suffix + ".tmp")
 
     with tmp_path.open("w", encoding="utf-8", newline="\n") as f:
@@ -835,6 +835,7 @@ def main() -> int:
             row["upscaler_type"] = "none"
             row["ctxr3_converted"] = "true"
             row["non_upscaled_version"] = NON_UPSCALED_PROCESS_VERSION
+            row["npot_resized"] = "false"
 
             rows[stem_lower] = row
 

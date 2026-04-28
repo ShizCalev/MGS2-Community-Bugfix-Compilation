@@ -83,10 +83,11 @@ UPSCALE_PROCESS_VERSION = "4"
 # 0 = v1 release
 # 1 = fixed crash in ovr_jp's w01a01box. almost all opaque have a different hash too, so reconverted everything (i'd assume my mtime fuckery messed something up at some point.)
 # 2 = alpha clamped instead of split.
-NON_UPSCALED_PROCESS_VERSION = "3"
+NON_UPSCALED_PROCESS_VERSION = "4"
 
 SKIP_GOOD_ALPHA_FILES = True #if true, 128 alpha is treated as opaque. if false, alpha channel gets stripped entirely if all alpha >= 128
 SPAM_LOG_WITH_GOOD_ALPHA = False
+RESIZE_NON_UPSCALED_NPOT_TO_POT_WITH_LANCZOS = True
 
 CSV_FLUSH_SECONDS = 5.0
 
@@ -659,7 +660,7 @@ def sync_premade_dxt5_ctxr_to_staging_or_die(
 
 def upsert_premade_dxt5_rows(
     conversion_rows: list[dict[str, str]],
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool, bool]],
     conversion_header: list[str],
     premade_ctxr_hash_by_name: dict[str, str],
     premade_origin_by_name: dict[str, str],
@@ -695,6 +696,7 @@ def upsert_premade_dxt5_rows(
         row["upscaler_type"] = "none"
         row["non_upscaled_version"] = NON_UPSCALED_PROCESS_VERSION
         row["ctxr3_converted"] = "false"
+        row["npot_resized"] = "false"
 
         conversion_map[stem] = (
             ctxr_hash,
@@ -707,6 +709,7 @@ def upsert_premade_dxt5_rows(
             "none",
             NON_UPSCALED_PROCESS_VERSION,
             True,
+            False,
             False,
             False,
         )
@@ -1179,14 +1182,14 @@ def origin_relative_to_required_subpath_or_die(image_path: Path) -> str:
 # mapping entry:
 # (before_hash, ctxr_hash, used_nomips_bool, origin_folder_string, opacity_stripped_bool, upscaled_bool,
 #  upscaler_version_str, upscaler_type_str, non_upscaled_version_str, upscaler_meta_present_bool,
-#  ctxr3_converted_bool, filename_has_uppercase_bool)
+#  ctxr3_converted_bool, npot_resized_bool, filename_has_uppercase_bool)
 #
 # NOTE: CSV mipmaps column means "has mipmaps". Internally we track "used_nomips".
 # ==========================================================
 def load_conversion_csv_unique_or_die(
     csv_path: Path,
 ) -> tuple[
-    dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool]],
+    dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool, bool]],
     list[dict[str, str]],
     list[str],
     bool,
@@ -1209,7 +1212,7 @@ def load_conversion_csv_unique_or_die(
         header_has_upscaler_cols = ("upscaler_version" in header_lower) and ("upscaler_type" in header_lower)
 
         rows: list[dict[str, str]] = []
-        mapping: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool]] = {}
+        mapping: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool, bool]] = {}
         duplicates: list[str] = []
 
         for row in rdr:
@@ -1236,6 +1239,7 @@ def load_conversion_csv_unique_or_die(
             ).strip()
 
             ctxr3_converted_raw = (row.get("ctxr3_converted") or row.get("Ctxr3_converted") or row.get("CTXR3_CONVERTED") or "").strip()
+            npot_resized_raw = (row.get("npot_resized") or row.get("Npot_resized") or row.get("NPOT_RESIZED") or "").strip()
 
             if not filename:
                 continue
@@ -1253,6 +1257,7 @@ def load_conversion_csv_unique_or_die(
 
             # If the column is missing or blank, treat as false.
             ctxr3_converted = bool_from_csv(ctxr3_converted_raw) if ctxr3_converted_raw else False
+            npot_resized = bool_from_csv(npot_resized_raw) if npot_resized_raw else False
 
             name = filename.lower()
             if name in mapping:
@@ -1270,6 +1275,7 @@ def load_conversion_csv_unique_or_die(
                     non_upscaled_version_raw,
                     upscaler_meta_present,
                     ctxr3_converted,
+                    npot_resized,
                     filename_has_upper,
                 )
 
@@ -1430,13 +1436,56 @@ def hash_images_unique_or_die(
 # ==========================================================
 def _needs_ctxr3_conversion_nonupscaled(
     stem_lower: str,
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool, bool]],
 ) -> bool:
     entry = conversion_map.get(stem_lower)
     if entry is None:
         return True
     ctxr3_converted = bool(entry[10])
     return not ctxr3_converted
+
+
+def _is_power_of_two(n: int) -> bool:
+    return n > 0 and (n & (n - 1)) == 0
+
+
+def _dims_are_power_of_two(dims: tuple[int, int] | None) -> bool:
+    if dims is None:
+        return True
+    width, height = dims
+    return _is_power_of_two(width) and _is_power_of_two(height)
+
+
+def get_effective_npot_resized_for_stem(
+    stem_lower: str,
+    staging_is_upscaled: bool,
+    nonupscaled_override_stems: set[str],
+    image_origin_by_name: dict[str, str],
+    image_dimensions_by_name: dict[str, tuple[int, int]],
+    ctxr3_required_stems: set[str],
+    used_nomips: bool,
+) -> bool:
+    if not RESIZE_NON_UPSCALED_NPOT_TO_POT_WITH_LANCZOS:
+        return False
+
+    # Only the normal non-upscaled NVTT -> CtxrTool chain using DPF_DEFAULT
+    # should resize NPOT images. DPF_NOMIPS and ctxr3-managed no-mips paths
+    # intentionally keep the source dimensions as-is.
+    if used_nomips:
+        return False
+
+    if get_effective_upscaled_flag_for_stem(
+        stem_lower,
+        staging_is_upscaled,
+        nonupscaled_override_stems,
+        image_origin_by_name,
+    ):
+        return False
+
+    if stem_lower in ctxr3_required_stems:
+        return False
+
+    return not _dims_are_power_of_two(image_dimensions_by_name.get(stem_lower))
 
 
 # ==========================================================
@@ -1607,7 +1656,7 @@ def refresh_not_yet_converted_after_ctxr3(
 def launch_ctxr3_for_pending_or_die(
     image_files: list[Path],
     ctxr3_required_stems: set[str],
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool, bool]],
     staging_folder: Path,
 ) -> None:
     # Used for:
@@ -2143,6 +2192,28 @@ def resave_images_to_pot_or_die(image_paths: list[Path]) -> None:
         raise RuntimeError(f"Failed resizing/resaving {failed} image(s) to power-of-two dimensions")
 
 
+def make_temp_pot_resized_copy_or_die(src: Path, tmp_dir: Path, stem_lower: str) -> Path:
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+
+    tmp_path = tmp_dir / f"{stem_lower}__pot_tmp.png"
+
+    with Image.open(src) as im:
+        width, height = im.size
+        new_w = _next_power_of_two(width)
+        new_h = _next_power_of_two(height)
+
+        if new_w == width and new_h == height:
+            im.save(tmp_path, format="PNG", optimize=False)
+        else:
+            resized = im.resize((new_w, new_h), Image.LANCZOS)
+            resized.save(tmp_path, format="PNG", optimize=False)
+
+    if not tmp_path.is_file():
+        raise RuntimeError(f"Failed creating POT-resized temp copy: {tmp_path}")
+
+    return tmp_path
+
+
 def remap_chainner_tgas_to_png(mapping: dict[Path, Path]) -> None:
     switched = 0
 
@@ -2203,11 +2274,12 @@ def _dims_within_factor_wiggle(before: tuple[int, int], after: tuple[int, int], 
 
 def run_nvtt_exports_or_die(
     image_files: list[Path],
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool, bool]],
     image_hash_by_name: dict[str, str],
     image_origin_by_name: dict[str, str],
     image_used_nomips_by_name: dict[str, bool],
     image_opacity_expected_by_name: dict[str, bool],
+    image_dimensions_by_name: dict[str, tuple[int, int]],
     workers: int,
     no_mip_regexes: list[re.Pattern],
     manual_ui_textures: set[str],
@@ -2572,6 +2644,7 @@ def run_nvtt_exports_or_die(
         "upscaler_type",
         "non_upscaled_version",
         "ctxr3_converted",
+        "npot_resized",
     ]
     conversion_header = ensure_csv_header_has_columns(list(conversion_header), needed_cols)
 
@@ -2582,12 +2655,12 @@ def run_nvtt_exports_or_die(
     tmp_rgb_dir = PARAM_FOLDER / "_tmp_rgb_only"
     progress = ProgressTracker(len(missing), "Param export")
 
-    def worker(img_path: Path) -> tuple[Path, bool, str, str, str, bool, str, bool, bool, str, str, str]:
+    def worker(img_path: Path) -> tuple[Path, bool, str, str, str, bool, str, bool, bool, str, str, str, bool]:
         stem_lower = img_path.stem.lower()
         out_dds = PARAM_FOLDER / f"{stem_lower}.dds"
         out_ctxr = PARAM_FOLDER / f"{stem_lower}.ctxr"
 
-        tmp_rgb_path: Path | None = None
+        tmp_paths: list[Path] = []
         effective_upscaled = get_effective_upscaled_flag_for_stem(
             stem_lower,
             staging_is_upscaled,
@@ -2616,15 +2689,13 @@ def run_nvtt_exports_or_die(
                 pass
 
         def cleanup_tmp_rgb():
-            nonlocal tmp_rgb_path
-            if tmp_rgb_path is None:
-                return
-            try:
-                if tmp_rgb_path.is_file():
-                    tmp_rgb_path.unlink()
-            except Exception:
-                pass
-            tmp_rgb_path = None
+            while tmp_paths:
+                tmp_path = tmp_paths.pop()
+                try:
+                    if tmp_path.is_file():
+                        tmp_path.unlink()
+                except Exception:
+                    pass
 
         used_nomips = get_effective_used_nomips_for_stem(
             stem_lower,
@@ -2636,6 +2707,15 @@ def run_nvtt_exports_or_die(
         )
 
         dpf_to_use = DPF_NOMIPS if used_nomips else DPF_DEFAULT
+        npot_resized = get_effective_npot_resized_for_stem(
+            stem_lower,
+            staging_is_upscaled,
+            nonupscaled_override_stems,
+            image_origin_by_name,
+            image_dimensions_by_name,
+            ctxr3_required_stems,
+            used_nomips,
+        )
 
         before_hash = image_hash_by_name.get(stem_lower, "").lower()
         if not before_hash:
@@ -2656,6 +2736,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         origin_folder = image_origin_by_name.get(stem_lower, "")
@@ -2677,6 +2758,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         opacity_expected = image_opacity_expected_by_name.get(stem_lower, False)
@@ -2685,6 +2767,7 @@ def run_nvtt_exports_or_die(
         if opacity_expected:
             try:
                 tmp_rgb_path = make_temp_rgb_only_copy_or_die(img_path, tmp_rgb_dir)
+                tmp_paths.append(tmp_rgb_path)
                 nvtt_input_path = tmp_rgb_path
             except Exception as e:
                 cleanup_tmp_rgb()
@@ -2704,6 +2787,33 @@ def run_nvtt_exports_or_die(
                     upscaler_version,
                     upscaler_type,
                     non_upscaled_version,
+                    npot_resized,
+                )
+
+        if npot_resized:
+            try:
+                tmp_pot_path = make_temp_pot_resized_copy_or_die(nvtt_input_path, tmp_rgb_dir, stem_lower)
+                tmp_paths.append(tmp_pot_path)
+                nvtt_input_path = tmp_pot_path
+            except Exception as e:
+                cleanup_tmp_rgb()
+                if effective_upscaled:
+                    delete_upscaled_image_pair_if_exists(img_path)
+                cleanup_param_ctxr()
+                return (
+                    img_path,
+                    False,
+                    f"Failed creating POT-resized temp copy: {e}",
+                    before_hash,
+                    "",
+                    used_nomips,
+                    origin_folder,
+                    opacity_expected,
+                    effective_upscaled,
+                    upscaler_version,
+                    upscaler_type,
+                    non_upscaled_version,
+                    npot_resized,
                 )
 
         nvtt_args = [
@@ -2743,6 +2853,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         if nvtt.returncode != 0:
@@ -2767,6 +2878,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         if not out_dds.is_file():
@@ -2787,6 +2899,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         ctxr_args = [str(CTXR_TOOL_EXE), str(out_dds)]
@@ -2823,6 +2936,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         ctxr_out = (ctxr.stdout or "").strip()
@@ -2851,6 +2965,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         if not ctxr_ok:
@@ -2874,6 +2989,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         if not out_ctxr.is_file():
@@ -2894,6 +3010,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         try:
@@ -2916,6 +3033,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         staging_ctxr = STAGING_FOLDER / out_ctxr.name
@@ -2943,6 +3061,7 @@ def run_nvtt_exports_or_die(
                     upscaler_version,
                     upscaler_type,
                     non_upscaled_version,
+                    npot_resized,
                 )
 
             try:
@@ -2965,6 +3084,7 @@ def run_nvtt_exports_or_die(
                         upscaler_version,
                         upscaler_type,
                         non_upscaled_version,
+                        npot_resized,
                     )
             except Exception as e:
                 cleanup_tmp_rgb()
@@ -2984,6 +3104,7 @@ def run_nvtt_exports_or_die(
                     upscaler_version,
                     upscaler_type,
                     non_upscaled_version,
+                    npot_resized,
                 )
 
             try:
@@ -3006,6 +3127,7 @@ def run_nvtt_exports_or_die(
                     upscaler_version,
                     upscaler_type,
                     non_upscaled_version,
+                    npot_resized,
                 )
 
         except Exception as e:
@@ -3026,6 +3148,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             )
 
         cleanup_tmp_rgb()
@@ -3045,6 +3168,7 @@ def run_nvtt_exports_or_die(
             upscaler_version,
             upscaler_type,
             non_upscaled_version,
+            npot_resized,
         )
 
     ok = 0
@@ -3075,6 +3199,7 @@ def run_nvtt_exports_or_die(
             nuv = (r.get("non_upscaled_version") or "").strip()
             meta_present = bool(uv and ut)
             ctxr3_converted_val = bool_from_csv((r.get("ctxr3_converted") or "").strip()) if (r.get("ctxr3_converted") or "").strip() else False
+            npot_resized_val = bool_from_csv((r.get("npot_resized") or "").strip()) if (r.get("npot_resized") or "").strip() else False
 
             conversion_map[name] = (
                 (r.get("before_hash") or "").lower(),
@@ -3088,6 +3213,7 @@ def run_nvtt_exports_or_die(
                 nuv,
                 meta_present,
                 ctxr3_converted_val,
+                npot_resized_val,
                 False,
             )
 
@@ -3111,6 +3237,7 @@ def run_nvtt_exports_or_die(
                 upscaler_version,
                 upscaler_type,
                 non_upscaled_version,
+                npot_resized,
             ) = fut.result()
 
             if success:
@@ -3133,6 +3260,7 @@ def run_nvtt_exports_or_die(
                         "upscaler_type": upscaler_type,
                         "non_upscaled_version": non_upscaled_version,
                         "ctxr3_converted": "false",
+                        "npot_resized": bool_to_csv(npot_resized),
                     }
                 )
             else:
@@ -3171,7 +3299,7 @@ def prune_csv_entries_missing_staged_ctxr(
     conversion_csv_path: Path,
     conversion_header: list[str],
     conversion_rows: list[dict[str, str]],
-    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool]],
+    conversion_map: dict[str, tuple[str, str, bool, str, bool, bool, str, str, str, bool, bool, bool, bool]],
 ) -> int:
     staged_ctxr_stems: set[str] = set()
     for p in STAGING_FOLDER.iterdir():
@@ -3476,6 +3604,7 @@ def main() -> int:
                 "upscaler_type",
                 "non_upscaled_version",
                 "ctxr3_converted",
+                "npot_resized",
             ]
 
         needed_cols = [
@@ -3490,6 +3619,7 @@ def main() -> int:
             "upscaler_type",
             "non_upscaled_version",
             "ctxr3_converted",
+            "npot_resized",
         ]
         conversion_header = ensure_csv_header_has_columns(list(conversion_header), needed_cols)
 
@@ -3545,6 +3675,8 @@ def main() -> int:
 
                 if "ctxr3_converted" not in row or not (row.get("ctxr3_converted") or "").strip():
                     row["ctxr3_converted"] = "false"
+                if "npot_resized" not in row or not (row.get("npot_resized") or "").strip():
+                    row["npot_resized"] = "false"
 
             write_conversion_csv_atomic(conversion_csv, conversion_header, conversion_rows)
             log(f"[CSV] Rewrote {CONVERSION_CSV} to add missing columns")
@@ -3571,7 +3703,7 @@ def main() -> int:
         case_mismatch_names: set[str] = set()
 
         for name, entry in conversion_map.items():
-            filename_has_upper = bool(entry[11])
+            filename_has_upper = bool(entry[12])
             if filename_has_upper:
                 case_mismatch_names.add(name)
 
@@ -3690,6 +3822,7 @@ def main() -> int:
             csv_non_upscaled_version,
             csv_upscaler_meta_present,
             csv_ctxr3_converted,
+            csv_npot_resized,
             csv_filename_has_upper,
         ) in conversion_map.items():
             img_before = image_hash_by_name.get(name)
@@ -3730,6 +3863,16 @@ def main() -> int:
             opacity_ok = (csv_opacity_stripped == img_opacity_expected)
             upscaled_ok = (csv_upscaled == current_upscaled)
             non_upscaled_ok = ((csv_non_upscaled_version or "").strip() == current_non_upscaled_version)
+            current_npot_resized = get_effective_npot_resized_for_stem(
+                name,
+                is_upscaled_run,
+                demastered_nonupscaled_override_stems,
+                image_origin_by_name,
+                image_dimensions_by_name,
+                ctxr3_required_stems,
+                img_used_nomips,
+            )
+            npot_resized_ok = (csv_npot_resized == current_npot_resized)
 
             if current_upscaled:
                 upscaler_ok = bool(
@@ -3746,7 +3889,7 @@ def main() -> int:
             if (not current_upscaled) and (name in ctxr3_required_stems):
                 ctxr3_ok = (csv_ctxr3_converted is True)
 
-            if not (origin_ok and mip_ok and before_ok and opacity_ok and upscaled_ok and upscaler_ok and non_upscaled_ok and ctxr3_ok):
+            if not (origin_ok and mip_ok and before_ok and opacity_ok and upscaled_ok and upscaler_ok and non_upscaled_ok and ctxr3_ok and npot_resized_ok):
                 early_mismatch_names.add(name)
 
         delete_failures = 0
@@ -3840,6 +3983,7 @@ def main() -> int:
                 image_origin_by_name=image_origin_by_name,
                 image_used_nomips_by_name=image_used_nomips_by_name,
                 image_opacity_expected_by_name=image_opacity_expected_by_name,
+                image_dimensions_by_name=image_dimensions_by_name,
                 workers=workers,
                 no_mip_regexes=no_mip_regexes,
                 manual_ui_textures=manual_ui_textures,
@@ -3899,6 +4043,7 @@ def main() -> int:
                 expected_non_upscaled_version,
                 expected_upscaler_meta_present,
                 expected_ctxr3_converted,
+                expected_npot_resized,
                 expected_filename_has_upper,
             ) = conversion_map[name]
 
@@ -4034,6 +4179,7 @@ def main() -> int:
                     expected_non_upscaled_version,
                     expected_upscaler_meta_present,
                     expected_ctxr3_converted,
+                    expected_npot_resized,
                     expected_filename_has_upper,
                 ) = conversion_map[name]
 
@@ -4054,6 +4200,7 @@ def main() -> int:
                         f"  expected_non_upscaled_version={(expected_non_upscaled_version or '').strip() or '<missing>'} "
                         f"actual_non_upscaled_version={current_non_upscaled_version}"
                     )
+                    log(f"  expected_npot_resized={bool_to_csv(expected_npot_resized)} actual_npot_resized={bool_to_csv(current_npot_resized)}")
 
                     if current_upscaled:
                         log(f"  expected_upscaler_version={(expected_upscaler_version or '').strip() or '<missing>'} actual_upscaler_version={current_upscaler_version}")
@@ -4131,6 +4278,7 @@ def main() -> int:
             image_origin_by_name=image_origin_by_name,
             image_used_nomips_by_name=image_used_nomips_by_name,
             image_opacity_expected_by_name=image_opacity_expected_by_name,
+            image_dimensions_by_name=image_dimensions_by_name,
             workers=workers,
             no_mip_regexes=no_mip_regexes,
             manual_ui_textures=manual_ui_textures,

@@ -6,12 +6,16 @@
 #include "common.hpp"
 #include "logging.hpp"
 #include "version.h"
-
+#include <array>
+#include <optional>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 //Community Bugfix hashes
-constexpr const char* CBFC_BASE_FLATLIST_WIN_COL_ORANGE2_CTXR_SHA1 = "11d03110d40b42adeafde2fa5f5cf65f27d6fc52";
-constexpr const char* CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "e3b5923c9ce88a173a49d26e3bb4de2b77303b50";
-constexpr const char* CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "33003443c78e1162ef71d4a4521f1c02ceb54f6c";
+constexpr const char* CBFC_BASE_FLATLIST_WIN_chr1_05_alp_sub_ovl_CTXR_SHA1 = "de2355f3429cd21ff10e5e16301462ea731981f9";
+constexpr const char* CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "2e3343bc51314b683da0743b7b82cfb5d2c04318";
+constexpr const char* CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "5d6c0d70ef7b829cde115babf1e65b6cfdd4ca69";
 
 
 constexpr const char* CBFC_2x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "16d11c6f3800c098e4c7a643dc8b837136cce7be";
@@ -19,16 +23,14 @@ constexpr const char* CBFC_4x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "a545a73
 
 
 
-//Third party mod file hashes
+//Third party mod file hashes.
 constexpr const char* LIQMIX_SLOP_4X_ORANGE2_CTXR_SHA1 = "4ecda248b079ee426262a23b64df6cb05a249088";
 constexpr const char* LIQMIX_SLOP_2X_ORANGE2_CTXR_SHA1 = "96ba1191c0da112d355bf510dcb3828f1183d1b5";
 
 constexpr const char* HIGHER_RES_KOJIPRO_ZOE_POSTER_CTXR_SHA1 = "ce3fe5bd55aebb046103b5dba1cffa736b08abd2";
 
 constexpr const char* GUYONACHAIR_HAIRFIX_V1_sna_hair1_alp_ovl_CTXR_SHA1 = "ac57554dd8fd091650c39c6698e551890af7cab1";
-constexpr const char* GUYONACHAIR_HAIRFIX_V1_sna_hair2_alp_ovl_CTXR_SHA1 = "68ab590796fd3849d64a7fa2c7c93960f2b89f30";
 constexpr const char* GUYONACHAIR_HAIRFIX_V1_sna_hair2dt_alp_ovl_CTXR_SHA1 = "862e917ccaf23e9bc9f7f841fe84dda00c70814b";
-constexpr const char* GUYONACHAIR_HAIRFIX_V1_sna_hair3_CTXR_SHA1 = "f8ae30ee716bd43ed7af1e5b8d78a93d32711668";
 
 constexpr const char* GUYONACHAIR_HAIRFIX_V2_sna_hair1_alp_ovl_CTXR_SHA1 = "7daf7a08fc41da6d2697315db62de1b44a55d84d";
 constexpr const char* GUYONACHAIR_HAIRFIX_V2_sna_hair2_alp_ovl_CTXR_SHA1 = "3042e939b7900fc0d9afa84a51d13864336c3b52";
@@ -44,8 +46,32 @@ constexpr const char* VANILLA_p010_01_p01g_VAMP_SEAL_SDT_SHA1 = "301dcbda56107c7
 
 // todo - do all this shit in futures
 // detect outdated ui files
-// detect guy on a chair's old hair
 // 
+
+namespace
+{
+
+
+    std::string Sha1ToString(const std::optional<std::array<std::uint8_t, 20>>& sha1)
+    {
+        if (!sha1.has_value())
+        {
+            return {};
+        }
+
+        std::ostringstream oss;
+        oss << std::hex << std::setfill('0');
+
+        for (std::uint8_t b : *sha1)
+        {
+            oss << std::setw(2) << static_cast<int>(b);
+        }
+
+        return oss.str();
+    }
+}
+
+
 
 void VerifyInstallation::Check()
 {
@@ -93,7 +119,7 @@ void VerifyInstallation::Check()
                 });
         };
 
-    const std::filesystem::path baseColOrange2Path = sExePath / "textures" / "flatlist" / "_win" / "col_orange2.bmp.ctxr";
+    const std::filesystem::path baseChr1_05_alp_sub_ovl2Path = sExePath / "textures" / "flatlist" / "_win" / "chr1_05_alp_sub_ovl.bmp.ctxr";
     const std::filesystem::path ovrStmColOrange2Path = sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "col_orange2.bmp.ctxr";
     const std::filesystem::path seculityCardPath = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "seculitycard_lv2_alp.bmp.ctxr";
     const std::filesystem::path betterAudioCheckPath = sExePath / "us" / "demo" / "_bp" / "p010_01_p01g.sdt";
@@ -105,9 +131,7 @@ void VerifyInstallation::Check()
     const std::filesystem::path snakeHair3_Path = sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair3.bmp.ctxr";
 
     const std::filesystem::path v1_snakeHair1_Path = sExePath / "textures" / "flatlist" / "_win" / "sna_hair1_alp_ovl.bmp.ctxr";
-    const std::filesystem::path v1_snakeHair2_Path = sExePath / "textures" / "flatlist" / "_win" / "sna_hair2_alp_ovl.bmp.ctxr";
     const std::filesystem::path v1_snakeHair2DT_Path = sExePath / "textures" / "flatlist" / "_win" / "sna_hair2dt_alp_ovl.bmp.ctxr";
-    const std::filesystem::path v1_snakeHair3_Path = sExePath / "textures" / "flatlist" / "_win" / "sna_hair3.bmp.ctxr";
 
     const std::filesystem::path afevis_old_decensor_d04t_manifest_Path = sExePath / "eu" / "stage" / "d04t" / "bp_assets.txt";
 
@@ -118,7 +142,7 @@ void VerifyInstallation::Check()
             return result.exists && result.sha1.has_value() && Util::SHA1Equals(*result.sha1, expected);
         };
 
-    auto baseColOrange2Future = startHashTask(baseColOrange2Path);
+    auto baseChr1_05_alp_sub_ovl2Future = startHashTask(baseChr1_05_alp_sub_ovl2Path);
     auto ovrStmColOrange2Future = startHashTask(ovrStmColOrange2Path);
     auto seculityCardFuture = startHashTask(seculityCardPath);
     auto betterAudioFuture = startHashTask(betterAudioCheckPath);
@@ -128,12 +152,10 @@ void VerifyInstallation::Check()
     auto snakeHair2DT_Future = startHashTask(snakeHair2DT_Path);
     auto snakeHair3_Future = startHashTask(snakeHair3_Path);
     auto v1_snakeHair1_Future = startHashTask(v1_snakeHair1_Path);
-    auto v1_snakeHair2_Future = startHashTask(v1_snakeHair2_Path);
     auto v1_snakeHair2DT_Future = startHashTask(v1_snakeHair2DT_Path);
-    auto v1_snakeHair3_Future = startHashTask(v1_snakeHair3_Path);
     auto afevisOldDecensorD04TManifest_Future = startHashTask(afevis_old_decensor_d04t_manifest_Path);
 
-    const FileHashResult baseColOrange2Result = baseColOrange2Future.get();
+    const FileHashResult baseChr1_05_alp_sub_ovl2Result = baseChr1_05_alp_sub_ovl2Future.get();
     const FileHashResult ovrStmColOrange2Result = ovrStmColOrange2Future.get();
     const FileHashResult seculityCardResult = seculityCardFuture.get();
     const FileHashResult betterAudioResult = betterAudioFuture.get();
@@ -143,16 +165,14 @@ void VerifyInstallation::Check()
     const FileHashResult snakeHair2DT_Result = snakeHair2DT_Future.get();
     const FileHashResult snakeHair3_Result = snakeHair3_Future.get();
     const FileHashResult v1_snakeHair1_Result = v1_snakeHair1_Future.get();
-    const FileHashResult v1_snakeHair2_Result = v1_snakeHair2_Future.get();
     const FileHashResult v1_snakeHair2DT_Result = v1_snakeHair2DT_Future.get();
-    const FileHashResult v1_snakeHair3_Result = v1_snakeHair3_Future.get();
     const FileHashResult afevisOldDecensorD04TManifest_Result = afevisOldDecensorD04TManifest_Future.get();
 
 
     // ------------------------------------------------------
     // MGS2: Verify Afevis Bugfix Collection (base) installation
     // ------------------------------------------------------
-    if (baseColOrange2Result.exists && !hashEquals(baseColOrange2Result, CBFC_BASE_FLATLIST_WIN_COL_ORANGE2_CTXR_SHA1))
+    if (baseChr1_05_alp_sub_ovl2Result.exists && !hashEquals(baseChr1_05_alp_sub_ovl2Result, CBFC_BASE_FLATLIST_WIN_chr1_05_alp_sub_ovl_CTXR_SHA1))
     {
         spdlog::warn("------------------- ! Community Bugfix Compilation (Base) Missing ! -------------------");
         spdlog::warn("Community Bugfix Compilation installation issue detected, base package is NOT found.");
@@ -345,32 +365,56 @@ void VerifyInstallation::Check()
 
     //snakeHair1_Result is the community bugfixed file. the rest are leftovers
     { 
-        if ((snakeHair1_Result.exists && (hashEquals(snakeHair1_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair1_alp_ovl_CTXR_SHA1) || hashEquals(snakeHair1_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair1_alp_ovl_CTXR_SHA1))) || //ovr_stm/ovr_eu
-            (v1_snakeHair1_Result.exists && hashEquals(v1_snakeHair1_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair1_alp_ovl_CTXR_SHA1)) ||         //v1 in flatlist/_win
-            (v1_snakeHair2_Result.exists && hashEquals(v1_snakeHair2_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair2_alp_ovl_CTXR_SHA1)) ||         //v1 in flatlist/_win
-            (v1_snakeHair2DT_Result.exists && hashEquals(v1_snakeHair2DT_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair2dt_alp_ovl_CTXR_SHA1)) ||   //v1 in flatlist/_win
-            (v1_snakeHair3_Result.exists && hashEquals(v1_snakeHair3_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair3_CTXR_SHA1)))                   //v1 in flatlist/_win
+        const FileHashResult* detected = nullptr;
+
+        if (snakeHair1_Result.exists &&
+            (hashEquals(snakeHair1_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair1_alp_ovl_CTXR_SHA1) ||
+             hashEquals(snakeHair1_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair1_alp_ovl_CTXR_SHA1)))
+        {
+            detected = &snakeHair1_Result;
+        }
+        else if (v1_snakeHair1_Result.exists &&
+                 hashEquals(v1_snakeHair1_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair1_alp_ovl_CTXR_SHA1))
+        {
+            detected = &v1_snakeHair1_Result;
+        }
+        else if (v1_snakeHair2DT_Result.exists &&
+                 hashEquals(v1_snakeHair2DT_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair2dt_alp_ovl_CTXR_SHA1))
+        {
+            detected = &v1_snakeHair2DT_Result;
+        }
+
+        if (detected)
         {
             spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
             spdlog::warn("Community Bugfix Compilation installation issue detected.");
-            spdlog::warn("Guy on a Chair's Snake hair fix mod has been detected. ({})", snakeHair1_Result.path.string());
+
+            // handle optional sha1 safely
+            std::string sha1Str = detected->sha1
+                ? Sha1ToString(*detected->sha1)
+                : "NO_SHA1";
+
+            spdlog::warn("Guy on a Chair's Snake hair fix mod has been detected. ({} - {})",
+                         detected->path.string(), sha1Str);
+
             spdlog::warn("This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.");
             spdlog::warn("Please reinstall the Community Bugfix Compilation (Base) to ensure correct behavior.");
             spdlog::warn("Or, if you are using a mod manager, please remove Guy on a Chair's Snake hair fix mod.");
             spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
+
             Logging::ShowConsole();
+
             std::cout << "Community Bugfix Compilation installation issue detected.\n"
                 "----------------------------------------\n"
                 "Guy on a Chair's Snake hair fix mod has been detected.\n"
-                "(" << snakeHair1_Result.path.string() << ")\n"
-                "\n"
-                "This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.\n"
-                "\n"
+                "(" << detected->path.string() << " - " << sha1Str << ")\n\n"
+                "This mod has been integrated directly into the MGS2 Community Bugfix Mod and the standalone version is no longer required.\n\n"
                 "Please reinstall the Community Bugfix Compilation (Base) to ensure correct behavior.\n"
-                "Or, if you are using a mod manager, please remove Guy on a Chair's Snake hair fix mod." << std::endl;
+                "Or, if you are using a mod manager, please remove Guy on a Chair's Snake hair fix mod."
+                << std::endl;
         }
 
-        if (snakeHair2_Result.exists && (hashEquals(snakeHair2_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair2_alp_ovl_CTXR_SHA1) || hashEquals(snakeHair2_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair2_alp_ovl_CTXR_SHA1)))
+        if (snakeHair2_Result.exists && (hashEquals(snakeHair2_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair2_alp_ovl_CTXR_SHA1)))
         {
             spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
             spdlog::warn("Community Bugfix Compilation installation issue detected.");
@@ -392,7 +436,7 @@ void VerifyInstallation::Check()
             std::filesystem::remove(snakeHair2DT_Result.path);
         }
 
-        if (snakeHair3_Result.exists && (hashEquals(snakeHair3_Result, GUYONACHAIR_HAIRFIX_V1_sna_hair3_CTXR_SHA1) || hashEquals(snakeHair3_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair3_CTXR_SHA1)))
+        if (snakeHair3_Result.exists && (hashEquals(snakeHair3_Result, GUYONACHAIR_HAIRFIX_V2_sna_hair3_CTXR_SHA1)))
         {
             spdlog::warn("------------------- ! Community Bugfix Compilation - Installation Issue ! -------------------");
             spdlog::warn("Community Bugfix Compilation installation issue detected.");

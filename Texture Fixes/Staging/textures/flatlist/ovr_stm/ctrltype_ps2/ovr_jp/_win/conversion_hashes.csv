@@ -1,9 +1,9 @@
-filename,before_hash,ctxr_hash,mipmaps,origin_folder,opacity_stripped,upscaled,upscaler_version,upscaler_type,ctxr3_converted,non_upscaled_version
-00100d1b,11aa05d051855bd49b15d22d8dff83a6d761e5f0,765acd396485fa23c41c5f7f23d78a53624bad2f,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,3
-0030f164,d6590bec4140062543624a0ed6c06aa50d730059,4340832f570287b536a73d28b63f8546077bd566,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,3
-0038f08e,109d862fb3274095a795c270b7847c74a30fb27b,7215221735d861cdcf204357ab3b371abef2fc9b,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,3
-005480d6,f58330fb742d0e302e27c76b10d22cb82c4bb6a2,37855750b8c0d34ff02b68e04f090f3f9cfb4551,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,3
-009fa21b,bd43860cd134254ec84106c4fae9e43f16aa5414,d3a28d8bcff78e9212c1b5b8cb3997438d03a9b5,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,3
-00aeebfc,d7ec37731ef6dd297f4691177dca8f117724cf0e,bb65e3c6ab335ef5e2c14ecaf54459367390efa7,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,3
-00be80b9,56f8646abdd9650a377b90af7f735dedf78bd4ce,1905a4f03d79b88bb34bd797eb6a66b198c79954,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,3
-00c5a3fd,e5f9bbffdb3d2dc61228d85f8a5bca86ef098315,ca69f2f28619c021ed82c7be85bd8b92320cb399,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,3
+filename,before_hash,ctxr_hash,mipmaps,origin_folder,opacity_stripped,upscaled,upscaler_version,upscaler_type,ctxr3_converted,non_upscaled_version,npot_resized
+00100d1b,11aa05d051855bd49b15d22d8dff83a6d761e5f0,765acd396485fa23c41c5f7f23d78a53624bad2f,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,4,false
+0030f164,d6590bec4140062543624a0ed6c06aa50d730059,4340832f570287b536a73d28b63f8546077bd566,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,4,false
+0038f08e,109d862fb3274095a795c270b7847c74a30fb27b,7215221735d861cdcf204357ab3b371abef2fc9b,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,4,false
+005480d6,f58330fb742d0e302e27c76b10d22cb82c4bb6a2,37855750b8c0d34ff02b68e04f090f3f9cfb4551,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,4,false
+009fa21b,bd43860cd134254ec84106c4fae9e43f16aa5414,d3a28d8bcff78e9212c1b5b8cb3997438d03a9b5,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,4,false
+00aeebfc,d7ec37731ef6dd297f4691177dca8f117724cf0e,bb65e3c6ab335ef5e2c14ecaf54459367390efa7,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,4,false
+00be80b9,56f8646abdd9650a377b90af7f735dedf78bd4ce,1905a4f03d79b88bb34bd797eb6a66b198c79954,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,4,false
+00c5a3fd,e5f9bbffdb3d2dc61228d85f8a5bca86ef098315,ca69f2f28619c021ed82c7be85bd8b92320cb399,false,Self Remade\Finalized\Dont demaster\UI\ctrltype_ps2\ovr_jp\_win,false,false,0,none,true,4,false

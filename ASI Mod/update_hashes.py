@@ -16,8 +16,8 @@ CPP_REL_PATH = Path(r"ASI Mod\src\bugfix_mod_checks.cpp")
 TARGETS = [
     # (relative path from git root, constant name in cpp)
     (
-        Path(r"Texture Fixes\Staging\textures\flatlist\_win\col_orange2.bmp.ctxr"),
-        "CBFC_BASE_FLATLIST_WIN_COL_ORANGE2_CTXR_SHA1",
+        Path(r"Texture Fixes\Staging\textures\flatlist\_win\chr1_05_alp_sub_ovl.bmp.ctxr"),
+        "CBFC_BASE_FLATLIST_WIN_chr1_05_alp_sub_ovl_CTXR_SHA1",
     ),
     (
         Path(r"Texture Fixes\Staging - 2x Upscaled\textures\flatlist\ovr_stm\_win\col_orange2.bmp.ctxr"),
