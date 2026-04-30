@@ -178,7 +178,11 @@ Recommended Mod Load Order (from first to last):
 
 - Fixed banding on Pliskin's hairline after Vamp encounter. [2011 HDC] | Contributed by [IroquoisPliskin1972](https://www.nexusmods.com/profile/IroquoisPliskin1972/mods)
 
-- Fixed alpha ordering issues on the MO Disc. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
+- Fixed transparency & texture UV issues on the MO Disc in several cutscenes. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
+
+- Fixed flipped textures in Tanker Bridge & Vamp Boss Fight room. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
+
+- Fixed most nodes having a small, completely detached screen floating above their left side. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
 
 <br>
 
