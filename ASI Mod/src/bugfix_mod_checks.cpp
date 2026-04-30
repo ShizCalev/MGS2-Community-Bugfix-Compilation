@@ -6,11 +6,7 @@
 #include "common.hpp"
 #include "logging.hpp"
 #include "version.h"
-#include <array>
-#include <optional>
-#include <string>
-#include <sstream>
-#include <iomanip>
+
 
 //Community Bugfix hashes
 constexpr const char* CBFC_BASE_FLATLIST_WIN_chr1_05_alp_sub_ovl_CTXR_SHA1 = "de2355f3429cd21ff10e5e16301462ea731981f9";
