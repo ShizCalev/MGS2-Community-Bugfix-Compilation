@@ -12,7 +12,6 @@ TARGET_REPOS = [
     r"C:\Development\Git\MGS2-Upscaled-UI-Textures",
 ]
 
-BRANCHES = ["main", "master"]
 MAX_WORKERS = max(1, min(len(TARGET_REPOS), os.cpu_count() or 2))
 
 print_lock = Lock()
@@ -56,7 +55,7 @@ def git_output(cmd, cwd):
 
 def get_submodule_paths(repo_path):
     result = subprocess.run(
-        ["git", "submodule", "status"],
+        ["git", "submodule", "status", "--recursive"],
         cwd=repo_path,
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
@@ -86,36 +85,42 @@ def repo_exists_and_is_git(repo_path):
     return os.path.exists(git_dir)
 
 
-def try_checkout_and_pull_branch(repo_path):
-    for branch in BRANCHES:
-        local_branch = subprocess.run(
-            ["git", "rev-parse", "--verify", branch],
-            cwd=repo_path,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            check=False,
-        )
+def pull_current_branch(repo_path):
+    branch = git_output(["git", "branch", "--show-current"], cwd=repo_path)
 
-        if local_branch.returncode == 0:
-            log(f"[+] Checking out existing branch '{branch}' in: {repo_path}")
-            run(["git", "checkout", branch], cwd=repo_path)
-            run(["git", "pull", "origin", branch], cwd=repo_path)
-            return branch
+    if not branch:
+        log(f"[!] Detached HEAD, not switching branches or pulling: {repo_path}")
+        return None
 
-        remote_branch = subprocess.run(
-            ["git", "ls-remote", "--exit-code", "--heads", "origin", branch],
-            cwd=repo_path,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            check=False,
-        )
+    log(f"[+] Staying on current branch '{branch}' in: {repo_path}")
 
-        if remote_branch.returncode == 0:
-            log(f"[+] Creating local tracking branch '{branch}' in: {repo_path}")
-            run(["git", "checkout", "-B", branch, f"origin/{branch}"], cwd=repo_path)
-            return branch
+    run(["git", "fetch", "origin"], cwd=repo_path)
 
-    return None
+    upstream = git_output(
+        ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
+        cwd=repo_path,
+    )
+
+    if upstream:
+        run(["git", "pull", "--ff-only"], cwd=repo_path)
+        return branch
+
+    remote_branch = subprocess.run(
+        ["git", "ls-remote", "--exit-code", "--heads", "origin", branch],
+        cwd=repo_path,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+
+    if remote_branch.returncode != 0:
+        log(f"[!] Current branch '{branch}' has no origin branch, not pulling: {repo_path}")
+        return branch
+
+    run(["git", "branch", "--set-upstream-to", f"origin/{branch}", branch], cwd=repo_path)
+    run(["git", "pull", "--ff-only"], cwd=repo_path)
+
+    return branch
 
 
 def update_submodule(submodule_path):
@@ -128,13 +133,12 @@ def update_submodule(submodule_path):
     if old_commit:
         log(f"[+] Current commit: {old_commit}")
 
-    run(["git", "fetch", "origin"], cwd=submodule_path)
+    pull_current_branch(submodule_path)
 
-    branch = try_checkout_and_pull_branch(submodule_path)
-    if branch is None:
-        log(f"[!] No main/master branch found, leaving current HEAD as-is: {submodule_path}")
-
-    run(["git", "submodule", "update", "--recursive", "--remote", "--init"], cwd=submodule_path)
+    run(
+        ["git", "submodule", "update", "--recursive", "--remote", "--init"],
+        cwd=submodule_path,
+    )
 
     new_commit = git_output(["git", "rev-parse", "HEAD"], cwd=submodule_path)
     if new_commit:
@@ -157,10 +161,10 @@ def process_repo(repo_path):
         log(f"[+] Repo HEAD: {current_commit}")
 
     run(["git", "submodule", "init"], cwd=repo_path)
-    run(["git", "submodule", "update", "--recursive", "--remote", "--init"], cwd=repo_path)
+    run(["git", "submodule", "update", "--recursive", "--init"], cwd=repo_path)
 
     submodules = get_submodule_paths(repo_path)
-    log(f"[+] Found {len(submodules)} top-level submodule(s)")
+    log(f"[+] Found {len(submodules)} recursive submodule(s)")
 
     for submodule_path in submodules:
         update_submodule(submodule_path)

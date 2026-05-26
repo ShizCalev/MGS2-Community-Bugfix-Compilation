@@ -4,3 +4,5 @@ water tight doors
 finish existing codec videos
 
 fix mid poly m9 uv on hammer group
+
+fix seam on head of red headed us marine

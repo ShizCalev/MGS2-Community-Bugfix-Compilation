@@ -156,7 +156,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     }
     else if (ul_reason_for_call == DLL_PROCESS_DETACH)
     {
-        spdlog::info("DLL_PROCESS_DETACH called, shutting down {}.", sFixName);
         spdlog::shutdown();
     }
 
