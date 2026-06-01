@@ -26,14 +26,13 @@ ERROR_LOG_PATH = "conversion_error_log.txt"
 # ==========================================================
 # PARAM EXPORT CONFIG
 # ==========================================================
-PARAM_FOLDER = Path(r"J:\Mega\Games\MG Master Collection\Self made mods\Tooling\CTXR File Conversion\mgs2-param")
+PARAM_FOLDER = Path(r"C:\Development\Git\CTXR-Converter")
 NVTT_EXPORT_EXE = Path(r"C:\Program Files\NVIDIA Corporation\NVIDIA Texture Tools\nvtt_export.exe")
 
 DPF_DEFAULT = Path(r"J:\Mega\Games\MG Master Collection\Self made mods\Tooling\CTXR File Conversion\mgs_kaiser.dpf")
 DPF_NOMIPS = Path(r"J:\Mega\Games\MG Master Collection\Self made mods\Tooling\CTXR File Conversion\mgs_nomips.dpf")
 
-CTXR_TOOL_EXE = Path(r"J:\Mega\Games\MG Master Collection\Self made mods\Tooling\CTXR File Conversion\mgs2-param\CtxrTool.exe")
-CTXR_TOOL_SUCCESS_LINE = "Running CtxrTool v1.3: Visit https://github.com/Jayveer/CtxrTool for updates:"
+CTXR_TOOL_PY = Path(r"C:\Development\Git\CTXR-Converter\ctxr3.py")
 
 NO_MIP_REGEX_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\no_mip_regex.txt")
 MANUAL_UI_TEXTURES_PATH = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\ps2 textures\manual_ui_textures.txt")
@@ -73,9 +72,10 @@ CHAINNER_PROJECT_4X_STRIPPED_OPACITY_DEMASTERED = Path(r"C:\Development\Git\Afev
 # 1 = corrected opaque texture alpha stripping for upscaling
 # 2 = wavelet color fix!!!!! oh dang
 # 3 = clamped alpha instead of split
-UPSCALE_PROCESS_VERSION = "4"
+# 5 = ctxr4
+UPSCALE_PROCESS_VERSION = "5"
 
-# - normal non-upscaled nvtt -> CtxrTool flow
+# - normal non-upscaled nvtt -> ctxrtool.py flow
 # - non-upscaled ctxr3 flow
 # - demastered upscaled runs where selected stems are forced into NON-upscaled handling
 #
@@ -83,11 +83,22 @@ UPSCALE_PROCESS_VERSION = "4"
 # 0 = v1 release
 # 1 = fixed crash in ovr_jp's w01a01box. almost all opaque have a different hash too, so reconverted everything (i'd assume my mtime fuckery messed something up at some point.)
 # 2 = alpha clamped instead of split.
-NON_UPSCALED_PROCESS_VERSION = "4"
+# 3 = npot resizing
+# 4 = prebake dxt5 outputs
+# 5 = ctxr4
+NON_UPSCALED_PROCESS_VERSION = "5"
 
 SKIP_GOOD_ALPHA_FILES = True #if true, 128 alpha is treated as opaque. if false, alpha channel gets stripped entirely if all alpha >= 128
 SPAM_LOG_WITH_GOOD_ALPHA = False
-RESIZE_NON_UPSCALED_NPOT_TO_POT_WITH_LANCZOS = True
+
+# Power-of-two resizing by workflow.
+RESIZE_NON_UPSCALED_NVTT_TO_POT_WITH_LANCZOS = False
+RESIZE_UPSCALED_CHAINNER_TO_POT_WITH_LANCZOS = False
+
+# some textures have dimensions too close to POT, and NVTT will silently export a corrupted texture instead of warning you.
+# gunship.bmp, which is 512x127 is one such texture.
+FORCE_NON_UPSCALED_NVTT_NPOT_RESIZE_STEMS: set[str] = set()
+FORCE_UPSCALED_CHAINNER_NPOT_RESIZE_STEMS: set[str] = set()
 
 CSV_FLUSH_SECONDS = 5.0
 
@@ -1456,6 +1467,13 @@ def _dims_are_power_of_two(dims: tuple[int, int] | None) -> bool:
     return _is_power_of_two(width) and _is_power_of_two(height)
 
 
+def should_resize_upscaled_output_to_pot(stem_lower: str) -> bool:
+    return (
+        RESIZE_UPSCALED_CHAINNER_TO_POT_WITH_LANCZOS
+        or stem_lower in FORCE_UPSCALED_CHAINNER_NPOT_RESIZE_STEMS
+    )
+
+
 def get_effective_npot_resized_for_stem(
     stem_lower: str,
     staging_is_upscaled: bool,
@@ -1465,23 +1483,31 @@ def get_effective_npot_resized_for_stem(
     ctxr3_required_stems: set[str],
     used_nomips: bool,
 ) -> bool:
-    if not RESIZE_NON_UPSCALED_NPOT_TO_POT_WITH_LANCZOS:
-        return False
-
-    # Only the normal non-upscaled NVTT -> CtxrTool chain using DPF_DEFAULT
-    # should resize NPOT images. DPF_NOMIPS and ctxr3-managed no-mips paths
-    # intentionally keep the source dimensions as-is.
-    if used_nomips:
-        return False
-
-    if get_effective_upscaled_flag_for_stem(
+    effective_upscaled = get_effective_upscaled_flag_for_stem(
         stem_lower,
         staging_is_upscaled,
         nonupscaled_override_stems,
         image_origin_by_name,
+    )
+
+    if effective_upscaled:
+        if not should_resize_upscaled_output_to_pot(stem_lower):
+            return False
+        return not _dims_are_power_of_two(image_dimensions_by_name.get(stem_lower))
+
+    # Only the normal non-upscaled NVTT -> ctxrtool.py chain using DPF_DEFAULT
+    # may resize an NPOT temp copy before DDS export.
+    if (
+        not RESIZE_NON_UPSCALED_NVTT_TO_POT_WITH_LANCZOS
+        and stem_lower not in FORCE_NON_UPSCALED_NVTT_NPOT_RESIZE_STEMS
     ):
         return False
 
+    # DPF_NOMIPS intentionally keeps the source dimensions as-is.
+    if used_nomips:
+        return False
+
+    # ctxr3-managed no-mip paths intentionally keep source dimensions as-is.
     if stem_lower in ctxr3_required_stems:
         return False
 
@@ -1741,6 +1767,124 @@ def launch_ctxr3_for_pending_or_die(
         if is_demastered_run:
             _safe_rmtree(tmp_root)
 
+
+# ==========================================================
+# DDS VALIDATION HELPERS
+# ==========================================================
+def _align_up(value: int, alignment: int) -> int:
+    if alignment <= 0:
+        return value
+    return ((value + alignment - 1) // alignment) * alignment
+
+
+def _dds_fourcc(raw: bytes) -> str:
+    return raw.decode("ascii", errors="replace").rstrip("\x00")
+
+
+def _calc_bc_dds_payload_size(width: int, height: int, mip_count: int, block_size: int) -> int:
+    total = 0
+    w = max(1, width)
+    h = max(1, height)
+
+    for _ in range(max(1, mip_count)):
+        bw = max(1, (w + 3) // 4)
+        bh = max(1, (h + 3) // 4)
+        total += bw * bh * block_size
+        w = max(1, w // 2)
+        h = max(1, h // 2)
+
+    return total
+
+
+def validate_dds_file_or_die(path: Path) -> None:
+    #catch bad nvtt conversions. gunship.bmp is known to cause this, as its dimensions are 512x127
+    try:
+        data = path.read_bytes()
+    except Exception as e:
+        raise RuntimeError(f"DDS read failed: {path} ({e})")
+
+    if len(data) < 128:
+        raise RuntimeError(f"DDS is too small to contain a valid header: {path} ({len(data)} byte(s))")
+
+    if data[0:4] != b"DDS ":
+        raise RuntimeError(f"DDS missing magic header: {path}")
+
+    import struct
+
+    try:
+        header_size = struct.unpack_from("<I", data, 4)[0]
+        flags = struct.unpack_from("<I", data, 8)[0]
+        height = struct.unpack_from("<I", data, 12)[0]
+        width = struct.unpack_from("<I", data, 16)[0]
+        mip_count_raw = struct.unpack_from("<I", data, 28)[0]
+        pf_size = struct.unpack_from("<I", data, 76)[0]
+        pf_flags = struct.unpack_from("<I", data, 80)[0]
+        fourcc = _dds_fourcc(data[84:88])
+    except Exception as e:
+        raise RuntimeError(f"DDS header parse failed: {path} ({e})")
+
+    if header_size != 124:
+        raise RuntimeError(f"DDS has invalid header size: {path} ({header_size})")
+
+    if pf_size != 32:
+        raise RuntimeError(f"DDS has invalid pixel-format header size: {path} ({pf_size})")
+
+    if width <= 0 or height <= 0:
+        raise RuntimeError(f"DDS has invalid dimensions: {path} ({width}x{height})")
+
+    DDSD_MIPMAPCOUNT = 0x00020000
+    DDPF_FOURCC = 0x00000004
+
+    mip_count = mip_count_raw if (flags & DDSD_MIPMAPCOUNT) and mip_count_raw > 0 else 1
+    payload_offset = 128
+
+    block_size_by_fourcc = {
+        "DXT1": 8,
+        "BC1": 8,
+        "DXT3": 16,
+        "BC2": 16,
+        "DXT5": 16,
+        "BC3": 16,
+        "ATI1": 8,
+        "BC4U": 8,
+        "BC4S": 8,
+        "ATI2": 16,
+        "BC5U": 16,
+        "BC5S": 16,
+    }
+
+    block_size = block_size_by_fourcc.get(fourcc)
+
+    if fourcc == "DX10":
+        if len(data) < 148:
+            raise RuntimeError(f"DDS DX10 header is truncated: {path} ({len(data)} byte(s))")
+        dxgi_format = struct.unpack_from("<I", data, 128)[0]
+        payload_offset = 148
+
+        # BC1/BC4 are 8 bytes per block. BC2/BC3/BC5/BC6/BC7 are 16 bytes per block.
+        if dxgi_format in (70, 71, 72, 73, 74, 79, 80, 81, 95, 96):
+            block_size = 8
+        elif dxgi_format in (75, 76, 77, 78, 82, 83, 84, 97, 98, 99):
+            block_size = 16
+
+    if block_size is None:
+        # Not a block-compressed DDS we know how to size-check. The header checks above
+        # still catch empty/truncated/garbage output, but do not guess linear formats.
+        return
+
+    expected_payload = _calc_bc_dds_payload_size(width, height, mip_count, block_size)
+    actual_payload = len(data) - payload_offset
+
+    if actual_payload < expected_payload:
+        raise RuntimeError(
+            "DDS payload is smaller than the declared block-compressed dimensions/mips:\n"
+            f"  path={path}\n"
+            f"  format={fourcc}\n"
+            f"  dimensions={width}x{height}\n"
+            f"  mip_count={mip_count}\n"
+            f"  expected_payload_at_least={expected_payload}\n"
+            f"  actual_payload={actual_payload}"
+        )
 
 # ==========================================================
 # PARAM EXPORT HELPERS
@@ -2298,8 +2442,8 @@ def run_nvtt_exports_or_die(
         raise RuntimeError(f"No-mips DPF not found: {DPF_NOMIPS}")
     if not PARAM_FOLDER.is_dir():
         raise RuntimeError(f"Param folder not found: {PARAM_FOLDER}")
-    if not CTXR_TOOL_EXE.is_file():
-        raise RuntimeError(f"CtxrTool.exe not found: {CTXR_TOOL_EXE}")
+    if not CTXR_TOOL_PY.is_file():
+        raise RuntimeError(f"ctxrtool.py not found: {CTXR_TOOL_PY}")
 
     staging_is_upscaled = get_staging_upscaled_bool()
     upscale_factor = get_staging_upscale_factor_or_one()
@@ -2341,7 +2485,7 @@ def run_nvtt_exports_or_die(
     error_log = STAGING_FOLDER / ERROR_LOG_PATH
 
     if not missing:
-        log("[PARAM] No images missing from conversion_hashes.csv for nvtt/CtxrTool. Nothing to export.")
+        log("[PARAM] No images missing from conversion_hashes.csv for nvtt/ctxrtool.py. Nothing to export.")
         remove_error_log_if_exists(error_log)
         return
 
@@ -2612,16 +2756,26 @@ def run_nvtt_exports_or_die(
         merged_mapping.update(mapping_alpha_extra)
 
         upscaled_missing_final: list[Path] = []
+        upscaled_pot_resize_final: list[Path] = []
         for orig in chain_normal + chain_alpha + chain_normal_extra + chain_alpha_extra:
             ups = merged_mapping.get(orig)
             if ups is None:
                 log(f"[UPSCALE WARN] No upscaled file found for {orig} in mapping; skipping.")
                 continue
+
             upscaled_missing_final.append(ups)
 
-        if upscaled_missing_final:
-            log("[UPSCALE] Resaving upscaled images to power-of-two dimensions...")
-            resave_images_to_pot_or_die(upscaled_missing_final)
+            if should_resize_upscaled_output_to_pot(orig.stem.lower()):
+                upscaled_pot_resize_final.append(ups)
+
+        if upscaled_pot_resize_final:
+            log(
+                f"[UPSCALE] Resaving {len(upscaled_pot_resize_final)} upscaled image(s) "
+                "to power-of-two dimensions..."
+            )
+            resave_images_to_pot_or_die(upscaled_pot_resize_final)
+        elif upscaled_missing_final:
+            log("[UPSCALE] Power-of-two resave is disabled for all pending upscaled workflow output(s).")
 
         missing = list(nonupscaled_direct) + upscaled_missing_final
     else:
@@ -2648,7 +2802,7 @@ def run_nvtt_exports_or_die(
     ]
     conversion_header = ensure_csv_header_has_columns(list(conversion_header), needed_cols)
 
-    log(f"[PARAM] Exporting {len(missing)} missing image(s) via nvtt_export + CtxrTool\n")
+    log(f"[PARAM] Exporting {len(missing)} missing image(s) via nvtt_export + ctxrtool.py\n")
 
     os.chdir(str(PARAM_FOLDER))
 
@@ -2902,7 +3056,41 @@ def run_nvtt_exports_or_die(
                 npot_resized,
             )
 
-        ctxr_args = [str(CTXR_TOOL_EXE), str(out_dds)]
+        try:
+            validate_dds_file_or_die(out_dds)
+        except Exception as e:
+            cleanup_tmp_rgb()
+            if effective_upscaled:
+                delete_upscaled_image_pair_if_exists(img_path)
+            cleanup_param_ctxr()
+            try:
+                if out_dds.is_file():
+                    out_dds.unlink()
+            except Exception:
+                pass
+            return (
+                img_path,
+                False,
+                f"nvtt_export produced an invalid DDS: {e}",
+                before_hash,
+                "",
+                used_nomips,
+                origin_folder,
+                opacity_expected,
+                effective_upscaled,
+                upscaler_version,
+                upscaler_type,
+                non_upscaled_version,
+                npot_resized,
+            )
+
+        ctxr_args = [
+            sys.executable,
+            str(CTXR_TOOL_PY),
+            str(out_dds),
+            "-o",
+            str(out_ctxr),
+        ]
 
         try:
             ctxr = subprocess.run(
@@ -2926,7 +3114,7 @@ def run_nvtt_exports_or_die(
             return (
                 img_path,
                 False,
-                f"CtxrTool exception: {e}",
+                f"ctxrtool.py exception: {e}",
                 before_hash,
                 "",
                 used_nomips,
@@ -2940,7 +3128,8 @@ def run_nvtt_exports_or_die(
             )
 
         ctxr_out = (ctxr.stdout or "").strip()
-        ctxr_ok = (ctxr_out == CTXR_TOOL_SUCCESS_LINE)
+        ctxr_rc = ctxr.returncode if ctxr.returncode is not None else -1
+        ctxr_ok = (ctxr_rc == 0)
 
         try:
             out_dds.unlink()
@@ -2973,9 +3162,17 @@ def run_nvtt_exports_or_die(
             if effective_upscaled:
                 delete_upscaled_image_pair_if_exists(img_path)
             cleanup_param_ctxr()
-            msg = "CtxrTool failed (unexpected output)"
+
+            if ctxr_rc == 1:
+                msg = "ctxrtool.py failed to convert this input (rc=1)"
+            elif ctxr_rc == 2:
+                msg = "ctxrtool.py usage/argument error (rc=2). Check wrapper arguments; -o is only valid with one input."
+            else:
+                msg = f"ctxrtool.py failed (rc={ctxr_rc})"
+
             if ctxr_out:
                 msg += "\n" + ctxr_out
+
             return (
                 img_path,
                 False,
@@ -3000,7 +3197,7 @@ def run_nvtt_exports_or_die(
             return (
                 img_path,
                 False,
-                f"CtxrTool reported success but CTXR was not created: {out_ctxr}",
+                f"ctxrtool.py reported success but CTXR was not created: {out_ctxr}",
                 before_hash,
                 "",
                 used_nomips,
@@ -3284,7 +3481,7 @@ def run_nvtt_exports_or_die(
 
     if fail:
         write_error_log_or_die(error_log, failed_images)
-        raise RuntimeError("One or more nvtt_export/CtxrTool jobs failed")
+        raise RuntimeError("One or more nvtt_export/ctxrtool.py jobs failed")
     else:
         remove_error_log_if_exists(error_log)
 
@@ -4082,6 +4279,16 @@ def main() -> int:
             opacity_ok = (expected_opacity_stripped == current_opacity_expected)
             upscaled_ok = (expected_upscaled == current_upscaled)
             non_upscaled_ok = ((expected_non_upscaled_version or "").strip() == current_non_upscaled_version)
+            current_npot_resized = get_effective_npot_resized_for_stem(
+                name,
+                is_upscaled_run,
+                demastered_nonupscaled_override_stems,
+                image_origin_by_name,
+                image_dimensions_by_name,
+                ctxr3_required_stems,
+                current_used_nomips,
+            )
+            npot_resized_ok = (expected_npot_resized == current_npot_resized)
 
             if current_upscaled:
                 upscaler_ok = bool(
@@ -4098,7 +4305,7 @@ def main() -> int:
             if (not current_upscaled) and (name in ctxr3_required_stems):
                 ctxr3_ok = (expected_ctxr3_converted is True)
 
-            if before_ok and ctxr_ok and mip_ok and origin_ok and opacity_ok and upscaled_ok and upscaler_ok and non_upscaled_ok and ctxr3_ok:
+            if before_ok and ctxr_ok and mip_ok and origin_ok and opacity_ok and upscaled_ok and upscaler_ok and non_upscaled_ok and ctxr3_ok and npot_resized_ok:
                 keeps.append(ctxr)
             else:
                 mismatches.append(ctxr)
@@ -4152,6 +4359,15 @@ def main() -> int:
                 demastered_nonupscaled_override_stems,
                 image_origin_by_name,
             )
+            current_npot_resized = get_effective_npot_resized_for_stem(
+                name,
+                is_upscaled_run,
+                demastered_nonupscaled_override_stems,
+                image_origin_by_name,
+                image_dimensions_by_name,
+                ctxr3_required_stems,
+                current_used_nomips,
+            )
 
             expected_before = ""
             expected_ctxr = ""
@@ -4164,6 +4380,7 @@ def main() -> int:
             expected_non_upscaled_version = ""
             expected_upscaler_meta_present = False
             expected_ctxr3_converted = False
+            expected_npot_resized = current_npot_resized
             expected_filename_has_upper = False
 
             if name in conversion_map:

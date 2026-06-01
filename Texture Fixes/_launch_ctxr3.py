@@ -22,7 +22,7 @@ from PIL import Image
 CTXR_CLI_PY = Path(r"C:\Development\Git\Afevis-MGS2-Bugfix-Compilation\Texture Fixes\Chains\ctxr_cli.py")
 CTXR_TEMPLATE = Path(r"C:\Users\cmkoo\OneDrive\Desktop\loading_jp.ctxr")
 
-NON_UPSCALED_PROCESS_VERSION = "4"
+NON_UPSCALED_PROCESS_VERSION = "5"
 
 DEPLOY_DIRS_TXT = "deploy_directories.txt"
 CONVERSION_CSV = "conversion_hashes.csv"
@@ -39,6 +39,21 @@ TMP_DIR_NAME = "_tmp"
 DEFAULT_MAX_WORKERS = max(1, min(16, os.cpu_count() or 8))
 
 PRINT_LOCK = Lock()
+
+CSV_HEADER = [
+    "filename",
+    "before_hash",
+    "ctxr_hash",
+    "mipmaps",
+    "origin_folder",
+    "opacity_stripped",
+    "upscaled",
+    "upscaler_version",
+    "upscaler_type",
+    "non_upscaled_version",
+    "ctxr3_converted",
+    "npot_resized",
+]
 
 
 @dataclass
@@ -318,29 +333,15 @@ def load_existing_csv(csv_path: Path) -> tuple[dict[str, dict[str, str]], list[s
 
 
 def write_conversion_csv(csv_path: Path, rows_by_filename: dict[str, dict[str, str]]) -> None:
-    header = [
-        "filename",
-        "before_hash",
-        "ctxr_hash",
-        "mipmaps",
-        "origin_folder",
-        "opacity_stripped",
-        "upscaled",
-        "upscaler_version",
-        "upscaler_type",
-        "ctxr3_converted",
-        "non_upscaled_version",
-        "npot_resized",
-    ]
     tmp_path = csv_path.with_suffix(csv_path.suffix + ".tmp")
 
     with tmp_path.open("w", encoding="utf-8", newline="\n") as f:
-        writer = csv.DictWriter(f, fieldnames=header)
+        writer = csv.DictWriter(f, fieldnames=CSV_HEADER)
         writer.writeheader()
 
         for filename in sorted(rows_by_filename.keys(), key=lambda s: s.lower()):
             row = rows_by_filename[filename]
-            out = {h: (row.get(h, "") or "") for h in header}
+            out = {h: (row.get(h, "") or "") for h in CSV_HEADER}
             out["filename"] = _lower_key(out.get("filename", filename))
             writer.writerow(out)
 
@@ -453,6 +454,50 @@ def is_truthy(s: str) -> bool:
     return (s or "").strip().lower() == "true"
 
 
+def build_expected_csv_row(
+    stem_lower: str,
+    before_hash: str,
+    ctxr_hash: str,
+    origin_folder: str,
+    opacity_stripped: str,
+) -> dict[str, str]:
+    return {
+        "filename": stem_lower,
+        "before_hash": before_hash.lower(),
+        "ctxr_hash": ctxr_hash.lower(),
+        "mipmaps": "false",
+        "origin_folder": origin_folder,
+        "opacity_stripped": opacity_stripped,
+        "upscaled": "false",
+        "upscaler_version": "0",
+        "upscaler_type": "none",
+        "non_upscaled_version": NON_UPSCALED_PROCESS_VERSION,
+        "ctxr3_converted": "true",
+        "npot_resized": "false",
+    }
+
+
+def row_matches_expected_csv_metadata(
+    row: dict[str, str],
+    expected: dict[str, str],
+) -> bool:
+    for field in CSV_HEADER:
+        if field == "ctxr_hash":
+            continue
+
+        actual = (row.get(field) or "").strip()
+        want = (expected.get(field) or "").strip()
+
+        if field in {"filename", "before_hash", "mipmaps", "opacity_stripped", "upscaled", "upscaler_type", "non_upscaled_version", "ctxr3_converted", "npot_resized"}:
+            actual = actual.lower()
+            want = want.lower()
+
+        if actual != want:
+            return False
+
+    return True
+
+
 TexMeta = dict[str, tuple[str, str, Path, Path]]
 # before_hash, opacity_stripped, original_source_path, source_path_for_conversion
 
@@ -460,6 +505,7 @@ TexMeta = dict[str, tuple[str, str, Path, Path]]
 def purge_stale_deploy_entries_and_decide_needed(
     deploy_dirs: list[Path],
     tex_meta: TexMeta,
+    origin_folder: str,
 ) -> set[str]:
     needs_convert: set[str] = set()
 
@@ -469,17 +515,21 @@ def purge_stale_deploy_entries_and_decide_needed(
 
         changed = False
 
-        for stem_lower, (before_hash, _opacity_stripped, _orig_path, _conv_path) in tex_meta.items():
+        for stem_lower, (before_hash, opacity_stripped, _orig_path, _conv_path) in tex_meta.items():
             row = rows.get(stem_lower)
             if row is None:
                 needs_convert.add(stem_lower)
                 continue
 
-            row_ctxr3 = is_truthy(row.get("ctxr3_converted", "false"))
-            row_before = _lower_key(row.get("before_hash", ""))
-            before_match = row_before == before_hash.lower()
+            expected = build_expected_csv_row(
+                stem_lower=stem_lower,
+                before_hash=before_hash,
+                ctxr_hash=(row.get("ctxr_hash") or ""),
+                origin_folder=origin_folder,
+                opacity_stripped=opacity_stripped,
+            )
 
-            if (not row_ctxr3) or (not before_match):
+            if not row_matches_expected_csv_metadata(row, expected):
                 deployed_ctxr = d / f"{stem_lower}.ctxr"
                 try:
                     if deployed_ctxr.is_file():
@@ -707,7 +757,7 @@ def main() -> int:
         tex_meta[stem_lower] = (before_hash, opacity_stripped, p, p)
 
     log("\nChecking deploy directories for stale or missing conversions...")
-    needs_convert = purge_stale_deploy_entries_and_decide_needed(deploy_dirs, tex_meta)
+    needs_convert = purge_stale_deploy_entries_and_decide_needed(deploy_dirs, tex_meta, origin_folder)
 
     stems_to_convert = sorted({p.stem.lower() for p in tex_paths if p.stem.lower() in needs_convert})
     if not stems_to_convert:
@@ -821,23 +871,13 @@ def main() -> int:
             copied += 1
 
             before_hash, opacity_stripped, _orig_path, _conv_path = tex_meta[stem_lower]
-            row = rows.get(stem_lower, {})
-
-            row["filename"] = stem_lower
-            row["before_hash"] = before_hash.lower()
-            row["ctxr_hash"] = ctxr_hashes[stem_lower].lower()
-            row["mipmaps"] = "false"
-            row["origin_folder"] = origin_folder
-            row["opacity_stripped"] = opacity_stripped
-
-            row["upscaled"] = "false"
-            row["upscaler_version"] = "0"
-            row["upscaler_type"] = "none"
-            row["ctxr3_converted"] = "true"
-            row["non_upscaled_version"] = NON_UPSCALED_PROCESS_VERSION
-            row["npot_resized"] = "false"
-
-            rows[stem_lower] = row
+            rows[stem_lower] = build_expected_csv_row(
+                stem_lower=stem_lower,
+                before_hash=before_hash,
+                ctxr_hash=ctxr_hashes[stem_lower],
+                origin_folder=origin_folder,
+                opacity_stripped=opacity_stripped,
+            )
 
         write_conversion_csv(csv_path, rows)
         log(f"  Deployed {copied} ctxr file(s) -> {d}")
