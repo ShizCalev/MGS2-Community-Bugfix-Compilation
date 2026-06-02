@@ -9,13 +9,13 @@
 
 
 //Community Bugfix hashes
-constexpr const char* CBFC_BASE_FLATLIST_WIN_chr1_05_alp_sub_ovl_CTXR_SHA1 = "de2355f3429cd21ff10e5e16301462ea731981f9";
-constexpr const char* CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "2e3343bc51314b683da0743b7b82cfb5d2c04318";
-constexpr const char* CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "5d6c0d70ef7b829cde115babf1e65b6cfdd4ca69";
+constexpr const char* CBFC_BASE_FLATLIST_WIN_chr1_05_alp_sub_ovl_CTXR_SHA1 = "b4c6895d80d7aed75f35bf6fe4c57a7887ce0aa0";
+constexpr const char* CBFC_2x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "59aadac25f41712a2b02cdcc71d5ca814c2deee4";
+constexpr const char* CBFC_4x_OVRSTM_WIN_COL_ORANGE2_CTXR_SHA1 = "91ccce1dff9d9c6e46915e49534764ab5561e15e";
 
 
-constexpr const char* CBFC_2x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "16d11c6f3800c098e4c7a643dc8b837136cce7be";
-constexpr const char* CBFC_4x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "a545a73f98a0e74ad58f6b56ddf87fea8a814635";
+constexpr const char* CBFC_2x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "1e2979a1ebd2f781f3b7ca4e232ca62be9bb84be";
+constexpr const char* CBFC_4x_BUGFIXED_seculitycard_lv2_alp_CTXR_SHA1 = "7d49ba9afaa1ea4eea7195abcbb0561afa401c27";
 
 
 
