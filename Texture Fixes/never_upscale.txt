@@ -1,5 +1,7 @@
 #native ui stuff slash custom remade
 #dont remove these or youre likely to cause the game to crash due to resolution limits
+0007bc34
+00c1181b
 kcej_logo_alp_ovl.bmp
 00919e1e
 004fc78a
