@@ -23,7 +23,6 @@ afevis_fp_sna_hi_finger.bmp,e78003b82d5abbdd70028e81693c6d2d28a56536,77245d9ce61
 afevis_fp_sna_hi_finger2.bmp,bfda8f2d28a90ddd2076f33e863c9049f4c0467c,751cc4d43f64072c9fae8b9da03dac97316b70c2,true,Self Remade\Finalized\Dont demaster\Dont upscale,true,false,0,none,5,false,false
 afevis_fp_sna_hi_hand1.bmp,547d7c159933534163a266d2cc6923aa6236d328,0d46851c81015c9a696c013149486bcec63cfacc,true,Self Remade\Finalized\Dont demaster\Dont upscale,true,false,0,none,5,false,false
 afevis_fp_sna_hi_hand2.bmp,8989845568e64eb2b17c990e39bf3d1f32dca373,91f2925ec90ae79e761af11724b8e3a304405ec2,true,Self Remade\Finalized\Dont demaster\Dont upscale,true,false,0,none,5,false,false
-alt_w24c1_rev_disp_01.bmp,1eaba2dde9f9b629c7470a223df5041266cfa5d8,1ba7d024a230b186155334c3a7fa4980ae21564f,true,Self Remade\Finalized\Self Remastered,true,false,0,none,5,false,false
 animal_alp_ovl.bmp,fe2bddeb1cf97ff137068d2e231453497185569e,a49beda9c3f7d7a061bbc55c9d82ca6fe126c586,false,Self Remade\Finalized\Self Remastered\UI\Shared,true,false,0,none,5,true,false
 augm_stabbed_tnc_body.bmp,3c6a6fa48e519cd206c876d741b14f9dba11e7e8,efae18d5a736f1fb85a7ebd1ec3e4f1d1c17cdd5,true,Self Remade\Finalized\Dont demaster,true,false,0,none,5,false,false
 augm_tnc_eri.bmp,a4b588aa2ce8ab5284113ef9dd0cf649afdb3cb3,c0a2526cb0a7d83695e89b5372d4e691fc7386ac,true,Self Remade\Finalized\Dont demaster,true,false,0,none,5,false,false
@@ -95,7 +94,9 @@ snake_tales_ltitleb_alp_ovl.bmp,57229e87a96cc0dabd717ca1d953f3e5fc480e78,9555cad
 snake_tales_ltitlec_alp_ovl.bmp,00307a1862b5bc2120b115c4acc1b9fdb7e65065,e8e04f93d8c4d9afa90783f0028aeb644c7e673f,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,true,false,0,none,5,true,false
 snake_tales_ltitled_alp_ovl.bmp,4decb6800d27dda0e2817429f96038f960f06437,5b4879743736ed7a7ea0e32b6ac3d5c42325eca0,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,true,false,0,none,5,true,false
 snake_tales_ltitlee_alp_ovl.bmp,63b2e5e1c463d3b7e60981835e9424cedf4af3cc,68e86eef89e90260ffe19313c9c62bca0bc66c3d,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,true,false,0,none,5,true,false
+spacecore_hos_arm02.bmp,c4eeda3c0e7948c82ae2bb251c865cb121af896d,48e481108e17c0b3c3cf06e3fea5d8739e7d957d,true,Self Remade\Finalized\Dont demaster,true,false,0,none,5,false,false
 spacecore_taisa_subsist_alp_ovl.bmp,5ff8ac4e04f87454585002d4718a20f1c9a6362d,b27f4362780bd3d0afd80b9ee170a3c1daae74a0,true,Self Remade\Finalized\Self Remastered\UI\Shared,true,false,0,none,5,false,false
+spacecore_w24c1_rev_disp_02,1eaba2dde9f9b629c7470a223df5041266cfa5d8,1ba7d024a230b186155334c3a7fa4980ae21564f,true,Self Remade\Finalized\Not Demaster Fixed\Dont Upscale,true,false,0,none,5,false,false
 tag1_alp_ovl.bmp,030406d8a61b806e7beb8745280ffbea36dbc082,0e8aae003d8d130f7e03d1e0a1f09e458319b43d,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,false,false,0,none,5,true,false
 tag2_alp_ovl.bmp,cbee2a47fa6becda12084649a406703d66938901,eaeb4f4f9ed5a2acab7bcfb4d43a8d9c72d2ccb2,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,false,false,0,none,5,true,false
 tag3_alp_ovl.bmp,ace9c123d644c45065b14c64366952bf9470e5f9,ca630ce6e5995fed33803f99eca836d23b73f773,false,Self Remade\Finalized\Self Remastered\UI\Shared\Dont Demaster,false,false,0,none,5,true,false
