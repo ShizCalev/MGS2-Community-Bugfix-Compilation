@@ -4,9 +4,14 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-TARGET_NAMES = {"bp_assets.txt", "manifest.txt"}
+TARGET_PREFIXES = ("bp_assets", "manifest")
 ROOT_DIR = Path(__file__).resolve().parent
 MAX_WORKERS = min(32, (os.cpu_count() or 8) * 2)
+
+
+def is_target_file(path: Path) -> bool:
+    name = path.name.lower()
+    return path.suffix.lower() == ".txt" and name.startswith(TARGET_PREFIXES)
 
 
 def collect_text_lines(raw_text: str) -> list[str]:
@@ -62,12 +67,13 @@ def normalize_file(path: Path) -> tuple[Path, bool]:
 
 def main() -> None:
     matched_files = [
-        p for p in ROOT_DIR.rglob("*")
-        if p.is_file() and p.name.lower() in TARGET_NAMES
+        path
+        for path in ROOT_DIR.rglob("*")
+        if path.is_file() and is_target_file(path)
     ]
 
     if not matched_files:
-        print("No bp_assets.txt or manifest.txt files found.")
+        print("No bp_assets*.txt or manifest*.txt files found.")
         return
 
     updated = 0
@@ -75,7 +81,10 @@ def main() -> None:
     failed = 0
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        futures = {executor.submit(normalize_file, p): p for p in matched_files}
+        futures = {
+            executor.submit(normalize_file, path): path
+            for path in matched_files
+        }
 
         for future in as_completed(futures):
             path = futures[future]

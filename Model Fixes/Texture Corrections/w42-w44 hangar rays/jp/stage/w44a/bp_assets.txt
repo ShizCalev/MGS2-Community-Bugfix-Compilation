@@ -100,7 +100,7 @@ textures/flatlist/drop01_alp_mod1201.bmp.ctxr,stage/w44a/cache/drop01_alp_mod120
 textures/flatlist/drop01_msk.bmp.ctxr,stage/w44a/cache/drop01_msk.bmp.ctxr,jp/stage/w44a/cache/00573de0/0036d73b.ctxr
 textures/flatlist/drop02_msk.bmp.ctxr,stage/w44a/cache/drop02_msk.bmp.ctxr,jp/stage/w44a/cache/00573de0/0046d73b.ctxr
 textures/flatlist/dzp2_tx_alp.bmp.ctxr,stage/w44a/cache/dzp2_tx_alp.bmp.ctxr,jp/stage/w44a/cache/00573de0/0062bc3f.ctxr
-textures/flatlist/pdray_number_w44_alp_ovl.bmp44a/cache/eva_alp_ovl.bpdray_number_w44_alp_ovl.bmp00715d80/00555dee.ctxr
+textures/flatlist/eva_alp_ovl.bmp.ctxr,stage/w44a/cache/eva_alp_ovl.bmp.ctxr,jp/stage/w44a/cache/00715d80/00555dee.ctxr
 textures/flatlist/fire1_alp.bmp.ctxr,stage/w44a/cache/fire1_alp.bmp.ctxr,jp/stage/w44a/cache/00573de0/00aa773d.ctxr
 textures/flatlist/flare0_msk.bmp.ctxr,stage/w44a/cache/flare0_msk.bmp.ctxr,jp/stage/w44a/cache/00573de0/00606825.ctxr
 textures/flatlist/flare_b1_msk.bmp.ctxr,stage/w44a/cache/flare_b1_msk.bmp.ctxr,jp/stage/w44a/cache/00573de0/00d6b80e.ctxr

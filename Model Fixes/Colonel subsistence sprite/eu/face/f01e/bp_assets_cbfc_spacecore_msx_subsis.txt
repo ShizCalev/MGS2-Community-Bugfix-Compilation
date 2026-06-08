@@ -1,0 +1,1 @@
+textures/flatlist/spacecore_taisa_subsist_alp_ovl.bmp.ctxr,face/f01e/cache/spacecore_taisa_subsist_alp_ovl.bmp.ctxr,eu/face/f01e/cache/007232c8/00d8bf7e.ctxr
