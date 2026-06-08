@@ -1,3 +1,6 @@
-assets/kms/us/spacecore_hos_maleb_mid.kms,us/stage/a24c/cache/00e49799.kms,cache/00e49799.kms
-assets/kms/us/spacecore_hos_maleb_low.kms,us/stage/a24c/cache/00e4946c.kms,cache/00e4946c.kms
-assets/kms/us/spacecore_hos_maleb_def.kms,us/stage/a24c/cache/00e4731b.kms,cache/00e4731b.kms
+assets/tri/us/spacecore_hos_all_def.tri,us/stage/a24c/cache/00472fd3.tri,cache/00472fd3.tri
+assets/tri/us/spacecore_hos_all_def.tri,us/stage/a24c/cache/00475124.tri,cache/00475124.tri
+assets/tri/us/spacecore_hos_all_def.tri,us/stage/a24c/cache/00475451.tri,cache/00475451.tri
+assets/kms/us/spacecore_hos_maleb_mid.kms,us/stage/a24c/cache/00e49799.kms,cache/00e49799.kms
+assets/kms/us/spacecore_hos_maleb_low.kms,us/stage/a24c/cache/00e4946c.kms,cache/00e4946c.kms
+assets/kms/us/spacecore_hos_maleb_def.kms,us/stage/a24c/cache/00e4731b.kms,cache/00e4731b.kms
