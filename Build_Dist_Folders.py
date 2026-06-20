@@ -956,11 +956,6 @@ def sync_target_group(
         nonlocal copy_count, update_count, skip_count
 
         src, dst, mtime = expected[key]
-        rel = dst.relative_to(target_root)
-
-        if should_ignore_target_rel(rel):
-            log(f"  [IGNORE EXPECTED] {dst}")
-            return
 
         if dst.exists() and files_are_identical(src, dst):
             if mtime is not None:

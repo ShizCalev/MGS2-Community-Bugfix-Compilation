@@ -1,4 +1,6 @@
-*.gcx
+GCX Fixes/us/**/*.gcx
+GCX Fixes/eu/**/*.gcx
+GCX Fixes/jp/**/*.gcx
 hash_differences.txt
 _dist/
 Texture Fixes/_upscaling
