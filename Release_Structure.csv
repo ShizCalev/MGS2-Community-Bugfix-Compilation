@@ -43,6 +43,8 @@ Model Fixes\Texture Corrections\w31c0_stage_a31c - flipped uv,dist\assets\kms\us
 Model Fixes\Decensor\manifests\eu,dist\eu\stage,false
 Model Fixes\Decensor\manifests\jp,dist\jp\stage,false
 
+Model Fixes\Snake Holster,dist,false
+
 
 Model Fixes\Texture Corrections\Strut F - Emma blood\EU,dist\eu\stage,false
 Model Fixes\Texture Corrections\Strut F - Emma blood\JP,dist\jp\stage,false
