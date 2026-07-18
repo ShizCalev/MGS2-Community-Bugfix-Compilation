@@ -140,6 +140,55 @@ namespace
         result.hashMatched = Util::SHA1Check(result.filePath, entry.sha1);
         return result;
     }
+
+
+    struct RemoveFileHashResult
+    {
+        std::filesystem::path filePath;
+        bool exists = false;
+        bool hashMatched = false;
+        bool hashFailed = false;
+    };
+
+    RemoveFileHashResult CheckRemoveFileHash(const Util::RemoveFileEntry& entry)
+    {
+        RemoveFileHashResult result;
+        result.filePath = entry.filePath;
+
+        std::error_code existsEc;
+        result.exists = std::filesystem::exists(entry.filePath, existsEc);
+
+        if (existsEc)
+        {
+            spdlog::warn("RemoveMatchingFiles: failed to check {}: {}", entry.filePath.string(), existsEc.message());
+            result.hashFailed = true;
+            return result;
+        }
+
+        if (!result.exists)
+        {
+            return result;
+        }
+        spdlog::info("RemoveMatchingFiles: computing hash for {}", entry.filePath.string());
+        const std::optional<std::array<std::uint8_t, 20>> computedHash = Util::ComputeSHA1Bytes(entry.filePath);
+
+        if (!computedHash.has_value())
+        {
+            result.hashFailed = true;
+            return result;
+        }
+
+        for (const char* sha1 : entry.sha1Hashes)
+        {
+            if (Util::SHA1Equals(*computedHash, sha1))
+            {
+                result.hashMatched = true;
+                break;
+            }
+        }
+
+        return result;
+    }
 }
 
 namespace Memory
@@ -1044,4 +1093,69 @@ namespace Util
         return (attrs & FILE_ATTRIBUTE_READONLY) != 0;
     }
 
+    bool RemoveMatchingFiles(const std::span<const RemoveFileEntry> entries, const char* logDescription)
+    {
+        if (entries.empty())
+        {
+            return true;
+        }
+
+        std::vector<std::future<RemoveFileHashResult>> futures;
+        futures.reserve(entries.size());
+
+        for (const RemoveFileEntry& entry : entries)
+        {
+            futures.emplace_back(std::async(std::launch::async, [entry]()
+                                            {
+                                                return CheckRemoveFileHash(entry);
+                                            }));
+        }
+
+        bool success = true;
+        std::vector<RemoveFileHashResult> matchesToRemove;
+        matchesToRemove.reserve(entries.size());
+
+        for (auto& future : futures)
+        {
+            RemoveFileHashResult result = future.get();
+
+            if (result.hashFailed)
+            {
+                success = false;
+                continue;
+            }
+
+            if (result.exists && result.hashMatched)
+            {
+                matchesToRemove.emplace_back(std::move(result));
+            }
+        }
+
+        for (const RemoveFileHashResult& match : matchesToRemove)
+        {
+            std::error_code removeEc;
+            const bool removed = std::filesystem::remove(match.filePath, removeEc);
+
+            if (removeEc)
+            {
+                spdlog::warn("{} cleanup: failed to remove {}: {}", logDescription, match.filePath.string(), removeEc.message());
+                success = false;
+                continue;
+            }
+
+            if (!removed)
+            {
+                spdlog::warn("{} cleanup: matched file disappeared before it could be removed: {}", logDescription, match.filePath.string());
+                success = false;
+                continue;
+            }
+
+            spdlog::info("{} cleanup: removed matched file: {}", logDescription, match.filePath.string());
+        }
+
+        return success;
+    }
+
 }
+
+

@@ -90,6 +90,13 @@ namespace Util
 
     bool IsFileReadOnly(const std::filesystem::path& path);
 
+    struct RemoveFileEntry
+    {
+        std::filesystem::path filePath;
+        std::span<const char* const> sha1Hashes;
+    };
+
+    bool RemoveMatchingFiles(const std::span<const RemoveFileEntry> entries, const char* logDescription);
 }
 
 /*
