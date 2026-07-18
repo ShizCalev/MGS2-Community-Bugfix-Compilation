@@ -213,6 +213,56 @@ jobs:
       working-directory: dist_4x
       run: 7z a -tzip "../${{ github.event.repository.name }}_4x_Upscaled_Nexus.zip" *
 
+    - name: Upload to NexusMods - Base
+      uses: Nexus-Mods/upload-action@v1.0.0-beta.9
+      with:
+        api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+        file_id: 498874
+        display_name: "${{ github.event.repository.name }} - Base"
+        filename: ${{ github.event.repository.name }}_Base_v${{ steps.extract_version.outputs.version }}.zip
+        version: "${{ steps.extract_version.outputs.version }}"
+        category: main
+        archive_existing_version: true
+        primary_mod_manager_download: true
+        description: |
+          Extract the contents of the zip into your game folder.
+          (e.g., steamappscommonMGS2)
+
+    - name: Upload to NexusMods - 2x Upscaled Addon
+      uses: Nexus-Mods/upload-action@v1.0.0-beta.9
+      with:
+        api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+        file_id: 498883
+        display_name: "${{ github.event.repository.name }} - 2x Upscaled Addon"
+        filename: ${{ github.event.repository.name }}_2x_Upscaled_Addon_v${{ steps.extract_version.outputs.version }}.zip
+        version: "${{ steps.extract_version.outputs.version }}"
+        category: optional
+        archive_existing_version: true
+        description: |
+          2x AI upscaled texture addon, upscaling -everything- except UI. 5.4 GB Extracted
+
+          The base version must be installed first!
+
+          As we fix/replace nearly all of the game's textures, our upscaled text packs do FULLY REPLACE LiqMix's AI Slop texture packs.
+
+    - name: Upload to NexusMods - 4x Upscaled Addon
+      uses: Nexus-Mods/upload-action@v1.0.0-beta.9
+      with:
+        api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+        file_id: 498877
+        display_name: "${{ github.event.repository.name }} - 4x Upscaled Addon"
+        filename: ${{ github.event.repository.name }}_4x_Upscaled_Nexus.zip
+        version: "${{ steps.extract_version.outputs.version }}"
+        category: optional
+        archive_existing_version: true
+        update_mod_version: true
+        description: |
+          4x AI upscaled texture addon, upscaling -everything- except UI. 23.12GB Extracted
+
+          The base version must be installed first!
+
+          As we fix/replace nearly all of the game's textures, our upscaled text packs do FULLY REPLACE LiqMix's AI Slop texture pack.
+
     - name: Generate Release Posting
       uses: ncipollo/release-action@v1
       with:
