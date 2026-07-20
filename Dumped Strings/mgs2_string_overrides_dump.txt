@@ -1,0 +1,2064 @@
+===== Table 0 (17 entries) =====
+0x2a283f99 : Use  to walk quietly.
+0x2e5b8532 : AKS-74u
+Assault rifle. Press  to aim,
+and press  for full automatic
+fire. Suppressor attached.
+0x342e4844 : then lower it without firing if you
+click the .
+
+0x372cac54 : After you equip the spray, you can
+discharge the coolant by pressing
+the .
+
+0x4a99ad7c : To move more quietly, try crawling,
+or walk slower by using .
+0x4e3db3c6 : AKS-74u
+Assault rifle. Press  to aim,
+and press  for full automatic
+fire. Can attach suppressor.
+0x504947d8 : Press the  to get a stabbing
+strike.
+0x76748c7b : It has more reach and power than
+normal strikes, but you're also
+more open to counterattacks.
+0x82a9cfde : Handguns are aimed by pushing down
+the , but if you click the ,
+
+0xab789333 : Slow your pace by using ,
+or go into a crawl.
+0xad8af93a : Press the  to strike out at
+Solidus from outside his range.
+0xbc3be17b : Coolant Spray
+For bomb disposal. Enters First
+Person View when equipped.
+Use the  to control the
+spray amount.
+0xbff9be05 : Weigh the pros and cons well.
+0xca8da231 : M4
+Assault rifle. 30 rounds per
+magazine. Press  to aim, and
+press  for full automatic
+fire.
+0xcc1f14d5 : If you use , you'll be able
+to walk more slowly and stealthily.
+0xce6da232 : Use  to slow your walk.
+0xcf615173 : Aim in First Person View and use the 
+ to aim at and shoot specific spots 
+-- enemy weak points and spots at various 
+heights that you normally cannot shoot.
+===== Table 1 (698 entries) =====
+0x00c07eca : でもを素早く押して離すと
+武器のクイックチェンジができる。
+0x01edfe23 : Once you aim your weapon with the
+, you're ready to attack in First
+Person View.
+
+0x021ae3bc : your range of vision is more limited.
+0x02420058 : Spazio libero insufficiente sulla
+periferica di memorizzazione.
+0x02f6745e : Périphérique de stockage non formaté.|
+Formater et sauvegarder?
+0x038d1252 : Stinger
+Portable surface-to-air missile.
+Aim in First Person View, fire
+w/ . Align sight on target
+to lock on.
+0x040e208d : If you see a likely handhold while
+you're jumping down from Hanging,
+try pressing the .
+
+0x049abdfe : High Frequency Blade
+Move  to slash, press to
+lunge. Block w/ . Switch
+between blade and back w/ .
+0x05868113 : Select the grenade when you take a
+peek.
+0x05f0764d : No, it's pretty simple, really.
+0x05f5d1b5 : Make sure you keep doing it until
+the door is open.
+0x0604c14c : Pentazemin
+Benzodiazepine anti-anxiety
+medication. Serves as muscle
+relaxant, treats autonomic
+imbalance. Use w/ .
+0x061b00f5 : ※これにあたるメッセージは今回表示しない
+0x0636cf9c : Trouvez la photographie de la fille 
+du type du développeur !
+Sadaaki Kaneyoshi 
+A travaillé sur les titres suivants : 
+Metal Gear Solid 2 (unité Scénario)
+0x0698952b : If you need to open the door faster,
+hit the  repeatedly while you turn
+the handle.
+0x06efaac5 : Look, there's no way to save
+unless you format the storage device!
+0x070a1bb2 : To throw something, such as a
+grenade or a magazine --
+0x07389d9a : If they catch you, shake yourself
+free by pressing the #－
+0x085eb6a4 : 泳ぐ方向はで変えられる。
+上で上、下で下、左右でそれぞれの
+方向を向く。
+0x08862a15 : Go ahead...try it.
+
+0x08c919f8 : ¡Conecta el dispositivo de almacenamiento!
+0x09336dcd : Push  and  at the same time to
+stretch up on your toes.
+
+0x0afbedee : Dans ce jeu, Metal Gear Solid |pour Console
+0x0b159c25 : エルードから#{、ホフク}#で落下している
+途中につかめそうな場所があったら
+#{、アクション}#を押してみるといい。
+0x0b48bc55 : Trova la foto della ragazza che va
+a genio allo sviluppatore!
+Shinta Nojiri 
+Titoli a cui ha lavorato: Metal Gear (GB),
+Metal Gear Solid 2 (unità Script)
+0x0c512580 : 「認識酵素が反応して活性を示すと、#{FOXDIE、フォックスダイ}#は
+マクロファージの組織を使って、TNFεを作りはじ
+める」
+「何？」
+「サイトカインの一種で細胞死を誘発するペプチド
+よ。TNFεは血流に乗って心臓に達し、心筋細胞の
+レセプ夕ーに結合する」
+「それで、心臓発作を？」
+「刺激を受けた心筋細胞は急激なアポトーシスを起
+こすわ。そして、その人物は……死ぬ」
+0x0c6941ea : ハッチに向かって#{、アクション}#を押せば
+開けることができる。中を確認してみろ。
+何かが入っているかも知れん。
+0x0d035381 : エマの近くで#{、アクション}#を押しっぱなしに
+すれば、その間エマと手をつなぐ。
+0x0d23ce07 : Push the  as you're running to go
+into a tumble and a forward roll.
+0x0d3c297b : Mi spiace, Jack, ma non c'è abbastanza
+spazio disponibile sulla periferica di
+memorizzazione.
+0x0d56f4a2 : Find the photograph of the girl of the
+developer's type!
+Yutaka Negishi
+Titles worked on: Metal Gear Solid 2
+(Background Art Director)
+0x0d769801 : If you see an approximately
+waist-high railing, push the 
+near it.
+0x0d88e1da : Ich kann erst speichern, wenn du
+ein Speichergerät hast!
+0x0dfc6139 : 雷電、BC連絡橋で#{SEAL10、シール・テン}#が何者かと
+交戦中だ。大統領も一緒だと思われる。
+0x0dfc9fdf : I see you have the bandage equipped.
+
+0x0ea31cf5 : ……きっと……
+運がいいからじゃないかしら？
+0x0f59b998 : Espace insuffisant sur le périphérique de stockage.
+0x0fbd9cae : Sensor A
+Ion mobility spectrometer
+explosive detector. Activates
+when equipped. Displays scented
+C4 on radar.
+0x1070ac72 : これで#{、武器}#を押している間、
+敵を引きずることができる。
+離す時は#{、武器}#を離せばいい。
+0x11a03423 : 私じゃなくて|他の人にして！
+0x11b4dbbd : そいつを狩り出さねば|ならなかった
+0x11df3282 : 近接戦闘の基本は格闘だ。#{、パンチ}#で
+出すパンチは主観でも放つことができる。
+試してみろ。
+0x11ecfd19 : を素早く押せば武器の
+クイックチェンジができる。
+上手く使え。
+0x12ee2375 : among the picture previews at the
+bottom of the screen.
+0x130c7690 : Wet Cardboard Box
+Cardboard box to transport
+perishable foods. Wet and
+weak. Equip to wear.
+0x13ccbd74 : 装弾数は30発。
+5.56mm×45のSS109弾を
+使用する。
+0x14055416 : Every time you push the , you can
+turn the blade from the blade side
+to the back.
+
+0x140aa2bf : USP|
+9mm口径ハンドガン。|
+#{、武器}#を押すと構え、|
+離すと発砲。装弾数15発。
+サプレッサー装着。
+0x140e7a4c : ※これにあたるメッセージは今回表示しない
+0x141bf8f9 : ¡Mira, no hay forma de guardar a menos
+que fomatees el dispositivo de almacenamiento!
+0x144e6fa9 : Sensor B
+Neutron scintillator explosive
+detector. Beeps when detecting
+Fatman's odorless C4.
+0x1466ddfa : 全ての標的を破壊し、ゴールせよ！
+ミサイル操作中にを使用すると
+弾頭カメラの向きを操作できる。
+ミサイルを上手く誘導しろ。
+0x14b4bd2b : Destroy Radios
+0x14d8b0f2 : If you see the CALL sign, push the
+ to open your channel.
+
+0x14e2b2d1 : Watch out -- pushing the  will
+pull out the pin.
+0x14ec1798 : Trova la foto della ragazza che va
+a genio allo sviluppatore!
+Yutaka Negishi 
+Titoli a cui ha lavorato: Metal Gear Solid 2
+(direttore artistico sfondi)
+0x15166896 : Push the  in front of the panel
+to activate it.
+0x1575d0a8 : Fehler beim Lesen des|
+Speichergeräts.|
+Zum Speichern sind mind.|
+?KB freier Speicherplatz nötig.|
+Möchten Sie das Spiel so beginnen?
+0x15a6acb5 : Aucun périphérique de stockage n'a été détecté.
+0x15b4bdc3 : Press the  when you're in front of
+the workstation southeast from there,
+0x167df70b : Peek around Corners
+0x16c4e282 : Busca la foto del tipo de chica preferida de.
+Yutaka Negishi 
+Juegos en los que ha trabajado: 
+Metal Gear Solid 2
+(Director Artístico del Escenario de Fondo)
+0x1713d8dc : Bandana
+Solid Snake's bandana. ∞
+(infinity) symbol is sewn in.
+0x17c9011f : Do you have any spent handgun or
+rifle magazines?
+0x18ff6e4a : Press the  in front of the node
+to activate it.
+0x193fd7de : Enemies as Shields
+0x19dd7904 : Claymore
+Anti-personnel landmine w/
+front sensor. Press  to set.
+Can be retrieved if crawled
+over.
+0x1a25f090 : ビハインド中にを動かせば
+その方向を伺うことができる。
+0x1a6b74ad : Jennifer is in this room somewhere.
+Supposedly, Jennifer is typing up
+an e-mail right now. If I find her
+with the directional mic and press
+the , I think I can get in touch
+with her.
+
+0x1a6e3325 : Use the node by pressing the  in
+front of the terminal.
+0x1b3f1a04 : Cardboard Box 1
+Cardboard box to transport
+perishable foods. Equip to
+wear. 
+0x1baff8b8 : 武器を装備してるなら、ビハインド中に
+#{、武器}#を押せば、遮蔽物から素早く
+飛び出して武器を構えることができる。
+0x1c171114 : Select the magazine and throw it
+using the .
+
+0x1c2fb5c0 : Connecte ton périphérique de stockage tout de suite !
+0x1c88bc3b : If it's about waist-high, you'll be
+able to climb up or over things with
+the .
+0x1d637365 : ※これにあたるメッセージは今回表示しない
+0x1d9bf423 : Throwing distance varies with how
+long you press the .
+
+0x1dbe82f6 : But hitting  will let you do a
+quick change of weapons.
+0x1dc5f57c : Push the  to go straight down.
+0x1e4b7510 : Campbell continued, "Jennifer is
+using her cell phone to send us
+e-mail. If you hear the sound of
+someone punching keys on a cell
+phone, turn towards the nearest
+hostage and press the  to talk
+to that person. If it really is
+Jennifer, she should give you some
+sort of response."
+"What if I'm wrong?"
+"The enemy might hear the noise and
+come to investigate. Don't talk to
+just anyone. Don't press the 
+until you're absolutely sure that
+it's Jennifer you're talking to."#C0
+
+0x1e56a7e6 : Stun Grenade
+Grenade that stuns enemy
+soldiers temporarily. Press 
+to aim, release to throw.
+0x1e6d0bef : Change your heading with the .
+0x1e9aa71f : Lo siento Jack, pero no hay suficiente
+espacio libre en el dispositivo de almacenamiento.
+0x1f0506cb : You can crouch, too, with the .
+
+0x1f34eca9 : I'm sorry, Jack, but there isn't
+enough free space on the
+storage device.
+0x1f4e9476 : When the panel appears, choose a
+floor and press the , and the
+elevator will start moving.
+0x1f520802 : Phone
+Mobile phone w/ vibration
+feature. Allows for receiving
+of E-mails.
+
+0x1f730640 : Directional Microphone
+Microphone that picks up sounds
+where it's pointed. Can pick
+up small sounds. Hold in First
+Person View, move w/ .
+0x1fcf2ea4 : を押しっぱなしにすれば、
+銃を構えたまま移動することができる。
+0x219c2837 : Once you have the directional
+microphone selected, the screen
+will switch to First Person View.
+0x220238e7 : 　俺がD脚へ到着すると、ドルフから無線連絡
+が入った。オブライエンと連絡が取れたらしい。
+オブライエンはヴァンプの侵入を防ぐためにD
+脚からシェル1シェル2連絡橋への扉を封鎖。
+残ったSEALSを組織してG脚を中心に防御を固
+めているという。
+「スネーク、君もSEALSに合流してほしい。
+相手はヴァンプだ。SEALSと言えどそう簡単
+に止められるとは思えん」
+「だがシェル1シェル2連絡橋が閉鎖されている
+なら、どうやってシェル2に行けばいい？」
+「もう一つルートがある。『ビッグ・シェル』
+下部のオイルフェンスを渡るんだ。E脚地下に
+あるハシゴからオイルフェンスに下りることが
+出来る。そのまま渡ればシェル2のL脚に出ら
+れるはずだ」
+「わかった」
+　俺は通信を切った。既にヴァンプはシェル2
+へ向かっているはずだ。急がなくてはならない。#C0
+0x2232aa29 : ストレージが見つかりません。
+0x22409b27 : ソーコム・ピストル|
+45口径ハンドガン。|
+#{、武器}#を押すと構え、|
+離すと発砲。装弾数12発。
+サプレッサー装着。
+0x22a271b5 : Hey, there is no storage device.
+0x230c99f4 : ※これにあたるメッセージは今回表示しない
+0x23333fec : Crouch down using the , then push
+the  in the direction you want to
+move.
+0x23ee1dd1 : 全ての標的を破壊し、ゴールせよ！
+状況に応じて武器を使い分けろ！
+クレイモアはを押している間、
+設置方向を変えることが可能だ。
+0x24440b3e : When you start to feel the lack of
+air, hit the  repeatedly.
+0x24bace50 : を押している間|#{ 刀 、ブレード}#で防御ができる
+0x24bb5310 : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Yoshikazu Matsuhana 
+Mitarbeit bei: Snatcher, Policenauts,
+Lethal Enforcers, Metal Gear Solid Serie
+0x251e29d5 : Push the  button while Hanging to
+jump down straight below.
+
+0x25b397ca : 素手で敵と戦う場合の基本はパンチだ。
+#{、パンチ}#を押せ。
+0x25c6dff5 : Raiden, go up that ladder to get to
+the fire escape on the exterior of
+Strut L.
+0x26025e45 : スネーク、#{記録、セーブ}#できなかった！
+0x2604b847 : Find the photograph of the girl of the
+developer's type!
+Sadaaki Kaneyoshi 
+Titles worked on: GuitarFreaks series,
+Metal Gear Solid 2 (Script unit)
+0x2636987c : Let go of  and the selected
+weapon will be in your hand.
+0x26a53fea : やり方は、こうだ。まず倒れた敵の
+近くで、武器を装備せずに#{、武器}#を
+押して、敵の体を抱える。
+0x26ae71fa : If you have a weapon selected while
+in Corner View,
+0x26d2259d : Ich kann erst speichern, wenn Du das
+Speichergerät formatiert
+hast!
+0x26dbd938 : You can deselect equipped weapons and 
+items by pressing the  or  quickly. 
+Press again to re-equip. Comes in handy 
+with First Person View equipment
+0x28c46243 : エレベー夕を呼ぶには、近くにある
+パネルの前で#{、アクション}#を押せばいい。
+0x28c5c478 : 手を離したくなったら
+#{、アクション}#を離せばいい。
+0x28f4df19 : Press the  for the windup, and
+release the button to throw it.
+
+0x290dc08a : 指向性マイク|
+マイクを向けた方向の音を拾う。
+通常は聞き取れない小さな音の|
+収音も可能。装備すると主観で|
+構えで方向を操作。
+0x29c23af2 : Speichergerät wurde nicht|
+erkannt. Zum Speichern sind mind.|
+?KB freier Speicherplatz nötig.|
+Möchten Sie das Spiel so beginnen?
+0x29d61584 : The Corner View lets you take a look
+ahead with  and ,
+0x2a23af95 : Push the  near a scalable railing
+to Hang off the other side.
+
+0x2a283f99 : Tilt the  lightly to walk quietly.
+0x2acf6888 : Get some good shots!
+0x2b4c0e51 : Il est impossible de sauvegarder si tu n'as
+pas connecté de périphérique de stockage.
+0x2c2e37cd : リモコンミサイル|
+無線誘導飛翔体。通称二キー夕。
+#{、武器}#を押すと主観で構え、|
+離すと発射。発射後ミサイルを
+で操作できる。|
+0x2c4e7cc4 : You can strafe left and right even
+during a First Person View attack
+by pushing  or .
+
+0x2cb17164 : Let go of the  to get back behind
+cover.
+0x2d8c0970 : N.V.G.
+Electronically amplifies weak
+dim light for visualization
+when equipped. Allows one to
+see in the dark.
+
+0x2e5b8532 : AKS-74u
+Assault rifle. Press  to aim, 
+and press  for full automatic
+fire. Suppressor attached.
+0x2e7bd03f : USP
+9mm handgun. Press  to aim,
+release to fire. 15 rounds per
+magazine. Can attach suppressor.
+0x2ea6fd2e : To steady your hands when aiming
+with a sniper rifle,
+
+0x2ea80176 : その相手がエイムズだと確信したら
+マイクを向けたまま#{、アクション}#を押して
+呼びかけるんだ。
+0x2eab1aca : Select the desired weapon by moving
+the  up and down.
+
+0x2f4c67e4 : then push the  to call his name.
+0x2f902d8f : 壁に張りついた状態でを押すと、
+壁を叩いて音を立てることができる。
+持ち場から動こうとしない敵がいる場合は、
+音を立てて誘導してみるのも効果的。
+0x2fe6c2cc : ロッカーは近くで#{、アクション}#を押せば
+開けられる。扉を開けて中に入れば
+隠れることができるよ。
+0x30a2df14 : SOCOM
+.45 handgun. Press  to aim,
+release to fire. 12 rounds per
+magazine. Suppressor attached.
+0x30c6b5ba : Destroy all targets and head to the
+goal! Use different weapons
+accordingly! You can change where
+you set the Claymore while
+pressing the .
+0x311d20af : C4
+Plastic explosive w/ remote
+detonator. Press  to set.
+Press  to detonate.
+0x31c47d67 : The throwing distance depends on
+how long you push the .
+0x32056e4e : When you're ready to take a shot, use
+ and  to scroll left or right#－
+0x321dc5d3 : Push the  up or hit the  to 
+start a call on that frequency.
+0x32b88849 : 心音を聞いてエイムズを特定したら、
+マイクをその人質に向けたまま
+#{、アクション}#を押して呼びかけるんだ。
+0x32fe1ffe : #{SEAL10、シール・テン}#の生き残りという線は？
+0x331fa119 : 新規にセーブファイルを作成するためには|
+ストレージに空き容量が足りません|
+作成には?キロバイト以上の空き容量が必要です|
+このままゲームを開始しますか？
+0x3332ef15 : You need a storage device
+to save.
+0x33691fc6 : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Sadaaki Kaneyoshi 
+Mitarbeit bei: GuitarFreaks Serie,
+Metal Gear Solid 2 (Skripteinheit)
+0x33a7f221 : Select a weapon and switch to First
+Person View with .
+
+0x341063b5 : Move the  while in Corner View to
+study that direction.
+
+0x342a70dd : While running, you can execute a
+roll by pressing the .
+
+0x342e4844 : then lower it without firing if you
+click the .
+
+0x34fd9c4e : You can also move the  while in
+Corner View to survey other
+directions.
+0x35347985 : Move the  up and down to slash up
+or down, and left and right to slice
+the blade horizontally.
+
+0x354ab363 : RGB6|
+40mm6連装グレネードラン|
+チャー。#{、武器}#を押すと構え、
+離すと発射。榴弾は放物線を|
+描いて飛び着弾すると爆発する。
+0x3592d95b : Open / Close Lockers
+0x36192b62 : Para guardar necesitas
+un dispositivo de almacenamiento.
+0x3672f444 : とを同時に押せば、
+主観のまま背伸びして上に伸び上がる
+ことができる。上手く使ってくれ。
+0x36d140f9 : Push  and  while in First Person
+View to strafe left and right.
+0x36ec73f1 : 大佐、#{SEAL10、シール・テン}#ブラボー・チームが
+全滅した……。
+0x372cac54 : After you equip the spray, you can
+discharge the coolant by tilting
+the .
+0x372cbc40 : Busca la foto del tipo de chica preferida de.
+Shinta Nojiri 
+Juegos en los que ha trabajado: 
+Metal Gear (GB), 
+Metal Gear Solid 2 (unidad del guión)
+0x37bbb117 : you can lower the gun without
+firing.
+0x37f7e7fd : Push the  while running to go 
+into a roll.
+
+0x382cb86d : you have the option to make a Jump-
+out shot with the .
+
+0x3858629b : Use the HANGING-DROP-CATCH move and
+get to the goal! Press the  at
+the right timing while falling and
+you can HANG again!
+
+0x385f09c4 : Nicht genug Speicherplatz|
+auf dem Speichergerät.
+Zum Speichern sind mind.|
+?KB freier Speicherplatz nötig.|
+Möchten Sie das Spiel so beginnen?
+0x399dda96 : You can aim the handgun with the , 
+
+0x39a96c1e : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Yutaka Negishi 
+Mitarbeit bei: Metal Gear Solid 2
+(künstl. Leiter Hintergrund)
+0x39dc3750 : 壁に張り付いて、#{、パンチ}#だ。
+0x3a1c3936 : Face the locker and press the  to
+open the door.
+0x3a2508c7 : Trova la foto della ragazza che va
+a genio allo sviluppatore!
+Masahiro Hinami 
+Titolo rappresentativo: Ring of Red
+0x3a257bfe : When you're on the surface, you can
+swim in corresponding directions
+using the up, down,
+0x3aa85b7a : Press the  or  during First Person
+View to step sideways. Press the  & 
+together to stretch up. Effective while
+0x3ac87b6e : エルード中に#{、ホフク}#を押すと、
+その場から真下に飛び降りる。
+0x3ad24b56 : Stealth Camo
+Activates when equipped. Can
+optically deceive enemy eyes,
+helping you to hide.
+0x3b7b1de4 : Push  to change to First Person
+View.
+0x3bbd25c8 : There is insufficient space|
+on the storage device.
+At least ?KB of free space|
+is needed to save your game.|
+Will you start the game as it is?
+0x3c5993c9 : Use the  to make high-speed turns.
+0x3c7022ba : If you need to take some, select it
+in the Item Window and push the .
+0x3cafef16 : Snake, there wasn't enough
+space left on the storage device!
+0x3ce25ce0 : Aucun périphérique de stockage n'a
+été détecté| un minimum de ?ko d'espace
+libre est requis pour sauvegarder la partie.
+voulez-vous commencer à jouer?
+0x3d02fbf7 : Face the hatch and push the  to
+open it.
+0x3da2daa9 : 走りながら#{、ホフク}#を押すと
+ローリングをすることができる。
+0x3dbc57c6 : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Shinta Nojiri 
+Mitarbeit bei: Metal Gear (GB),
+Metal Gear Solid 2 (Skript-Einheit)
+0x3ddcb21c : To hold up an enemy, sneak up and press
+the  to raise your equipped weapon. 
+Aim at enemy weak points and the enemy
+may give you an item.
+
+0x3e209a22 : スティンガーミサイル|
+携帯用地対空ミサイル。|
+装備すると主観で構え#{、武器}#|
+を押すと発射。照準に標的を|
+捉える事でロックオンが可能。
+0x3e8a441d : AP Sensor
+Lifeform-detecting sensor.
+Vibrates on enemy approach.
+All other vibrations will be
+OFF when sensor is activated.
+0x3ed652c7 : Hit the  to pop out and catch the
+enemy off guard.
+0x3f586aa1 : 主観の時に、を押せば、
+主観のままそれぞれ左右に
+ステップする。
+0x3f94629c : Once you recognize Ames by his
+heartbeat, keep the microphone
+pointed toward him.
+0x3fa133ac : hiding behind objects during gun fights.
+0x3fc0f616 : Take aim using First Person View and
+try to land it where it will lure the
+enemy away.
+0x40601fe7 : Il n'y a pas de périphérique de stockage !
+0x40984e50 : Cardboard Box 3
+Cardboard box to transport
+daily supplies. Equip to wear.
+0x40ccce5a : Trouvez la photographie de la fille 
+du type du développeur !
+Yoshikazu Matsuhana 
+A travaillé sur les titres suivants : 
+Policenauts, Metal Gear Solid series
+0x40cd646a : ソーコム・ピストル|
+45口径ハンドガン。|
+#{、武器}#を押すと構え、|
+離すと発砲。装弾数12発。
+サプレッサー装着可能。
+0x41a3b556 : to strafe right and left,
+respectively.
+0x41bb1eb7 : Stand up against a wall and press the 
+to knock on the wall. This will draw the
+attention of an enemy who never seems to
+leave his spot.
+
+0x42356a03 : To select a weapon, push and hold 
+and open the Weapons Window.
+
+0x423b6c25 : Field Uniform
+Same uniform as Shell 1 Core
+Gurlukovich soldiers. Equip to
+wear. Balaclava is no longer
+present.
+0x423fa817 : ストレージの空き容量が足りません。
+0x424f65a0 : 壁の方向に向かってを
+押しっぱなしにすると、壁に張り付ける。
+0x4261744f : Use an enemy as a shield by strangling him 
+and taking him hostage. Other enemies will 
+hesitate to shoot. You can escape during 
+this moment.
+0x42a06544 : Check the hatch by positioning
+yourself nearby it and pressing the
+.
+0x42be9f96 : If you hide under a cardboard box and stay 
+still, the enemy will ignore you. lf you move 
+when in his sight, you will be found. Blocking 
+an enemy's path while in the box will cause
+0x42c9bc0e : #{ペン夕ゼミン、安定剤}#を使えばしばらくの間
+手ぶれを止めることができる。
+精密な狙撃がしやすくなるはずだ。
+0x42fd6b95 : それで新しい弾倉を装填した状態になる。を素早く押してクイック
+チェンジを使うといいだろう。
+0x4401bb50 : Sensor B
+Neutron scintillator explosive
+detector. Activates when
+equipped. Beeps when detecting
+odorless C4.
+0x44a0e5d7 : Error al detectar el dispositivo de almacenamiento.
+Inténtalo de nuevo.
+0x4535c329 : Try it if you have time.
+
+0x46097cfc : Also, the  will let you go into a
+crouch.
+
+0x46261252 : Speichergerät wurde nicht erkannt.
+0x4691c353 : #{、武器}#を押す度に
+#{刀、ブレード}#の刃と峰をひっくり返す。
+0x46b2e509 : Wig A
+Blue wig. Equip to wear.
+0x470b72e2 : At the same time, because you are
+staying in the same position,
+0x47920e81 : ¡No hay ningún dispositivo de almacenamiento!
+0x481a2782 : If you have a weapon selected,
+0x48b538ec : Snake, non c'era abbastanza
+spazio disponibile sulla
+periferica di memorizzazione!
+0x4a91f07a : ※これにあたるメッセージは今回表示しない
+0x4a99ad7c : To move more quietly, try crawling,
+or walk slower by pushing the 
+a little bit at a time.
+0x4aa99e18 : Punching is a basic move in
+hand-to-hand.
+
+0x4b41895c : Push the  while in that position
+to knock on the wall and create a
+diversion.
+0x4b9dc4ac : Oh, non ! Snake, il n'y avait plus assez
+d'espace libre sur le périphérique de stockage
+pour sauvegarder la partie.
+0x4c74ec69 : The gun should now be loaded with a
+fresh magazine.
+0x4d12fb28 : Move the  while in Corner View to
+look in that direction.
+
+0x4d15a4e4 : Necesitas conectar un
+dispositivo de almacenamiento.
+0x4d3d3d0b : ※これにあたるメッセージは今回表示しない
+0x4d422d02 : You can use the  to look around
+during this time.
+0x4d750d46 : Du benötigst ein Speichergerät,
+um speichern zu können.
+0x4d9c3b1d : ペン夕ゼミン|
+ベンゾジアゼピン系抗不安薬。|
+狙撃銃を構えた時の手ぶれを|
+一定時間止める。ウィンドウで|
+選んで#{、決定}#で服用。
+0x4ddcb78c : Magazine
+Empty magazine. Press  to
+hold, release to throw. How
+long the button is pressed
+varies distance.
+
+0x4e07df8f : Push the  with the blade selected
+to block.
+
+0x4e3db3c6 : AKS-74u
+Assault rifle. Press  to
+aim, and press  for full 
+automatic fire. Can attach
+suppressor.
+0x4e6fb958 : SOCOM Suppressor
+Firing noise is reduced when
+attached to SOCOM. Equip
+together w/ SOCOM to attach.
+Unremovable once attached.
+0x4e9e8ea3 : Hit the  to do a weapon quick-
+change. Make use of it.
+0x4eac31ed : Change your vantage point and
+conduct a thorough search.
+0x4f892148 : Sea Lice
+Genetically engineered bug
+for oil spill accidents. Eats
+and decomposes oil. Rations
+are their favorite as well.
+0x4f9aa354 : Trouvez la photographie de la fille 
+du type du développeur !
+Yutaka Negishi 
+A travaillé sur les titres suivants : 
+Metal Gear Solid 2 (directeur artistique)
+0x501b442e : 武器を装備していない場合のみ、
+敵に接近して#{、武器}#で投げ技が使える。
+0x504947d8 : Click the  to get a stabbing
+strike.
+0x5080ccb2 : The enemy may drop an item.
+0x50a334c9 : Just get in close and hit those
+controls at the same time.
+0x50e60513 : 飛び降りるにはエルードで手すりに
+ぶらさがった状態で#{、ホフク}#を
+押せばいい。
+0x51002d15 : MO Disc
+Optical disc given by the 
+President. Contains a computer
+virus to destroy the control 
+function of GW / Arsenal Gear.
+0x514089b1 : You will be able to climb over the
+railing and Hang down from the
+other side.
+0x51afc248 : Trouvez la photographie de la fille 
+du type du développeur !
+Masahiro Hinami 
+Titre représentatif : Ring of Red
+0x52093a20 : ジャック、ごめんなさい。
+空き領域がないみたい。
+0x529f2624 : Push the  in front of the panel
+you see next to the elevator.
+0x52c50cb9 : Just push the  in front of the
+node.
+0x531ab35b : As long as you have a hold on the
+body, you'll be able to drag it.
+0x537b1ee1 : When you hear that noise, press the
+.
+0x53856320 : Dog Tags
+Soldier identification tags.
+Select SPECIAL on title screen
+and enter Dog Tag Viewer mode
+to look at obtained dog tags.
+0x53abf359 : Oh no, Snake! Non avevi abbastanza 
+spazio disponibile sulla periferica di
+memorizzazione per salvare il gioco.
+0x556661d7 : マガジン
+銃の空弾倉。
+#{、武器}#を押すと構え、
+離すと投げる。#{、武器}#を
+押す長さで投擲距離が変わる。
+0x55fc5468 : Press  when running to roll forward.
+Effective to move between hiding spots or
+over gaps. Hold down  while rolling to
+start crawling at the end of the roll.
+0x56627e31 : The Big Shell's layout map should
+now be available after touching the
+.
+0x568bbb2b : 床にメンテナンス用のハッチが
+あるだろう。その中も確認するんだ。
+ハッチの近くで#{、アクション}#を押せ。
+0x56ad95c8 : Knock on Walls
+0x57544e4f : 制作者の好みを暴け！兼吉完聡
+主な作品は「ギ夕ーフリークス」シリーズ。
+「メ夕ルギアソリッド2」(スクリプト班)
+0x57685ac3 : Errore nel rilevamento della|
+periferica di memorizzazione.|
+Per salvare il gioco occorrono|
+almeno ?KB di spazio libero.|
+Vuoi iniziare il gioco così com'è?
+0x57805fea : Change to First Person View with a
+weapon selected.
+0x5790c575 : It should come in useful.
+0x57aa7f22 : シェル1中央棟B1との|連絡が途絶えた
+0x5816a75a : Raiden, do you see the ladder?
+Walk up to the ladder and push the
+ to start climbing.
+
+0x582351c5 : Push the  in front of the door.
+0x58326cf9 : When you're ready to pull yourself
+up, just push the  again.
+
+0x5840df2c : まて、雷電。今#{SEAL10、シール・テン}#突入部隊の
+無線を傍受した。
+0x58a923b9 : Storage device not formatted.|
+Format and save?
+0x58c793c8 : スネーク、ハシゴにつかまるには
+ハシゴに向かって#{、アクション}#を押すんだ。
+0x5998376f : once I have the pictures, right?
+0x5aae5780 : If you have the grenade selected
+during a peek,
+0x5ad0cee7 : 『G.W』。それはそう呼ばれている。
+『愛国者達』の切り札。
+0x5ae355e4 : Hold up all enemies and get to the
+goal! The mission will be terminated
+if you are discovered or an enemy is
+killed. Point the weapon and press 
+to point and move. Use this wisely.
+0x5be0b79e : ¡No puedo guardar a menos que
+conectes un dispositivo de almacenamiento!
+0x5c1d4da4 : RGB6
+40mm 6-round grenade launcher.
+Press  to aim, and release
+to fire. Grenade will travel in
+an arc and explode upon impact.
+0x5c75d4dc : To operate the elevator, walk in and
+push the  in front of the panel
+located to the left of the door.
+0x5cfe14eb : I can't save unless you have a
+storage device!
+0x5d3b23f1 : Stand in front of a locker & press 
+to open the locker. Press  again in
+front of an open locker to close it.
+
+0x5eb215a0 : Push the  again to let go.
+0x5ed5dd14 : Une erreur s'est produite pendant|
+la détection du périphérique de stockage.|
+Un minimum de ?Ko d'espace libre|
+est requis pour sauvegarder la partie.|
+Voulez-vous commencer à jouer?
+0x5fb979a4 : エルードから飛び降りる途中に
+つかめそうな場所があったら#{、アクション}#を
+押してみるといい。
+0x5fd5b9d6 : Flatten yourself against the wall
+and push the  to knock and create
+a diversion.
+0x603666cb : USP Suppressor
+Firing noise is reduced when
+attached to USP. Equip together
+w/ USP to attach. Unremovable
+once attached.
+0x6214b900 : PSG1|
+自動狙撃銃。装備すると主観で|
+構え、#{、武器}#を押すと発砲。|
+でスコープのズーム
+イン、でズームアウト。
+0x62174bba : デジ夕ルカメラ|
+#{、武器}#で撮影。で|
+ズームイン、でズーム|
+アウト。、
+でプレビューを左右に移動。|
+0x6273774c : 素手の状態で#{、アクション}#を押している間、
+手をつなぐ。
+0x665dde68 : Digital Camera
+Press  for photos. Zoom in 
+w/ , zoom out w/ . Use 
+and  to scroll left or right
+among the picture previews.
+0x6668cbba : Find the photograph of the girl of the
+developer's type!
+Yoshikazu Matsuhana 
+Titles worked on: Snatcher, Policenauts,
+Lethal Enforcers, Metal Gear Solid series
+0x668532f5 : 双眼鏡|
+軍用双眼鏡。遠距離から|
+偵察を行う事ができる。|
+でズームイン、|
+でズームアウト。
+0x67cafa00 : レーション等の装備品を装備する時は
+で同じことをすればいい。
+0x680a20c4 : 雑誌|
+成人男性向けグラビア雑誌。|
+若い女性モデルの魅力的な写真|
+が満載。企画記事も見逃せない。
+#{、武器}#で設置。
+0x6841fb93 : Mine Detector
+Chemically detects mines.
+Activates when equipped.
+Displays position of Claymore
+mines on radar.
+0x6845cc39 : ビハインドカメラの時にハンドガンや
+自動小銃を装備しているなら、
+#{、武器}#で飛び出し撃ちができる。
+0x687bf78c : エルード中はの左右か、
+、で左右に移動できる。
+0x68d329fd : Push left or right to make
+90-degree turns in those directions,
+and down to make a 180-degree spin.
+0x68e1c0e1 : Field Uniform
+Same uniform as Shell 1 Core
+Gurlukovich soldiers. Equip AK
+at the same time to disguise
+yourself as an enemy soldier.
+0x6916e3b4 : Storage device not detected.
+0x694724d8 : Spazio libero insufficiente sulla|
+periferica di memorizzazione per|
+creare un nuovo file di salvataggio.|
+Per salvare il gioco occorrono|
+almeno ?KB di spazio libero.|
+Vuoi iniziare il gioco così com'è?
+0x69d09d1e : Aim guns by pressing the . To move
+while aiming the gun, press both the 
+and the . You can also shoot while
+moving.
+
+0x6a682f85 : グレネード
+投擲用破片手榴弾。
+#{、武器}#を押すと構え、離すと
+投げる。#{、武器}#を押す長さで
+投擲距離が変わる。
+0x6a9183e7 : Push  and  at the same time to
+stretch up on your toes while still
+in First Person View.
+0x6acf9841 : Once you see the Codec screen,
+set the frequency by moving the
+ left and right.
+
+0x6ba71fc2 : 出てきたパネルの中から行きたい
+フロアを選んで#{、決定}#を押せば
+エレベー夕が動き出すみたいよ。
+0x6bc62975 : Il te faut un périphérique de stockage.
+0x6bd70c0f : Books
+0x6c1bd409 : うーん。スネーク、
+空き領域がなくて
+#{記録、セーブ}#できなかったよ。
+0x6c1da620 : and left and right to slice parallel
+to the ground.
+0x6dafbc66 : #{、武器}#ボ夕ンを離すまでの長さで
+投げる距離が変わる。
+0x6e2e5d8d : Push the  up to move forward,
+down to move back.
+0x6e3f975d : 　キャンベルは続けた。
+「メールを打つ音がするのがジェ二ファーだ。音を聞いてジェ二ファーだと思ったら、マイクをその人質に向けたままを押して呼びかけろ。その人質が本当にジェ二ファーだったら、何らかの反応を示すはず」
+「もし間違ったら？」
+「物音を聞きつけて敵がやってくるかもしれんな。うかつに呼びかけない方がいいだろう。ジェ二ファーにで呼びかけるのは、その相手がジェ二ファーだと確信出来てからにしろ。それとそのエリアで敵に見つかったら逃げ場はないぞ。発見されたら終わりだ。気をつけろよ」#C0
+0x6ee10fda : if you see a good handhold, try
+pushing the .
+0x6f2e1006 : Unlike peeking out with  and ,
+this method doesn't involve leaning 
+out.
+0x6f56447e : In this game, Metal Gear Solid|for the console...
+0x6f9b5f8e : #{、パンチ}#を押すと水をかいて前進する。
+連打すれば早く泳ぐことができるぞ。
+0x6f9c99a7 : の上で前進、下で後退、
+左右はそれぞれの方向を向く。
+0x70a9008a : Push the  again to get out of the
+locker.
+0x70c68c66 : It is very helpful when you want to
+fix your aim quickly.
+0x70f9e449 : With no weapon equipped, walk up to an 
+enemy from behind & press the , without 
+using the . Hit the  rapidly to take 
+the enemy out.
+0x714ad454 : Wig D
+Colored wig. Equip to wear.
+
+
+0x7174e9be : Hé, aucun périphérique de stockage n'a été détecté !
+0x71aa5e72 : Lift an unconscious or dead enemy by
+pressing the . Release the  to drop
+the body. Continue pressing and releasing
+the  to shake the body.
+
+0x72999a0c : then press the  to put him in a
+chokehold.
+
+0x72cc392e : ハッチを開けるには、ハッチに向かって
+#{、アクション}#を押せばいい。
+0x731770cc : そうだ。早くノードにアクセスしろ。
+やり方は、ノードの前に立って
+#{、アクション}#を押すだけだ。
+0x73302982 : like the Scope.
+0x73e36b64 : M9
+Tranquilizer with suppressor.
+Puts enemies to sleep. Press
+ to aim, and release to fire.
+Equipped with laser pointer.
+0x744d6825 : クレイモア|
+対人指向性地雷。#{、武器}#を|
+押すと設置。設置後地雷前方の|
+起爆範囲に入る物を感知すると|
+爆発する。ホフクで回収可能。
+0x745fb136 : No se ha detectado ningún dispositivo de almacenamiento.
+0x74fb3eed : Your USP is equipped with a
+flashlight.
+0x75207d2a : Devi avere una
+periferica di memorizzazione.
+0x75432707 : Wig C
+Colored wig. Equip to wear.
+0x76748c7b : It has more reach and power than
+normal strikes, but you're also
+more open to counterattacks.
+0x76aaf0ab : Raiden, push  or  while in
+First Person View
+
+0x76b089ef : Snake, es war nicht genug
+Speicherplatz auf dem Speichergerät!
+0x76c0cb9c : The punch is the basis of hand-to-
+hand combat. Push the .
+0x77085ae6 : 
+		
+0x7769a3a8 : The noise will draw enemy soldiers
+toward wherever the magazine lands.
+0x784f91e7 : PSG1
+Sniper rifle. Aim in First
+Person View, fire w/ . Zoom
+in with , zoom out with .
+0x787cf1bb : Face the hatch and push the  to
+open it.
+0x798b1a97 : お前が手に持っているマガジンは
+ハンドガンや自動小銃の空弾倉だ。
+#{、武器}#を押すと構え、離すと投げる。
+0x7a139f01 : First, make sure no weapon is
+selected. Then push the  near the
+body to grab it.
+
+0x7a4167bf : 施設内に設置されている消火器を銃で撃つと
+消火剤が噴き出す。これを利用すれば、追撃
+してくる敵をかく乱することもできる。
+0x7ad12b4a : it will be fully reloaded
+automatically.
+
+0x7b0c2a36 : Press down and hold the  near
+Emma to hold her hand.
+
+0x7b3ec19a : ブラボー・チームと共に爆弾処理の
+教官が降下している。#{SEAL10、シール・テン}#の
+作戦ではC脚に残ることになっていた。
+0x7bcd1c43 : Speichergerät wurde nicht erkannt.
+0x7c0ecf99 : エイムズに#{、アクション}#で呼びかけるのは
+その相手がエイムズだと確信できて
+からにしろ。
+0x7ca2016f : 制作者の好みを暴け！日並雅宏
+代表作は「リングオブレッド」。
+0x7d943518 : You will be able to peek out from
+behind cover and scan that direction.
+0x7e225061 : プリスキン、#{SEAL10、シール・テン}#のブラボー・
+チームが全滅した……。
+0x7e72a17e : Trova la foto della ragazza che va
+a genio allo sviluppatore!
+Sadaaki Kaneyoshi 
+Titoli a cui ha lavorato: serie GuitarFreaks,
+Metal Gear Solid 2 (unità Script)
+0x7eaa9c4b : パネルを押すにはパネルの前で
+#{、アクション}#を押せばいい。
+0x7f0f0756 : Errore nel rilevamento della
+periferica di memorizzazione.
+Riprova.
+0x7f27d3ad : Medicine
+Cold medicine. Press  to
+take while having it selected
+in window.
+0x7f494ab3 : 銃を一度装備から外すとマガジンの最大
+数まで装弾する。のクイック
+チェンジを使えば楽にできるはずだ。
+0x80055523 : No storage device|
+detected. At least ?KB of free space|
+is needed to save your game.|
+Will you start the game as it is?
+0x80faa058 : #{刀、ブレード}#の装備中にを押せば防御だ。
+を押している間、敵の銃弾を
+弾くことができる。
+0x81324a14 : Aim the gun and push  to
+automatically lock onto the target.
+0x817cf754 : Raiden, the procedure for opening
+watertight doors is the same as
+when you're on land.
+0x81893209 : No puedes guardar a menos
+que conectes un
+dispositivo de almacenamiento.
+0x81cb2815 : ハンドルを回している間、
+#{、アクション}#を連打すれば早く開けられる。
+途中で手を放してしまわないようにね。
+0x823ee31a : You can put him in a chokehold.
+0x825bd3da : 通信したい周波数を選択して#{、決定}#を
+押すだけで、その周波数で通信を
+することができるぞ。
+0x82a9cfde : Handguns are aimed by pushing down
+the , but if you click the ,
+
+0x8308622f : There is insufficient space on the|
+storage device to create a new|
+save file. At least ?KB of free space|
+is needed to create a new save file.|
+Will you start the game as it is?
+0x830e2eee : Then use the  to raise the gun and
+you can attack from that viewpoint.
+0x839a858a : Card Key
+Security card Level #1. Opens
+security Level #1 doors when
+held in inventory.
+0x84028372 : ……スティルマン、あんた、
+プリスキンは本当に#{SEAL10、シール・テン}#の
+隊員ではないと？
+0x841f5e86 : or the buttons again and again.
+0x842c1881 : Cardboard Box 5
+Cardboard box to transport
+game software. The eye design
+is "eye-catching." Equip to
+wear.
+0x84ec032d : そうか……#{SEAL10、シール・テン}#に生き残りが
+いると言ったな。
+0x84ed5f10 : Release the  to toss it.
+0x85062b81 : When you see the CALL sign, hit the
+ to receive, all right?
+0x8587ae98 : Schließe jetzt dein Speichergerät an!
+0x8706479c : 風邪薬|
+総合感冒薬。|
+風邪を治す事ができる。|
+ウィンドウで選んで|
+#{、決定}#で服用。
+0x877870fc : Je regrette, Jack, mais il n'y a
+pas assez d'espace libre sur
+le périphérique de stockage.
+0x87ca5004 : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Yutaka Negishi 
+Mitarbeit bei: Metal Gear Solid 2
+(Background Art Director)
+0x8816b3ea : Ti serve una periferica di memorizzazione
+su cui salvare i dati.
+0x88347536 : is that you won't expose yourself
+to possible enemy fire.
+0x891ae5ac : Input  toward a wall near a corner to
+enter corner view. You can stay hidden
+and look beyond the corner. You can move
+the camera with  in corner view.
+0x8937bfb1 : or you can jump out with your
+weapon ready.
+0x89a61352 : Drag Enemies
+0x8a047e33 : #{SEAL10、シール・テン}#の突入班は？
+0x8aae5c53 : Body Armor
+Bulletproof vest made of special
+fibers. Damage incurred when
+equipped is reduced by half.
+0x8ac942c8 : Push the  again to stand up.
+0x8aef9acc : Use the quick change button --  --
+for this one.
+0x8af83a65 : 捕虜を撃つのか!?
+0x8b2ff500 : Sensor A
+Ion mobility spectrometer
+explosive detector. Activates
+when equipped. Displays Fatman's
+scented C4 on radar.
+0x8b315845 : Connect your storage device!
+0x8bfe085f : ポールにつかまるにはポールの方を
+向いて#{、アクション}#を押せばいい。
+0x8c16953d : Bei diesem Spiel wird Metal Gear Solid|für die Konsole
+0x8c18a579 : 指向性マイクを装備すると主観画面に
+なる。でマイクを人質の
+方向に向けるんだ。
+0x8d189145 : Periferica di memorizzazione non formattata.|
+Vuoi formattare e salvare?
+0x8d1d5cd2 : 『ビッグ・シェル』全体の構造マップは
+でいつでも閲覧が可能だ。
+0x8d4a769d : You press the  to pull the pin,
+and release the button to throw the
+grenade.
+
+0x8d4e4cfe : You will see an array of weapon
+icons.
+0x8ddd59cb : All you have to do is select the
+gun and aim it with the , and the
+light will go on.
+0x8e42e7d0 : You can select a weapon out of the
+row by moving the  left and right.
+0x8e526e33 : Throw Enemies
+0x8ec6a992 : 武器を装備した状態で主観にして、
+#{、武器}#で武器を構えれば、
+主観攻撃ができる。
+0x8f1797a1 : そこでを離せば、
+君の手に選んだ武器が握られている
+はずだ。
+0x8f1a2ec0 : Thermal Goggles
+Visualizes heat source
+distribution. Allows one to see
+in the dark when equipped.
+Claymores can be seen when used.
+0x8f9b9712 : Binoculars
+Military binoculars allowing
+long-distance reconnaissance.
+Zoom in with , zoom out
+with .
+0x8fc57a7f : Oh nein, Snake, es war nicht genug
+Speicherplatz auf dem Speichergerät, um den Spielstand zu
+speichern.
+0x9099a951 : The selected weapon should appear
+in the far right.
+0x91177588 : Est- ce que tu peux connecter un
+périphérique de stockage ?
+0x91c97c03 : How long you push the  determines
+how far you throw it.
+0x928dbea1 : コントローラを接続し直し|
+を押して続けてください
+0x9402caf8 : Lean the  down in the Codec screen
+to activate the Memory Window.
+
+0x947623b5 : #{SEAL10、シール・テン}#はB脚、C脚に降下した。
+0x94937ba3 : Select a frequency and push the 
+to start a call on that frequency.
+0x94c77141 : 写真を送信する時は、その#{WS、ワーク・ステーション}#の前に
+立って#{、アクション}#を押すだけでいい。
+0x95b8636b : Destroy all targets and head to the
+goal! You can set the C4 on the wall
+by pressing the  while flattening 
+yourself against the wall.
+0x960bf7e8 : Book
+Publication w/ adult-oriented
+material. Full of girly photos
+and interesting columns. Press
+ to set.
+0x96764d29 : ビハインドモードからは、
+で覗き込みをしたり、
+武器を構えて飛び出したりできる。
+0x978442f0 : Non c'è alcuna periferica
+di memorizzazione!
+0x979e4b8b : Destroy all targets and head to the
+goal! Destroy them consecutively and
+gain bonus points. Press the 
+twice quickly for "tactical reload."
+0x980a2213 : As long as you have no weapons
+selected,
+0x993684d7 : No hay suficiente espacio libre en el dispositivo de almacenamiento.|
+Para guardar el juego necesitas al menos|
+?KB libres. ¿Quieres comenzar a jugar|
+de todas las formas?
+0x99de457d : Walk into the open locker and close
+the door to hide.
+0x9a157a3e : Move in close to the enemy from
+behind and push the 
+0x9a77feb6 : Up will take you up, down takes you
+lower, left and right to face those
+directions.
+0x9a983a10 : 水中で息が苦しくなったら#{、アクション}#を
+連打するんだ。そうすれば息をつめて
+#{O2、オーツー}#ゲージの減り具合を少なくできる。
+0x9aa0a6ce : 、で覗き込み、
+#{、武器}#で飛び出し撃ち等が可能だ。
+有効に使え。
+0x9b50181d : 指向性マイク|
+マイクを向けた方向の音を拾う。
+通常は聞き取れない小さな音の|
+収音も可能。装備して|
+を押すとエイムズに呼びかける。
+0x9b638440 : Keep an eye out for approaching
+enemies.
+0x9b862e14 : Peek by using  and , and make
+Jump-out shots with the .
+
+0x9b8ab310 : Directional Microphone
+Microphone that picks up sounds
+where it's pointed. Can pick up
+small sounds. Equip and press
+ to call for Jennifer.
+0x9c457596 : Jack, aucun périphérique de stockage n'a été détecté.
+0x9c4d6752 : Jump Down from Hanging
+0x9cc0dc3d : With the  pressed, you'll be able
+to deflect enemy gunfire.
+
+0x9d633fb8 : You can use it on the spot and
+regain some LIFE.
+0x9e813fb3 : Move in close to the enemy when you
+have no weapons selected. You can
+throw him with the .
+
+0x9eb76806 : If you hold down the , you can
+move while holding your gun.
+
+0x9ed1449e : With no weapon equipped, press the 
+near an unconscious/dead enemy to grab
+his body. Hold down the  to drag him.
+0x9ef16676 : you can throw an enemy with the 
+and the .
+
+
+0x9ef3faca : Frag Grenade
+Grenade. Press  to hold,
+release to throw. How long
+the button is pressed varies
+distance.
+
+0x9fca94a3 : Push the  to dive down from the
+surface.
+0xa0d80505 : Destroy all targets and head to the
+goal! Destroy the consecutively and
+gain bonus points. Press the 
+twice quickly for "tactical reload."
+0xa1c371c4 : Error detecting the storage device.
+Please try again.
+0xa267a1f3 : いや、我々も聞いていない。
+#{SEAL10、シール・テン}#の独自行動だろう。
+0xa2ad510b : Speichergerät nicht formatiert.|
+Formatieren und speichern?
+0xa2c0d224 : Push the  while Hanging to jump
+straight down.
+0xa339bc36 : 指向性マイク|
+マイクを向けた方向の音を拾う。
+通常は聞き取れない小さな音の|
+収音も可能。装備してを
+押すとジェ二ファーに呼びかける。
+0xa578c1ed : 首絞めをかけるには、敵の後ろから
+近づいて武器を装備せずに#{、武器}#を
+押せばいい。
+0xa5efc33c : Il n'y a pas assez d'espace sur le|
+périphérique de stockage.|
+Un minimum de ?Ko d'espace libre|
+est requis pour sauvegarder la partie.|
+Voulez-vous commencer à jouer?
+0xa5fc0e5a : Oh no. Snake, there wasn't enough
+space left on the storage device.
+0xa64482b5 : ※これにあたるメッセージは今回表示しない
+0xa65a6676 : You can easily do this by using the
+ to change equipment quickly.
+
+0xa669d3b2 : Press the  again to climb up
+from Hanging.
+
+0xa76640b5 : This will let you ration your air
+supply better and slow the decline
+of your O2 Gauge.
+0xa7e77c85 : Du benötigst ein Speichergerät.
+0xa90d1799 : ス夕ン・グレネード|
+閃光音響手榴弾。|
+敵を気絶させることができる。|
+#{、武器}#を押すと構え、|
+離すと投げる。
+0xa91a51c1 : Move the  up and down to
+make a vertical slice,
+0xa9896f12 : You can now execute a First Person
+View attack with the .
+
+0xa9a3699b : デジ夕ルカメラ|
+写真を撮る事ができる。|
+#{、武器}#を押すと撮影。|
+でズームイン、|
+でズームアウト。
+0xaa460887 : left and right movement of the .
+0xaa647dae : 腰くらいの高さの手すりに向かって
+#{、アクション}#を押すと、手すりを乗り越えて
+向こう側にぶら下がることができる。
+0xaada73c1 : When you're sure that you have
+Ames, keep the microphone
+pointed in the same direction,
+0xab2184a3 : Tu ne peux pas enregistrer sans
+périphérique de stockage.
+0xab2aa909 : Press  to climb up objects with heights
+close to your waist. You cannot climb up
+heights too high.
+0xab789333 : Slow your pace by tilting the 
+only slightly, or go into a crawl.
+0xab85e934 : Busca la foto del tipo de chica preferida de.
+Yoshikazu Matsuhana 
+Juegos en los que ha trabajado: Snatcher, 
+Policenauts, Lethal Enforcers, 
+las series de Metal Gear Solid
+0xab9d8915 : No se ha detectado ningún dispositivo de almacenamiento.|
+Para guardar el juego necesitas al menos|
+?KB libres. ¿Quieres comenzar a jugar|
+de todas las formas?
+0xabda89cd : Cardboard Box 2
+Cardboard box to transport
+electric appliances. Equip to
+wear.
+0xac434ec4 : 写真を送信する
+身元を調べてくれ…
+0xac80a6a2 : Select a ration in the menu display
+and press the  for LIFE recovery.
+
+0xac81c0b4 : first, walk up to the body, and with
+all weapons deselected, press the
+ to pick it up.
+
+0xacb44a25 : Raiden, you can climb onto anything
+up to about waist-high with the .
+0xad2f89e6 : ※これにあたるメッセージは今回表示しない
+0xad793a9d : and move the  around to free
+yourself from his spell.
+
+0xad8af93a : Push the  in to strike out at
+Solidus from outside his range.
+0xadc2cc6d : Push  or  while in Corner View.
+
+0xae302e07 : Watch out for Solidus' snake arms.
+0xaefa7051 : you can use the momentum to knee
+someone.
+0xaf27a6cd : Push the  down in front of the
+door and wait until the door opens
+before letting go.
+0xaf39abb5 : Saving can't be done unless you have
+a storage device.
+0xaf473797 : 制作者の好みを暴け！野尻真太
+主な作品は「ゴーストバベル」
+「メ夕ルギアソリッド2」(スクリプト班)
+0xaf719a5a : Destroy all targets and head to the
+goal! Make good use of moving while
+aiming your gun. Destroying the
+deduction obstacles (red targets)
+will lower your score.
+
+0xafc5a512 : Jack, non è stata rilevata alcuna
+periferica di memorizzazione.
+0xafd1c914 : Press  when holding your gun to
+activate the lock-on function.
+
+0xaff371f2 : Snake, face the ladder and push the
+ to grab onto the ladder.
+0xb02e8ec4 : Select the ration in your window
+and push the .
+
+0xb1634c49 : Look, all you have to do is stand
+in front of the machine and push
+the .
+0xb2909177 : Cigarettes
+Highly addictive and hazardous
+to your health.
+0xb2ee09ff : USP
+9mm handgun. Press  to aim,
+release to fire. 15 rounds per
+magazine. Suppressor attached.
+0xb3b3500f : Push  or  while in Corner View
+to move your head and take a quick
+look in that direction.
+
+0xb4683f35 : PSG1－T|
+麻酔弾を射出する狙撃麻酔用銃。
+装備すると主観で構え#{、武器}#|
+で発砲。でズームイン、
+でズームアウト。
+0xb4903e94 : Shaver
+Electric razor. Smooth and
+quick shaving performance.
+Nothing is left behind.
+0xb49c99b9 : ストレージの検出でエラーが発生|
+しました。セーブファイルの保存には、|
+?キロバイト以上の空き容量が必要です。|
+このままゲームを開始しますか？
+0xb4a25ac8 : What you've got there is an empty
+magazine for handguns and
+automatic weapons.
+0xb51a61d5 : Push the  once more to get out of
+the locker.
+0xb639d96c : Whenever you're bleeding, select
+the bandage in the menu display#－
+
+
+0xb65524c3 : Come up behind an enemy without any
+weapons selected,
+0xb6ae26c7 : Oh, no. Snake, no hay espacio suficiente
+en el dispositivo de almacenamiento
+para guardar la partida.
+0xb7188293 : You can also punch in First Person View.
+0xb7f79e67 : エルードから這い上がる時は
+もう一度#{、アクション}#を押せばいい。
+0xb8072ff0 : Press the  during
+First Person View to step sideways. Press
+the  &  together to
+stretch up. Effective while hiding behind
+
+0xb8775903 : ウィンドウで選んで#{、決定}#を押せば、
+その場で使うこともできる。
+0xb87f8c62 : Find the photograph of the girl of the
+developer's type!
+Shinta Nojiri 
+Titles worked on: Metal Gear (GB),
+Metal Gear Solid 2 (Script unit)
+0xb89029ca : push the  while in Corner View to
+jump out from concealment and aim
+your weapon.
+0xb988bcff : Ha habido un error al detectar|
+el dispositivo de almacenamiento.|
+Para guardar el juego necesitas al menos|
+?KB libres. ¿Quieres comenzar a jugar|
+de todas las formas?
+0xb9b74ec1 : レーション|
+軍用携帯糧食。#{LIFE、ライフ}#を回復する。
+#{、決定}#で使用。装備すると|
+#{LIFE、ライフ}#が無くなった時、自動的に
+使用して#{LIFE、ライフ}#を回復できる。
+0xb9c2bf5c : を一回転させるように
+回せば回転斬りだ。
+0xb9f5d3b3 : ノードの前で#{、アクション}#を押すだけだ。
+0xbc3be17b : Coolant Spray
+For bomb disposal. Enters First
+Person View when equipped.
+Use the  to control the
+spray amount.
+0xbceb3ba6 : Ration
+"Meal ready to eat" to restore
+life. Press  to use. Life
+automatically recovers when 
+down to 0 if equipped.
+0xbd12ebb2 : You have Pentazemin in your
+inventory.
+0xbdf32a2c : Jack, no se ha detectado ningún dispositivo de almacenamiento.
+0xbe14e872 : ロッカーに向かって#{、アクション}#を押すと
+扉を開ける。扉を開けたロッカーの中に
+入れば、扉を閉めて隠れることができる。
+0xbe7cdef9 : After you take someone out, shake
+them by pushing the . An Item Box
+may appear.
+
+0xbec387df : This is how to do it:
+0xbf354263 : PSG1-T
+Tranquilizer rifle. Aim in 1st
+Person View, fire w/ . Zoom
+in with , zoom out with .
+0xbf89bd46 : やり方は、倒れた敵の体の近くで、
+武器を装備せずに#{、武器}#を押せば、
+敵の体を抱える。
+0xbff9be05 : Weigh the pros and cons well.
+0xc074487f : To deliver a punch, press the .
+You can also punch in First Person
+View.
+0xc0992360 : The difference between this and
+using  and 
+
+0xc1012b9d : You can move the  or use  and
+ to move left and right while
+Hanging.
+0xc1ac1998 : Hold up Enemies
+0xc1b25403 : You can guard with your blade if
+you have the  pressed down.
+0xc1c78ed7 : Face the pole and push the  to
+grab a hold of the pole.
+0xc1ff2641 : M9|
+簡易麻酔銃。敵を眠らせる事が|
+できる。#{、武器}#を押すと構え、
+離すと発砲。サプレッサー、|
+レーザーポイン夕ー装備。
+0xc210ac50 : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Sadaaki Kaneyoshi 
+Mitarbeit bei: Guitar-Freaks-Serie,
+Metal Gear Solid 2 (Skript-Einheit)
+0xc268ee2e : and the photos will be sent.
+0xc297e67c : その中から使いたい武器を
+の上下で選んで
+右下に合わせるんだ。
+0xc33e21d0 : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Shinta Nojiri 
+Mitarbeit bei: Metal Gear (GB),
+Metal Gear Solid 2 (Skripteinheit)
+0xc35db07d : Move the  toward a wall and keep
+it there to flatten yourself against
+the wall.
+
+0xc3bc2be6 : Senti, non c'è modo di salvare se non
+formatti la periferica di memorizzazione!
+0xc3f165c5 : Nessun periferica di memorizzazione|
+rilevata.|
+Per salvare il gioco occorrono|
+almeno ?KB di spazio libero.|
+Vuoi iniziare il gioco così com'è?
+0xc5b540df : デジ夕ルカメラ|
+#{、武器}#で撮影。で|
+ズームイン、でズーム|
+アウト。、
+でプレビューを左右に移動。|
+0xc5dcddd5 : Flatten yourself against a wall and
+hit the .
+
+0xc6226d69 : Move the  in a circle|to do a rotating cut.
+0xc67d7c74 : Hang from Ledges
+0xc69dba95 : 倒した敵の体を#{、武器}#で動かすと
+アイテムボックスが出て来ることがある。
+余裕があれば試してみろ。
+0xc76fa726 : 制作者の好みを暴け！松花賢和
+主な作品は「スナッチャー」「ポリスノーツ」
+「リーサルエンフォーサーズ」
+「メ夕ルギアソリッド」シリーズ。
+0xc82ba1be : nos estaremos refiriendo |a Metal Gear Solid para Consola.
+0xc87081f8 : ハシゴから離れたくなったら、
+ハシゴの一番上か一番下で
+もう一度#{、アクション}#を押せばいい。
+0xc9860bc8 : USP|
+9mm口径ハンドガン。|
+#{、武器}#を押すと構え、|
+離すと発砲。装弾数15発。
+サプレッサー装着可能。
+0xc9cdecba : ビハインドカメラ時、ハンドガン等を装備して
+を押すと物陰から飛び出して銃を構える。
+物陰から素早く攻撃することが可能。
+0xca850d93 : ノードの前で#{、アクション}#を押せばそれが
+発動するようにしてある。ノードを
+使うには端末の前で#{、アクション}#を押すんだ。
+0xca8da231 : M4
+Assault rifle. 30 rounds per
+magazine. Press  to aim, and
+press  for full automatic
+fire.
+0xca9a54e1 : C4|
+軍用プラスティック爆弾。|
+無線式発火装置で爆破する。|
+#{、武器}#を押すと設置。|
+設置後、#{、パンチ}#を押すと爆破。
+0xcaaaccf4 : When you're Hanging, get to the spot
+above the pipe, then jump down.
+0xcb993ed6 : #{刀、ブレード}#の操作はを使う。
+を上下に振れば上下に斬り、
+左右に動かせば水平になぎ払う。
+0xcc1701a4 :  and  let you strafe during
+First Person Attacks.
+
+0xcc1f14d5 : If you tilt the  at a smaller 
+angle, you'll be able to walk 
+more slowly and stealthily.
+0xcca04679 : Digital Camera
+Press  to take photographs.
+Zoom in with , zoom out
+with .
+0xccaf02c7 : After pushing the  in Hanging
+mode and falling, 
+0xcccf7ba0 : 走りながら#{、ホフク}#で出せる
+ローリングを活用するんだ。
+0xcce394b8 : 覗き込みをしている時にグレネードを
+装備していれば、#{、武器}#で遮蔽物を
+背にグレネードを投げることができる。
+0xcd22d24a : you can throw it over by pushing
+the  with your back still against
+a shielding object.
+
+0xcd247724 : To drag the enemy, hold down the .
+0xcdcfb278 : Press  near a handrail to jump over
+the handrail and hang to avoid enemies.
+You can move sideways and also enter
+First Person View.
+0xcdde117e : Destroy all targets and head to the
+goal! Destroy the consecutively and
+gain bonus points. Press the 
+twice quickly for "tactical reload."
+0xcde61b57 : Du kannst nur mit einem eigenen Speichergerät speichern.
+0xce233356 : Pentazemin
+Benzodiazepine anti-anxiety
+medication. Stops trembling of
+hands when sniping. Select in
+window and use with .
+0xce6da232 : Lean the  only very slightly to
+slow your walk.
+0xcef35bbe : OK, OK. So all I have to do is push
+the  in front of the computer#－
+0xcf05e09f : Stroke the water and move forward
+by pushing the .
+0xcf615173 : Aim in First Person View and use the 
+to aim at and shoot specific spots --
+enemy weak points and spots at various
+heights that you normally cannot shoot.
+0xcfada8fc : Hit the  repeatedly to break the
+enemy's neck.
+
+0xcfb45266 : 手を離したい時は#{、アクション}#を離すんだ。
+0xd07a8499 : the enemy to discover you.
+0xd097d5a4 : While in Corner View, equip a weapon &
+press the  to jump out and aim.
+You can attack quickly around a corner.
+
+0xd15de54d : Collega subito la tua 
+periferica di memorizzazione!
+0xd1878f11 : Push the  to start climbing the
+ladder.
+0xd1d68d6d : Cardboard Boxes
+0xd255f3cd : You set the C4 with the  and
+detonate it with the .
+
+0xd294c955 : 体が動かなくなったら、とにかく
+とボ夕ンを連打して
+呪縛を断ち切るしかない。
+0xd2faa119 : そのまま#{、武器}#を連打すれば、
+敵を倒せる。押しっぱなしにすれば
+敵を引きずって移動することもできる。
+0xd326eaa3 : Du hast kein Speichergerät!
+0xd3390090 : ハンドルを回すには扉に向かって
+#{、アクション}#を押したままにすればいい。
+0xd34dd61a : Push  and  simultaneously in
+First Person View to stretch up on
+your toes.
+0xd38e6c69 : 君のUSPにはフラッシュライトが装備
+されてる。USPを装備して#{、武器}#で
+構えれば、その間ライトがつくよ。
+0xd3989a4a : Shake out Items
+0xd49c0b64 : SOCOM
+.45 handgun. Press  to aim,
+release to fire. 12 rounds per
+magazine. Can attach suppressor.
+0xd4daf2bb : Fehler beim Erkennen des Speichergeräts.
+Bitte erneut versuchen.
+0xd4e6a6c1 : Infinity Wig
+Brown wig. Equip to wear. Hair
+whorl is ∞-shaped.
+0xd4fc8ba0 : を押すと主観になる。
+この時に#{、武器}#で武器を構えれば
+主観攻撃ができるんだ。
+0xd562105e : Wig B
+Orange wig. Equip to wear.
+0xd5a8def8 : Push the  again at the top or the
+foot of the ladder to let go.
+0xd5d607a1 : You need to have a storage device.
+0xd61bb787 : エルード中に#{、ホフク}#を押すと、
+真下に飛び降りる。
+0xd699db35 : Nicht genug Speicherplatz auf dem Speichergerät.
+0xd6d17fe7 : When you're springing up from Hanging
+mode with the ,
+0xd71196b4 : In questo gioco, chiameremo |Metal Gear Solid per console
+0xd72c5de6 : If this happens, your only option
+is to rapidly press a button#－
+0xd8ecb5de : Move in behind the enemy and push
+the  without touching the .
+
+0xd988e935 : 無線機画面での下を押せば、
+メモリーウインドウが開く。
+0xd9f8d1d9 : When you want to use the Codec,
+push the .
+0xdac83b77 : Take her with you... Free your hands
+of any equipment and hold down the
+ to give her a hand.
+0xdaca34e4 : Directional Microphone
+Microphone that picks up sounds
+where it's pointed. Can pick up
+small sounds. Equip and press
+ to call for Ames.
+0xdb28b01e : ロッカーから出るには、
+もう一度#{、アクション}#を押せばいい。
+0xdba3cde9 : As long as you have the  held
+down, you can move around with the
+body in your grasp.
+
+0xdba6608e : 武器を装備してビハインドしている時に
+#{、武器}#を押すと、物陰から素早く
+飛び出して武器を構えることができる。
+0xdbe96c80 : Oh, no. Snake, no hay espacio
+suficiente en el dispositivo de
+almacenamiento para guardar la partida.
+0xdc4344d3 : 他にも#{、ホフク}#でしゃがんだり、
+ホフクしたり、いろいろ視点を
+変えて探してみろ。
+0xdc9f8e40 : Move the  to control the blade.
+0xdda8a5a5 : 全ての標的を破壊し、ゴールせよ！
+C4は張り付いた状態でを
+押すことで壁に設置することも可能だ。
+0xde8086c2 : エルードでパイプの真上まで移動して
+飛び降りるんだ。飛び降りるには
+#{、ホフク}#を押せばいい。
+0xdebf5572 : Cardboard Box 4
+Cardboard box to transport
+action figures. Equip to wear.
+0xdf017de7 : You can use this to hide bodies and
+avoid being found.
+0xdf4b2513 : 走りながら#{、ホフク}#を押すと
+飛び込み前転ができる。
+0xdfc73a38 : While Hanging, push the  to go
+straight down.
+
+0xe0137f96 : Release the  to let go of
+the body.
+0xe086921a : Then push the  and call out to him.
+
+0xe09dc02b : To release your grip on her, take
+your finger off the .
+0xe09ead69 : Chaff Grenade
+Grenade that neutralizes
+electronic devices temporarily.
+Press  to aim, release
+to throw.
+0xe0d3776f : Non puoi salvare senza avere una
+periferica di memorizzazione pronta.
+0xe1289784 : Press the  or  during Corner View to 
+peek around a corner. However, you could be 
+seen by an enemy while leaning out. 
+Be careful.
+0xe17f3f91 : Non posso salvare se non hai una
+periferica di memorizzazione!
+0xe1afbf50 : Busca la foto del tipo de chica preferida de.
+Sadaaki Kaneyoshi 
+Juegos en los que ha trabajado: 
+las series de GuitearFreaks, 
+Metal Gear Solid 2 (unidad de guión)
+0xe20d958c : わかった。
+写真を撮ったらコンピュー夕の前で
+#{、アクション}#を押せばいいんだな。
+0xe2470575 : Si tu n'as pas connecté
+de périphérique de stockage,
+je ne peux pas sauvegarder, moi !
+0xe2743c9c : press the  to cock your arm and
+release the  to throw the object.
+
+0xe2c73bd0 : select Pentazemin in the menu
+display and press the .
+0xe2d49989 : No hay suficiente espacio libre en el dispositivo de almacenamiento.
+0xe34e7619 : Busca la foto del tipo de chica preferida de.
+Masahiro Hinami 
+Juego representativo: Ring of Red
+0xe365005d : You can also crouch down and crawl
+by using the .
+0xe366893f : and press the  to stop the
+bleeding.
+
+0xe36faa00 : Trouvez la photographie de la fille 
+du type du développeur !
+Shinta Nojiri 
+A travaillé sur les titres suivants : 
+Metal Gear Solid 2 (unité Scénario)
+0xe3ed9a40 : 雷電、ハシゴがあるな。ハシゴを
+使うには、ハシゴに近寄って#{、アクション}#を
+押せばいい。
+0xe440ce06 : Remember, the distance thrown
+varies, depending on how long you
+press the .
+
+0xe45f246d : Ehi, non è stata rilevata alcuna
+periferica di memorizzazione.
+0xe4927d44 : You can select it in the window and
+push the  to use the item on the
+spot.
+0xe4cc5775 : See the maintenance hatch on the
+floor?
+0xe62f5abf : Point the microphone toward the
+hostages with the .
+
+0xe659b89a : Keep it pushed down if you want to
+move around and drag him away with
+you.
+0xe709a65d : Trova la foto della ragazza che va
+a genio allo sviluppatore!
+Yoshikazu Matsuhana 
+Titoli a cui ha lavorato: Policenauts, 
+Snatcher, serie Metal Gear Solid
+0xe71f7e8c : Right. Log into it right now. Stand
+in front of the node and push the .
+0xe7323929 : While in Hanging mode, press the  to
+jump down. To knock out an enemy, jump
+down and land on top of the enemy.
+
+0xe7afcdbb : Periferica di memorizzazione non rilevata.
+0xe82fd12e : 横に並んでいる武器の中から使いたい
+物をの左右で選んで
+一番右に合わせろ。
+0xe859e6c0 : and the pictures will be sent to me.
+0xea32e680 : マガジンは撃ち尽くして空になった
+ハンドガンや自動小銃の弾倉だ。
+#{、武器}#で投げることができる。
+0xea62f56d : Face the door and press down on the
+ and the handle will turn.
+0xeace723a : ※これにあたるメッセージは今回表示しない
+0xeae9ef8e : Ecoute, il est impossible de sauvegarder si
+le périphérique de stockage n'est pas
+formaté !
+0xeb60ea0e : Radar will not appear at all.
+0xebf9bcc3 : These moves can be useful.
+0xec60e40a : There may be something you can use,
+so check the inside thoroughly.
+0xec7e49c4 : Find the photograph of the girl of the
+developer's type!
+Masahiro Hinami 
+Representative title: Ring of Red
+0xecf5f596 : Punch the  repeatedly if you need
+to turn it faster.
+0xecfeb7dd : One other thing... Don't get caught
+in its blast.
+0xed07a0ac : You can then use the  to throw
+the grenade while taking cover
+behind objects.
+0xee131e4e : その水密扉を開けるには、扉の前で
+#{、アクション}#を押してそのままドアが
+開くまで押しっぱなしにすればいい。
+0xee8b3c11 : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Masahiro Hinami 
+Repräsentativer Titel: Ring of Red
+0xeece71b1 : There was an error when detecting|
+the storage device.|
+At least ?KB of free space|
+is needed to save your game.|
+Will you start the game as it is?
+0xefa7abfb : With no weapon equipped, use the 
+and the  near an enemy to throw him.
+Sometimes this will knock the enemy 
+unconscious.
+0xefc1a95b : Push the  near the locker to open
+the door. Walk into it for a quick
+concealment.
+0xefd01b40 : You can throw those with the 
+after you've exhausted all the
+rounds in them.
+0xefdb82ce : チャフ・グレネード|
+電子妨害用手榴弾。|
+電子機器を一定時間無効に|
+できる。#{、武器}#を押すと
+構え、離すと投げる。
+0xf085dc06 : エルードから#{、アクション}#で這い上がる時、
+反動で近くにいる敵にひざを打ち込む
+ことができる。
+0xf0a11858 : 制作者の好みを暴け！
+根岸　豊
+「メ夕ルギアソリッド2」(デザインリーダー)
+0xf0c9d64b : Sorry, Jack, aber Du hast
+nicht genug freien Speicherplatz
+auf dem Speichergerät.
+0xf15514d5 : The chosen icon will appear in the
+lower right.
+0xf190383c : You have the Pentazemin equipped,
+huh.
+
+0xf197b172 : Safety is an important consideration,
+so be sure to use the technique.
+0xf1ba016f : マガジンは装備して#{、武器}#で
+投げられるんだ。マガジンが床に落ちた
+時の音で敵をおびき寄せたりできる。
+0xf1eb9d45 : Finden Sie das Foto vom Frauentyp
+des Entwicklers!
+Yoshikazu Matsuhana 
+Mitarbeit bei: Snatcher, Policenauts,
+Lethal Enforcers, Metal-Gear-Solid-Serie
+0xf257c4ef : 銃を構えた状態でを押すと
+ロックオンができる。素早く狙いを
+定める時には役立つはずだ。
+0xf25d7219 : 大佐、エイムズは#{SEAL10、シール・テン}#突入の
+報復に人質が殺されたことも
+知らなかったようだが？
+0xf2659cb8 : Radar in "Sons of Liberty" will not appear at all.
+0xf2ae966a : Push  and  while in Corner View
+to take quick looks out.
+0xf2d782d3 : push the  to jump out of
+concealment and aim your
+weapon.
+
+0xf31b3946 : Directional Microphone
+Microphone that picks up sounds
+where it's pointed. Can pick
+up small sounds. Hold in First
+Person View, move w/ .
+0xf353295f : Throwing distance depends on how
+long you press the .
+0xf3c68d57 : Don't call out to a hostage with
+the  until you're fairly sure
+that it's Ames.
+
+0xf3d03a8b : El dispositivo de almacenamiento no está formateado.|
+¿Formatear y guardar?
+0xf3e654d0 : There's no storage device!
+0xf3f6d292 : 止血材|
+止血用吸収パッド。|
+出血している時に使うと血を|
+止める事ができる。ウィンドウ|
+で選んで#{、決定}#で使用。
+0xf429ff51 : He, es wurde kein Speichergerät erkannt.
+0xf42e3ddf : Move the  in a circle to twirl
+the blade.
+
+0xf44f41fc : Push left and right to turn in
+those directions.
+0xf4fba9ef : Take advantage of the different
+options.
+0xf53314e4 : NIKITA
+Wireless guided projectile.
+Press  to aim in First Person
+View, release to fire. Missile
+can be controlled with the .
+0xf631d67d : 雷電、そのハシゴを昇ればL脚外周の
+夕ラップに出る。ハシゴを昇るには
+#{、アクション}#を押せばいい。
+0xf64ba020 : Jack, there's no storage device detected
+0xf68291a9 : Chokehold
+0xf69e1e6b : All you have to do is face the
+computer and push the ,
+0xf76c6953 : Let go of the  when you're done.
+
+0xf7c7ef8b : #{SEAL10、シール・テン}#が突入した報復に
+人質が殺されただろう？
+0xf7d99825 : ※これにあたるメッセージは今回表示しない
+0xf7e42f01 : Once you remove a weapon from its
+equip status,
+
+0xf80b4de5 : 武器を装備するには、を
+押しっぱなしにして武器ウィンドウを
+開け。武器のアイコンが表示される。
+0xf84e8de6 : AK Suppressor
+Firing noise is reduced when
+attached to AKS-74u. Equip
+together w/ AK to attach.
+Unremovable once attached.
+0xf9187857 : Insufficient space on the storage device.
+0xf96c27d8 : You can open and close the door
+by pushing the  when you're in
+front of the door.
+0xf97a4596 : ¡Eh!, no se ha detectado ningún
+dispositivo de almacenemiento.
+0xf9a57583 : without moving the .
+0xf9e773a4 : Bandage
+Absorbent pads to stop blood
+loss when bleeding. Press 
+to use while having it selected
+in window.
+0xfa065e08 : Face any waist-high railing and
+push the  to clear the railing
+and hang over the side.
+0xfa80bf39 : Jack, es wurde kein Speichergerät erkannt.
+0xfafee826 : If you have a handgun or an automatic
+rifle selected while in Corner View,
+0xfb0f5bc5 : を上下に振れば|上下に斬り
+0xfc4c536b : Fire Extinguishers
+0xfd208f2d : 雷電、水中でも水密扉の開け方は
+変わらない。扉の前で#{、アクション}#を
+押すんだ。
+0xfd59b7b5 : Push it in rapid succession to swim
+faster.
+0xfddeb1fc : #{SEAL10、シール・テン}#の無線によれば、
+大統領はB脚で発見されたらしい。
+0xfea1ba42 : ペン夕ゼミン|
+ベンゾジアゼピン系抗不安薬。|
+抗不安作用以外に筋弛緩作用、|
+自律神経調節作用等もある。|
+#{、決定}#で使用。
+0xff5143b9 : Equipment, such as rations, is
+selected the same way. Just use 
+instead.
+0xffb73cbf : Destroy all targets and head to the
+goal! Point the weapon and press
+the  to point and move. Use
+this wisely.
