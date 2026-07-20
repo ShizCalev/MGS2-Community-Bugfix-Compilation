@@ -1,0 +1,1120 @@
+===== Table 0 (2 entries) =====
+0x76748c7b : It has more reach and power than
+normal strikes, but you're also
+more open to counterattacks.
+0xbff9be05 : Weigh the pros and cons well.
+===== Table 1 (288 entries) =====
+0x021ae3bc : your range of vision is more limited.
+0x02420058 : Spazio libero insufficiente sulla
+
+periferica di memorizzazione.
+0x02f6745e : Périphérique de stockage non formaté.|
+
+Formater et sauvegarder?
+0x05868113 : Select the grenade when you take a
+
+peek.
+0x05f0764d : No, it's pretty simple, really.
+0x05f5d1b5 : Make sure you keep doing it until
+
+the door is open.
+0x061b00f5 : ※これにあたるメッセージは今回表示しない
+0x0636cf9c : Trouvez la photographie de la fille 
+
+du type du développeur !
+
+Sadaaki Kaneyoshi 
+
+A travaillé sur les titres suivants : 
+
+Metal Gear Solid 2 (unité Scénario)
+0x06efaac5 : Look, there's no way to save
+
+unless you format the storage device!
+0x070a1bb2 : To throw something, such as a
+
+grenade or a magazine --
+0x08862a15 : Go ahead...try it.
+
+
+0x08c919f8 : ¡Conecta el dispositivo de almacenamiento!
+0x0afbedee : Dans ce jeu, Metal Gear Solid |pour Console
+0x0b48bc55 : Trova la foto della ragazza che va
+
+a genio allo sviluppatore!
+
+Shinta Nojiri 
+
+Titoli a cui ha lavorato: Metal Gear (GB),
+
+Metal Gear Solid 2 (unità Script)
+0x0c512580 : 「認識酵素が反応して活性を示すと、#{FOXDIE、フォックスダイ}#は
+
+マクロファージの組織を使って、TNFεを作りはじ
+
+める」
+
+「何？」
+
+「サイトカインの一種で細胞死を誘発するペプチド
+
+よ。TNFεは血流に乗って心臓に達し、心筋細胞の
+
+レセプ夕ーに結合する」
+
+「それで、心臓発作を？」
+
+「刺激を受けた心筋細胞は急激なアポトーシスを起
+
+こすわ。そして、その人物は……死ぬ」
+0x0d3c297b : Mi spiace, Jack, ma non c'è abbastanza
+
+spazio disponibile sulla periferica di
+
+memorizzazione.
+0x0d56f4a2 : Find the photograph of the girl of the
+
+developer's type!
+
+Yutaka Negishi
+
+Titles worked on: Metal Gear Solid 2
+
+(Background Art Director)
+0x0d88e1da : Ich kann erst speichern, wenn du
+
+ein Speichergerät hast!
+0x0dfc6139 : 雷電、BC連絡橋で#{SEAL10、シール・テン}#が何者かと
+
+交戦中だ。大統領も一緒だと思われる。
+0x0dfc9fdf : I see you have the bandage equipped.
+
+
+0x0ea31cf5 : ……きっと……
+
+運がいいからじゃないかしら？
+0x0f59b998 : Espace insuffisant sur le périphérique de stockage.
+0x11a03423 : 私じゃなくて|他の人にして！
+0x11b4dbbd : そいつを狩り出さねば|ならなかった
+0x12ee2375 : among the picture previews at the
+
+bottom of the screen.
+0x13ccbd74 : 装弾数は30発。
+
+5.56mm×45のSS109弾を
+
+使用する。
+0x140e7a4c : ※これにあたるメッセージは今回表示しない
+0x141bf8f9 : ¡Mira, no hay forma de guardar a menos
+
+que fomatees el dispositivo de almacenamiento!
+0x14b4bd2b : Destroy Radios
+0x14ec1798 : Trova la foto della ragazza che va
+
+a genio allo sviluppatore!
+
+Yutaka Negishi 
+
+Titoli a cui ha lavorato: Metal Gear Solid 2
+
+(direttore artistico sfondi)
+0x1575d0a8 : Fehler beim Lesen des|
+
+Speichergeräts.|
+
+Zum Speichern sind mind.|
+
+?KB freier Speicherplatz nötig.|
+
+Möchten Sie das Spiel so beginnen?
+0x15a6acb5 : Aucun périphérique de stockage n'a été détecté.
+0x167df70b : Peek around Corners
+0x16c4e282 : Busca la foto del tipo de chica preferida de.
+
+Yutaka Negishi 
+
+Juegos en los que ha trabajado: 
+
+Metal Gear Solid 2
+
+(Director Artístico del Escenario de Fondo)
+0x17c9011f : Do you have any spent handgun or
+
+rifle magazines?
+0x193fd7de : Enemies as Shields
+0x1c2fb5c0 : Connecte ton périphérique de stockage tout de suite !
+0x1d637365 : ※これにあたるメッセージは今回表示しない
+0x1e9aa71f : Lo siento Jack, pero no hay suficiente
+
+espacio libre en el dispositivo de almacenamiento.
+0x1f34eca9 : I'm sorry, Jack, but there isn't
+
+enough free space on the
+
+storage device.
+0x219c2837 : Once you have the directional
+
+microphone selected, the screen
+
+will switch to First Person View.
+0x220238e7 : 　俺がD脚へ到着すると、ドルフから無線連絡
+
+が入った。オブライエンと連絡が取れたらしい。
+
+オブライエンはヴァンプの侵入を防ぐためにD
+
+脚からシェル1シェル2連絡橋への扉を封鎖。
+
+残ったSEALSを組織してG脚を中心に防御を固
+
+めているという。
+
+「スネーク、君もSEALSに合流してほしい。
+
+相手はヴァンプだ。SEALSと言えどそう簡単
+
+に止められるとは思えん」
+
+「だがシェル1シェル2連絡橋が閉鎖されている
+
+なら、どうやってシェル2に行けばいい？」
+
+「もう一つルートがある。『ビッグ・シェル』
+
+下部のオイルフェンスを渡るんだ。E脚地下に
+
+あるハシゴからオイルフェンスに下りることが
+
+出来る。そのまま渡ればシェル2のL脚に出ら
+
+れるはずだ」
+
+「わかった」
+
+　俺は通信を切った。既にヴァンプはシェル2
+
+へ向かっているはずだ。急がなくてはならない。#C0
+0x2232aa29 : ストレージが見つかりません。
+0x22a271b5 : Hey, there is no storage device.
+0x230c99f4 : ※これにあたるメッセージは今回表示しない
+0x24bb5310 : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Yoshikazu Matsuhana 
+
+Mitarbeit bei: Snatcher, Policenauts,
+
+Lethal Enforcers, Metal Gear Solid Serie
+0x25c6dff5 : Raiden, go up that ladder to get to
+
+the fire escape on the exterior of
+
+Strut L.
+0x26025e45 : スネーク、#{記録、セーブ}#できなかった！
+0x2604b847 : Find the photograph of the girl of the
+
+developer's type!
+
+Sadaaki Kaneyoshi 
+
+Titles worked on: GuitarFreaks series,
+
+Metal Gear Solid 2 (Script unit)
+0x26ae71fa : If you have a weapon selected while
+
+in Corner View,
+0x26d2259d : Ich kann erst speichern, wenn Du das
+
+Speichergerät formatiert
+
+hast!
+0x29c23af2 : Speichergerät wurde nicht|
+
+erkannt. Zum Speichern sind mind.|
+
+?KB freier Speicherplatz nötig.|
+
+Möchten Sie das Spiel so beginnen?
+0x2acf6888 : Get some good shots!
+0x2b4c0e51 : Il est impossible de sauvegarder si tu n'as
+
+pas connecté de périphérique de stockage.
+0x2ea6fd2e : To steady your hands when aiming
+
+with a sniper rifle,
+
+
+0x32fe1ffe : #{SEAL10、シール・テン}#の生き残りという線は？
+0x331fa119 : 新規にセーブファイルを作成するためには|
+
+ストレージに空き容量が足りません|
+
+作成には?キロバイト以上の空き容量が必要です|
+
+このままゲームを開始しますか？
+0x3332ef15 : You need a storage device
+
+to save.
+0x33691fc6 : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Sadaaki Kaneyoshi 
+
+Mitarbeit bei: GuitarFreaks Serie,
+
+Metal Gear Solid 2 (Skripteinheit)
+0x3592d95b : Open / Close Lockers
+0x36192b62 : Para guardar necesitas
+
+un dispositivo de almacenamiento.
+0x36ec73f1 : 大佐、#{SEAL10、シール・テン}#ブラボー・チームが
+
+全滅した……。
+0x372cbc40 : Busca la foto del tipo de chica preferida de.
+
+Shinta Nojiri 
+
+Juegos en los que ha trabajado: 
+
+Metal Gear (GB), 
+
+Metal Gear Solid 2 (unidad del guión)
+0x37bbb117 : you can lower the gun without
+
+firing.
+0x385f09c4 : Nicht genug Speicherplatz|
+
+auf dem Speichergerät.
+
+Zum Speichern sind mind.|
+
+?KB freier Speicherplatz nötig.|
+
+Möchten Sie das Spiel so beginnen?
+0x39a96c1e : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Yutaka Negishi 
+
+Mitarbeit bei: Metal Gear Solid 2
+
+(künstl. Leiter Hintergrund)
+0x3a2508c7 : Trova la foto della ragazza che va
+
+a genio allo sviluppatore!
+
+Masahiro Hinami 
+
+Titolo rappresentativo: Ring of Red
+0x3a257bfe : When you're on the surface, you can
+
+swim in corresponding directions
+
+using the up, down,
+0x3bbd25c8 : There is insufficient space|
+
+on the storage device.
+
+At least ?KB of free space|
+
+is needed to save your game.|
+
+Will you start the game as it is?
+0x3cafef16 : Snake, there wasn't enough
+
+space left on the storage device!
+0x3ce25ce0 : Aucun périphérique de stockage n'a
+
+été détecté| un minimum de ?ko d'espace
+
+libre est requis pour sauvegarder la partie.
+
+voulez-vous commencer à jouer?
+0x3dbc57c6 : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Shinta Nojiri 
+
+Mitarbeit bei: Metal Gear (GB),
+
+Metal Gear Solid 2 (Skript-Einheit)
+0x3f94629c : Once you recognize Ames by his
+
+heartbeat, keep the microphone
+
+pointed toward him.
+0x3fa133ac : hiding behind objects during gun fights.
+0x3fc0f616 : Take aim using First Person View and
+
+try to land it where it will lure the
+
+enemy away.
+0x40601fe7 : Il n'y a pas de périphérique de stockage !
+0x40ccce5a : Trouvez la photographie de la fille 
+
+du type du développeur !
+
+Yoshikazu Matsuhana 
+
+A travaillé sur les titres suivants : 
+
+Policenauts, Metal Gear Solid series
+0x41a3b556 : to strafe right and left,
+
+respectively.
+0x423fa817 : ストレージの空き容量が足りません。
+0x4261744f : Use an enemy as a shield by strangling him 
+
+and taking him hostage. Other enemies will 
+
+hesitate to shoot. You can escape during 
+
+this moment.
+0x42be9f96 : If you hide under a cardboard box and stay 
+
+still, the enemy will ignore you. lf you move 
+
+when in his sight, you will be found. Blocking 
+
+an enemy's path while in the box will cause
+0x42c9bc0e : #{ペン夕ゼミン、安定剤}#を使えばしばらくの間
+
+手ぶれを止めることができる。
+
+精密な狙撃がしやすくなるはずだ。
+0x44a0e5d7 : Error al detectar el dispositivo de almacenamiento.
+
+Inténtalo de nuevo.
+0x4535c329 : Try it if you have time.
+
+
+0x46261252 : Speichergerät wurde nicht erkannt.
+0x470b72e2 : At the same time, because you are
+
+staying in the same position,
+0x47920e81 : ¡No hay ningún dispositivo de almacenamiento!
+0x481a2782 : If you have a weapon selected,
+0x48b538ec : Snake, non c'era abbastanza
+
+spazio disponibile sulla
+
+periferica di memorizzazione!
+0x4a91f07a : ※これにあたるメッセージは今回表示しない
+0x4aa99e18 : Punching is a basic move in
+
+hand-to-hand.
+
+
+0x4b9dc4ac : Oh, non ! Snake, il n'y avait plus assez
+
+d'espace libre sur le périphérique de stockage
+
+pour sauvegarder la partie.
+0x4c74ec69 : The gun should now be loaded with a
+
+fresh magazine.
+0x4d15a4e4 : Necesitas conectar un
+
+dispositivo de almacenamiento.
+0x4d3d3d0b : ※これにあたるメッセージは今回表示しない
+0x4d750d46 : Du benötigst ein Speichergerät,
+
+um speichern zu können.
+0x4eac31ed : Change your vantage point and
+
+conduct a thorough search.
+0x4f9aa354 : Trouvez la photographie de la fille 
+
+du type du développeur !
+
+Yutaka Negishi 
+
+A travaillé sur les titres suivants : 
+
+Metal Gear Solid 2 (directeur artistique)
+0x5080ccb2 : The enemy may drop an item.
+0x50a334c9 : Just get in close and hit those
+
+controls at the same time.
+0x514089b1 : You will be able to climb over the
+
+railing and Hang down from the
+
+other side.
+0x51afc248 : Trouvez la photographie de la fille 
+
+du type du développeur !
+
+Masahiro Hinami 
+
+Titre représentatif : Ring of Red
+0x52093a20 : ジャック、ごめんなさい。
+
+空き領域がないみたい。
+0x531ab35b : As long as you have a hold on the
+
+body, you'll be able to drag it.
+0x53abf359 : Oh no, Snake! Non avevi abbastanza 
+
+spazio disponibile sulla periferica di
+
+memorizzazione per salvare il gioco.
+0x56ad95c8 : Knock on Walls
+0x57544e4f : 制作者の好みを暴け！兼吉完聡
+
+主な作品は「ギ夕ーフリークス」シリーズ。
+
+「メ夕ルギアソリッド2」(スクリプト班)
+0x57685ac3 : Errore nel rilevamento della|
+
+periferica di memorizzazione.|
+
+Per salvare il gioco occorrono|
+
+almeno ?KB di spazio libero.|
+
+Vuoi iniziare il gioco così com'è?
+0x57805fea : Change to First Person View with a
+
+weapon selected.
+0x5790c575 : It should come in useful.
+0x57aa7f22 : シェル1中央棟B1との|連絡が途絶えた
+0x5840df2c : まて、雷電。今#{SEAL10、シール・テン}#突入部隊の
+
+無線を傍受した。
+0x58a923b9 : Storage device not formatted.|
+
+Format and save?
+0x5998376f : once I have the pictures, right?
+0x5aae5780 : If you have the grenade selected
+
+during a peek,
+0x5ad0cee7 : 『G.W』。それはそう呼ばれている。
+
+『愛国者達』の切り札。
+0x5be0b79e : ¡No puedo guardar a menos que
+
+conectes un dispositivo de almacenamiento!
+0x5cfe14eb : I can't save unless you have a
+
+storage device!
+0x5ed5dd14 : Une erreur s'est produite pendant|
+
+la détection du périphérique de stockage.|
+
+Un minimum de ?Ko d'espace libre|
+
+est requis pour sauvegarder la partie.|
+
+Voulez-vous commencer à jouer?
+0x6668cbba : Find the photograph of the girl of the
+
+developer's type!
+
+Yoshikazu Matsuhana 
+
+Titles worked on: Snatcher, Policenauts,
+
+Lethal Enforcers, Metal Gear Solid series
+0x68d329fd : Push left or right to make
+
+90-degree turns in those directions,
+
+and down to make a 180-degree spin.
+0x6916e3b4 : Storage device not detected.
+0x694724d8 : Spazio libero insufficiente sulla|
+
+periferica di memorizzazione per|
+
+creare un nuovo file di salvataggio.|
+
+Per salvare il gioco occorrono|
+
+almeno ?KB di spazio libero.|
+
+Vuoi iniziare il gioco così com'è?
+0x6bc62975 : Il te faut un périphérique de stockage.
+0x6bd70c0f : Books
+0x6c1bd409 : うーん。スネーク、
+
+空き領域がなくて
+
+#{記録、セーブ}#できなかったよ。
+0x6c1da620 : and left and right to slice parallel
+
+to the ground.
+0x6f56447e : In this game, Metal Gear Solid|for the console...
+0x70c68c66 : It is very helpful when you want to
+
+fix your aim quickly.
+0x7174e9be : Hé, aucun périphérique de stockage n'a été détecté !
+0x73302982 : like the Scope.
+0x745fb136 : No se ha detectado ningún dispositivo de almacenamiento.
+0x74fb3eed : Your USP is equipped with a
+
+flashlight.
+0x75207d2a : Devi avere una
+
+periferica di memorizzazione.
+0x75432707 : Wig C
+
+Colored wig. Equip to wear.
+0x76748c7b : It has more reach and power than
+
+normal strikes, but you're also
+
+more open to counterattacks.
+0x76b089ef : Snake, es war nicht genug
+
+Speicherplatz auf dem Speichergerät!
+0x77085ae6 : 
+
+		
+0x7769a3a8 : The noise will draw enemy soldiers
+
+toward wherever the magazine lands.
+0x7a4167bf : 施設内に設置されている消火器を銃で撃つと
+
+消火剤が噴き出す。これを利用すれば、追撃
+
+してくる敵をかく乱することもできる。
+0x7ad12b4a : it will be fully reloaded
+
+automatically.
+
+
+0x7b3ec19a : ブラボー・チームと共に爆弾処理の
+
+教官が降下している。#{SEAL10、シール・テン}#の
+
+作戦ではC脚に残ることになっていた。
+0x7bcd1c43 : Speichergerät wurde nicht erkannt.
+0x7ca2016f : 制作者の好みを暴け！日並雅宏
+
+代表作は「リングオブレッド」。
+0x7d943518 : You will be able to peek out from
+
+behind cover and scan that direction.
+0x7e225061 : プリスキン、#{SEAL10、シール・テン}#のブラボー・
+
+チームが全滅した……。
+0x7e72a17e : Trova la foto della ragazza che va
+
+a genio allo sviluppatore!
+
+Sadaaki Kaneyoshi 
+
+Titoli a cui ha lavorato: serie GuitarFreaks,
+
+Metal Gear Solid 2 (unità Script)
+0x7f0f0756 : Errore nel rilevamento della
+
+periferica di memorizzazione.
+
+Riprova.
+0x80055523 : No storage device|
+
+detected. At least ?KB of free space|
+
+is needed to save your game.|
+
+Will you start the game as it is?
+0x817cf754 : Raiden, the procedure for opening
+
+watertight doors is the same as
+
+when you're on land.
+0x81893209 : No puedes guardar a menos
+
+que conectes un
+
+dispositivo de almacenamiento.
+0x823ee31a : You can put him in a chokehold.
+0x8308622f : There is insufficient space on the|
+
+storage device to create a new|
+
+save file. At least ?KB of free space|
+
+is needed to create a new save file.|
+
+Will you start the game as it is?
+0x839a858a : Card Key
+
+Security card Level #1. Opens
+
+security Level #1 doors when
+
+held in inventory.
+0x84028372 : ……スティルマン、あんた、
+
+プリスキンは本当に#{SEAL10、シール・テン}#の
+
+隊員ではないと？
+0x841f5e86 : or the buttons again and again.
+0x84ec032d : そうか……#{SEAL10、シール・テン}#に生き残りが
+
+いると言ったな。
+0x8587ae98 : Schließe jetzt dein Speichergerät an!
+0x877870fc : Je regrette, Jack, mais il n'y a
+
+pas assez d'espace libre sur
+
+le périphérique de stockage.
+0x87ca5004 : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Yutaka Negishi 
+
+Mitarbeit bei: Metal Gear Solid 2
+
+(Background Art Director)
+0x8816b3ea : Ti serve una periferica di memorizzazione
+
+su cui salvare i dati.
+0x88347536 : is that you won't expose yourself
+
+to possible enemy fire.
+0x8937bfb1 : or you can jump out with your
+
+weapon ready.
+0x89a61352 : Drag Enemies
+0x8a047e33 : #{SEAL10、シール・テン}#の突入班は？
+0x8af83a65 : 捕虜を撃つのか!?
+0x8b315845 : Connect your storage device!
+0x8c16953d : Bei diesem Spiel wird Metal Gear Solid|für die Konsole
+0x8d189145 : Periferica di memorizzazione non formattata.|
+
+Vuoi formattare e salvare?
+0x8d4e4cfe : You will see an array of weapon
+
+icons.
+0x8e526e33 : Throw Enemies
+0x8fc57a7f : Oh nein, Snake, es war nicht genug
+
+Speicherplatz auf dem Speichergerät, um den Spielstand zu
+
+speichern.
+0x9099a951 : The selected weapon should appear
+
+in the far right.
+0x91177588 : Est- ce que tu peux connecter un
+
+périphérique de stockage ?
+0x947623b5 : #{SEAL10、シール・テン}#はB脚、C脚に降下した。
+0x978442f0 : Non c'è alcuna periferica
+
+di memorizzazione!
+0x980a2213 : As long as you have no weapons
+
+selected,
+0x993684d7 : No hay suficiente espacio libre en el dispositivo de almacenamiento.|
+
+Para guardar el juego necesitas al menos|
+
+?KB libres. ¿Quieres comenzar a jugar|
+
+de todas las formas?
+0x99de457d : Walk into the open locker and close
+
+the door to hide.
+0x9a77feb6 : Up will take you up, down takes you
+
+lower, left and right to face those
+
+directions.
+0x9b638440 : Keep an eye out for approaching
+
+enemies.
+0x9c457596 : Jack, aucun périphérique de stockage n'a été détecté.
+0x9c4d6752 : Jump Down from Hanging
+0x9d633fb8 : You can use it on the spot and
+
+regain some LIFE.
+0xa1c371c4 : Error detecting the storage device.
+
+Please try again.
+0xa267a1f3 : いや、我々も聞いていない。
+
+#{SEAL10、シール・テン}#の独自行動だろう。
+0xa2ad510b : Speichergerät nicht formatiert.|
+
+Formatieren und speichern?
+0xa5efc33c : Il n'y a pas assez d'espace sur le|
+
+périphérique de stockage.|
+
+Un minimum de ?Ko d'espace libre|
+
+est requis pour sauvegarder la partie.|
+
+Voulez-vous commencer à jouer?
+0xa5fc0e5a : Oh no. Snake, there wasn't enough
+
+space left on the storage device.
+0xa64482b5 : ※これにあたるメッセージは今回表示しない
+0xa76640b5 : This will let you ration your air
+
+supply better and slow the decline
+
+of your O2 Gauge.
+0xa7e77c85 : Du benötigst ein Speichergerät.
+0xaada73c1 : When you're sure that you have
+
+Ames, keep the microphone
+
+pointed in the same direction,
+0xab2184a3 : Tu ne peux pas enregistrer sans
+
+périphérique de stockage.
+0xab85e934 : Busca la foto del tipo de chica preferida de.
+
+Yoshikazu Matsuhana 
+
+Juegos en los que ha trabajado: Snatcher, 
+
+Policenauts, Lethal Enforcers, 
+
+las series de Metal Gear Solid
+0xab9d8915 : No se ha detectado ningún dispositivo de almacenamiento.|
+
+Para guardar el juego necesitas al menos|
+
+?KB libres. ¿Quieres comenzar a jugar|
+
+de todas las formas?
+0xac434ec4 : 写真を送信する
+
+身元を調べてくれ…
+0xad2f89e6 : ※これにあたるメッセージは今回表示しない
+0xae302e07 : Watch out for Solidus' snake arms.
+0xaefa7051 : you can use the momentum to knee
+
+someone.
+0xaf39abb5 : Saving can't be done unless you have
+
+a storage device.
+0xaf473797 : 制作者の好みを暴け！野尻真太
+
+主な作品は「ゴーストバベル」
+
+「メ夕ルギアソリッド2」(スクリプト班)
+0xaf719a5a : Destroy all targets and head to the
+
+goal! Make good use of moving while
+
+aiming your gun. Destroying the
+
+deduction obstacles (red targets)
+
+will lower your score.
+
+
+0xafc5a512 : Jack, non è stata rilevata alcuna
+
+periferica di memorizzazione.
+0xb2909177 : Cigarettes
+
+Highly addictive and hazardous
+
+to your health.
+0xb4903e94 : Shaver
+
+Electric razor. Smooth and
+
+quick shaving performance.
+
+Nothing is left behind.
+0xb49c99b9 : ストレージの検出でエラーが発生|
+
+しました。セーブファイルの保存には、|
+
+?キロバイト以上の空き容量が必要です。|
+
+このままゲームを開始しますか？
+0xb4a25ac8 : What you've got there is an empty
+
+magazine for handguns and
+
+automatic weapons.
+0xb639d96c : Whenever you're bleeding, select
+
+the bandage in the menu display#－
+
+
+
+
+0xb65524c3 : Come up behind an enemy without any
+
+weapons selected,
+0xb6ae26c7 : Oh, no. Snake, no hay espacio suficiente
+
+en el dispositivo de almacenamiento
+
+para guardar la partida.
+0xb7188293 : You can also punch in First Person View.
+0xb87f8c62 : Find the photograph of the girl of the
+
+developer's type!
+
+Shinta Nojiri 
+
+Titles worked on: Metal Gear (GB),
+
+Metal Gear Solid 2 (Script unit)
+0xb988bcff : Ha habido un error al detectar|
+
+el dispositivo de almacenamiento.|
+
+Para guardar el juego necesitas al menos|
+
+?KB libres. ¿Quieres comenzar a jugar|
+
+de todas las formas?
+0xbd12ebb2 : You have Pentazemin in your
+
+inventory.
+0xbdf32a2c : Jack, no se ha detectado ningún dispositivo de almacenamiento.
+0xbec387df : This is how to do it:
+0xbff9be05 : Weigh the pros and cons well.
+0xc1ac1998 : Hold up Enemies
+0xc210ac50 : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Sadaaki Kaneyoshi 
+
+Mitarbeit bei: Guitar-Freaks-Serie,
+
+Metal Gear Solid 2 (Skript-Einheit)
+0xc268ee2e : and the photos will be sent.
+0xc33e21d0 : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Shinta Nojiri 
+
+Mitarbeit bei: Metal Gear (GB),
+
+Metal Gear Solid 2 (Skripteinheit)
+0xc3bc2be6 : Senti, non c'è modo di salvare se non
+
+formatti la periferica di memorizzazione!
+0xc3f165c5 : Nessun periferica di memorizzazione|
+
+rilevata.|
+
+Per salvare il gioco occorrono|
+
+almeno ?KB di spazio libero.|
+
+Vuoi iniziare il gioco così com'è?
+0xc67d7c74 : Hang from Ledges
+0xc76fa726 : 制作者の好みを暴け！松花賢和
+
+主な作品は「スナッチャー」「ポリスノーツ」
+
+「リーサルエンフォーサーズ」
+
+「メ夕ルギアソリッド」シリーズ。
+0xc82ba1be : nos estaremos refiriendo |a Metal Gear Solid para Consola.
+0xcaaaccf4 : When you're Hanging, get to the spot
+
+above the pipe, then jump down.
+0xcde61b57 : Du kannst nur mit einem eigenen Speichergerät speichern.
+0xd07a8499 : the enemy to discover you.
+0xd15de54d : Collega subito la tua 
+
+periferica di memorizzazione!
+0xd1d68d6d : Cardboard Boxes
+0xd326eaa3 : Du hast kein Speichergerät!
+0xd3989a4a : Shake out Items
+0xd4daf2bb : Fehler beim Erkennen des Speichergeräts.
+
+Bitte erneut versuchen.
+0xd5d607a1 : You need to have a storage device.
+0xd699db35 : Nicht genug Speicherplatz auf dem Speichergerät.
+0xd71196b4 : In questo gioco, chiameremo |Metal Gear Solid per console
+0xd72c5de6 : If this happens, your only option
+
+is to rapidly press a button#－
+0xdbe96c80 : Oh, no. Snake, no hay espacio
+
+suficiente en el dispositivo de
+
+almacenamiento para guardar la partida.
+0xdf017de7 : You can use this to hide bodies and
+
+avoid being found.
+0xe0d3776f : Non puoi salvare senza avere una
+
+periferica di memorizzazione pronta.
+0xe17f3f91 : Non posso salvare se non hai una
+
+periferica di memorizzazione!
+0xe1afbf50 : Busca la foto del tipo de chica preferida de.
+
+Sadaaki Kaneyoshi 
+
+Juegos en los que ha trabajado: 
+
+las series de GuitearFreaks, 
+
+Metal Gear Solid 2 (unidad de guión)
+0xe2470575 : Si tu n'as pas connecté
+
+de périphérique de stockage,
+
+je ne peux pas sauvegarder, moi !
+0xe2d49989 : No hay suficiente espacio libre en el dispositivo de almacenamiento.
+0xe34e7619 : Busca la foto del tipo de chica preferida de.
+
+Masahiro Hinami 
+
+Juego representativo: Ring of Red
+0xe36faa00 : Trouvez la photographie de la fille 
+
+du type du développeur !
+
+Shinta Nojiri 
+
+A travaillé sur les titres suivants : 
+
+Metal Gear Solid 2 (unité Scénario)
+0xe45f246d : Ehi, non è stata rilevata alcuna
+
+periferica di memorizzazione.
+0xe4cc5775 : See the maintenance hatch on the
+
+floor?
+0xe659b89a : Keep it pushed down if you want to
+
+move around and drag him away with
+
+you.
+0xe709a65d : Trova la foto della ragazza che va
+
+a genio allo sviluppatore!
+
+Yoshikazu Matsuhana 
+
+Titoli a cui ha lavorato: Policenauts, 
+
+Snatcher, serie Metal Gear Solid
+0xe7afcdbb : Periferica di memorizzazione non rilevata.
+0xe859e6c0 : and the pictures will be sent to me.
+0xeace723a : ※これにあたるメッセージは今回表示しない
+0xeae9ef8e : Ecoute, il est impossible de sauvegarder si
+
+le périphérique de stockage n'est pas
+
+formaté !
+0xeb60ea0e : Radar will not appear at all.
+0xebf9bcc3 : These moves can be useful.
+0xec60e40a : There may be something you can use,
+
+so check the inside thoroughly.
+0xec7e49c4 : Find the photograph of the girl of the
+
+developer's type!
+
+Masahiro Hinami 
+
+Representative title: Ring of Red
+0xecfeb7dd : One other thing... Don't get caught
+
+in its blast.
+0xee8b3c11 : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Masahiro Hinami 
+
+Repräsentativer Titel: Ring of Red
+0xeece71b1 : There was an error when detecting|
+
+the storage device.|
+
+At least ?KB of free space|
+
+is needed to save your game.|
+
+Will you start the game as it is?
+0xf0a11858 : 制作者の好みを暴け！
+
+根岸　豊
+
+「メ夕ルギアソリッド2」(デザインリーダー)
+0xf0c9d64b : Sorry, Jack, aber Du hast
+
+nicht genug freien Speicherplatz
+
+auf dem Speichergerät.
+0xf15514d5 : The chosen icon will appear in the
+
+lower right.
+0xf190383c : You have the Pentazemin equipped,
+
+huh.
+
+
+0xf197b172 : Safety is an important consideration,
+
+so be sure to use the technique.
+0xf1eb9d45 : Finden Sie das Foto vom Frauentyp
+
+des Entwicklers!
+
+Yoshikazu Matsuhana 
+
+Mitarbeit bei: Snatcher, Policenauts,
+
+Lethal Enforcers, Metal-Gear-Solid-Serie
+0xf25d7219 : 大佐、エイムズは#{SEAL10、シール・テン}#突入の
+
+報復に人質が殺されたことも
+
+知らなかったようだが？
+0xf2659cb8 : Radar in "Sons of Liberty" will not appear at all.
+0xf3d03a8b : El dispositivo de almacenamiento no está formateado.|
+
+¿Formatear y guardar?
+0xf3e654d0 : There's no storage device!
+0xf429ff51 : He, es wurde kein Speichergerät erkannt.
+0xf44f41fc : Push left and right to turn in
+
+those directions.
+0xf4fba9ef : Take advantage of the different
+
+options.
+0xf64ba020 : Jack, there's no storage device detected
+0xf68291a9 : Chokehold
+0xf7c7ef8b : #{SEAL10、シール・テン}#が突入した報復に
+
+人質が殺されただろう？
+0xf7d99825 : ※これにあたるメッセージは今回表示しない
+0xf7e42f01 : Once you remove a weapon from its
+
+equip status,
+
+
+0xf9187857 : Insufficient space on the storage device.
+0xf97a4596 : ¡Eh!, no se ha detectado ningún
+
+dispositivo de almacenemiento.
+0xfa80bf39 : Jack, es wurde kein Speichergerät erkannt.
+0xfafee826 : If you have a handgun or an automatic
+
+rifle selected while in Corner View,
+0xfc4c536b : Fire Extinguishers
+0xfd59b7b5 : Push it in rapid succession to swim
+
+faster.
+0xfddeb1fc : #{SEAL10、シール・テン}#の無線によれば、
+
+大統領はB脚で発見されたらしい。
