@@ -3,3 +3,5 @@
 
 "GCX Fixes/**/*.csv" -text
 "SDT Fixes/Script CSVs/**/*.csv" text eol=lf
+"Dumped Strings/*.xml" text eol=lf
+"Dumped Strings/*.json" text eol=lf

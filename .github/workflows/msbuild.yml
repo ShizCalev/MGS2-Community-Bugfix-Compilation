@@ -37,64 +37,6 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     # -------------------------
-    # GCX Zips (MGS2)
-    # -------------------------
-    - name: Compute GCX cache key
-      id: gcxhash
-      run: |
-        # Bump this string when GCX zips change
-        $hash = "gcx-v1"
-        "hash=$hash" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-
-    - name: Cache GCX zip files
-      id: gcx-zip-cache
-      uses: actions/cache@v4
-      with:
-        path: external/*.zip
-        key: gcx-zips-${{ runner.os }}-${{ steps.gcxhash.outputs.hash }}
-
-    # -------------------------
-    # MEGAcmd Setup (only if cache miss)
-    # -------------------------
-    - name: Cache MEGAcmd payload
-      if: steps.gcx-zip-cache.outputs.cache-hit != 'true'
-      id: megacmd-cache
-      uses: actions/cache@v4
-      with:
-        path: C:\ProgramData\chocolatey\lib\megacmd
-        key: megacmd-${{ runner.os }}-1.6.3
-
-    - name: MEGAcmd install (rebuild shims if cache miss)
-      if: steps.gcx-zip-cache.outputs.cache-hit != 'true'
-      run: choco install megacmd -y --force
-
-    - name: Add MEGAcmd to PATH
-      if: steps.gcx-zip-cache.outputs.cache-hit != 'true'
-      run: |
-        echo "$env:LOCALAPPDATA\MEGAcmd" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-    # -------------------------
-    # Download GCX zips (only if cache miss)
-    # -------------------------
-    - name: Download GCX zips
-      if: steps.gcx-zip-cache.outputs.cache-hit != 'true'
-      run: |
-        mkdir external -Force
-        mega-get "https://mega.nz/file/usYShZQb#q8ckz4h_SdJr14JD5RPesZpCJtP1b5l4rYB3jSigKZs" "external/mgs2-gcx.zip"
-
-    # -------------------------
-    - name: Extract GCX zips
-      run: |
-        $destMgs2 = "GCX Fixes"
-
-        New-Item -ItemType Directory -Force -Path $destMgs2 | Out-Null
-
-        Expand-Archive external/mgs2-gcx.zip -DestinationPath $destMgs2 -Force
-
-        Write-Host "Final GCX files in ${destMgs2}:"
-        Get-ChildItem $destMgs2 -Recurse | ForEach-Object { Write-Host $_.FullName }
-
-    # -------------------------
     # Prepare output structure
     # -------------------------
     - run: mkdir dist
@@ -110,20 +52,6 @@ jobs:
     
     - run: mkdir dist_4x
     - run: mkdir dist_4x/textures
-
-
-    - name: Run MGS2 GCX import-gcx.py
-      run: |
-        $RepoRootDir = "${{ github.workspace }}"
-        $importScript = Join-Path $RepoRootDir "GCX Fixes\import-gcx.py"
-
-        if (-not (Test-Path $importScript)) {
-          Write-Error "import-gcx.py not found at $importScript"
-          exit 1
-        }
-
-        Write-Host "Invoking $importScript..."
-        py $importScript
 
 
     # -------------------------

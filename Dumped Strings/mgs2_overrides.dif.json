@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "type": "mgs2-string-overrides-dif",
+  "sourceFile": "mgs2_string_overrides_dump.txt",
+  "generatedAt": "2026-07-21T04:42:59.901Z",
+  "changes": [
+    {
+      "hash": "0x842c1881",
+      "table": 1,
+      "before": "Cardboard Box 5\nCardboard box to transport\ngame software. The eye design\nis \"eye-catching.\" Equip to\nwear.",
+      "after": "Cardboard Box 5\nCardboard box to transport\ngame software. The eye design\nis \"eye-catching.\"\nEquip to wear."
+    }
+  ],
+  "disabled": [
+    {
+      "hash": "0x8c16953d",
+      "table": 1,
+      "text": "Bei diesem Spiel wird Metal Gear Solid|für die Konsole"
+    },
+    {
+      "hash": "0xe34e7619",
+      "table": 1,
+      "text": "Busca la foto del tipo de chica preferida de.\nMasahiro Hinami \nJuego representativo: Ring of Red"
+    },
+    {
+      "hash": "0xe1afbf50",
+      "table": 1,
+      "text": "Busca la foto del tipo de chica preferida de.\nSadaaki Kaneyoshi \nJuegos en los que ha trabajado: \nlas series de GuitearFreaks, \nMetal Gear Solid 2 (unidad de guión)"
+    },
+    {
+      "hash": "0x372cbc40",
+      "table": 1,
+      "text": "Busca la foto del tipo de chica preferida de.\nShinta Nojiri \nJuegos en los que ha trabajado: \nMetal Gear (GB), \nMetal Gear Solid 2 (unidad del guión)"
+    },
+    {
+      "hash": "0xab85e934",
+      "table": 1,
+      "text": "Busca la foto del tipo de chica preferida de.\nYoshikazu Matsuhana \nJuegos en los que ha trabajado: Snatcher, \nPolicenauts, Lethal Enforcers, \nlas series de Metal Gear Solid"
+    },
+    {
+      "hash": "0x16c4e282",
+      "table": 1,
+      "text": "Busca la foto del tipo de chica preferida de.\nYutaka Negishi \nJuegos en los que ha trabajado: \nMetal Gear Solid 2\n(Director Artístico del Escenario de Fondo)"
+    },
+    {
+      "hash": "0x0afbedee",
+      "table": 1,
+      "text": "Dans ce jeu, Metal Gear Solid |pour Console"
+    },
+    {
+      "hash": "0xec7e49c4",
+      "table": 1,
+      "text": "Find the photograph of the girl of the\ndeveloper's type!\nMasahiro Hinami \nRepresentative title: Ring of Red"
+    },
+    {
+      "hash": "0x2604b847",
+      "table": 1,
+      "text": "Find the photograph of the girl of the\ndeveloper's type!\nSadaaki Kaneyoshi \nTitles worked on: GuitarFreaks series,\nMetal Gear Solid 2 (Script unit)"
+    },
+    {
+      "hash": "0xb87f8c62",
+      "table": 1,
+      "text": "Find the photograph of the girl of the\ndeveloper's type!\nShinta Nojiri \nTitles worked on: Metal Gear (GB),\nMetal Gear Solid 2 (Script unit)"
+    },
+    {
+      "hash": "0x6668cbba",
+      "table": 1,
+      "text": "Find the photograph of the girl of the\ndeveloper's type!\nYoshikazu Matsuhana \nTitles worked on: Snatcher, Policenauts,\nLethal Enforcers, Metal Gear Solid series"
+    },
+    {
+      "hash": "0x0d56f4a2",
+      "table": 1,
+      "text": "Find the photograph of the girl of the\ndeveloper's type!\nYutaka Negishi\nTitles worked on: Metal Gear Solid 2\n(Background Art Director)"
+    },
+    {
+      "hash": "0xee8b3c11",
+      "table": 1,
+      "text": "Finden Sie das Foto vom Frauentyp\ndes Entwicklers!\nMasahiro Hinami \nRepräsentativer Titel: Ring of Red"
+    },
+    {
+      "hash": "0xc210ac50",
+      "table": 1,
+      "text": "Finden Sie das Foto vom Frauentyp\ndes Entwicklers!\nSadaaki Kaneyoshi \nMitarbeit bei: Guitar-Freaks-Serie,\nMetal Gear Solid 2 (Skript-Einheit)"
+    },
+    {
+      "hash": "0x33691fc6",
+      "table": 1,
+      "text": "Finden Sie das Foto vom Frauentyp\ndes Entwicklers!\nSadaaki Kaneyoshi \nMitarbeit bei: GuitarFreaks Serie,\nMetal Gear Solid 2 (Skripteinheit)"
+    },
+    {
+      "hash": "0x3dbc57c6",
+      "table": 1,
+      "text": "Finden Sie das Foto vom Frauentyp\ndes Entwicklers!\nShinta Nojiri \nMitarbeit bei: Metal Gear (GB),\nMetal Gear Solid 2 (Skript-Einheit)"
+    },
+    {
+      "hash": "0xc33e21d0",
+      "table": 1,
+      "text": "Finden Sie das Foto vom Frauentyp\ndes Entwicklers!\nShinta Nojiri \nMitarbeit bei: Metal Gear (GB),\nMetal Gear Solid 2 (Skripteinheit)"
+    },
+    {
+      "hash": "0x24bb5310",
+      "table": 1,
+      "text": "Finden Sie das Foto vom Frauentyp\ndes Entwicklers!\nYoshikazu Matsuhana \nMitarbeit bei: Snatcher, Policenauts,\nLethal Enforcers, Metal Gear Solid Serie"
+    },
+    {
+      "hash": "0x87ca5004",
+      "table": 1,
+      "text": "Finden Sie das Foto vom Frauentyp\ndes Entwicklers!\nYutaka Negishi \nMitarbeit bei: Metal Gear Solid 2\n(Background Art Director)"
+    },
+    {
+      "hash": "0x39a96c1e",
+      "table": 1,
+      "text": "Finden Sie das Foto vom Frauentyp\ndes Entwicklers!\nYutaka Negishi \nMitarbeit bei: Metal Gear Solid 2\n(künstl. Leiter Hintergrund)"
+    },
+    {
+      "hash": "0xd71196b4",
+      "table": 1,
+      "text": "In questo gioco, chiameremo |Metal Gear Solid per console"
+    },
+    {
+      "hash": "0x6f56447e",
+      "table": 1,
+      "text": "In this game, Metal Gear Solid|for the console..."
+    },
+    {
+      "hash": "0xc82ba1be",
+      "table": 1,
+      "text": "nos estaremos refiriendo |a Metal Gear Solid para Consola."
+    },
+    {
+      "hash": "0x51afc248",
+      "table": 1,
+      "text": "Trouvez la photographie de la fille \ndu type du développeur !\nMasahiro Hinami \nTitre représentatif : Ring of Red"
+    },
+    {
+      "hash": "0x0636cf9c",
+      "table": 1,
+      "text": "Trouvez la photographie de la fille \ndu type du développeur !\nSadaaki Kaneyoshi \nA travaillé sur les titres suivants : \nMetal Gear Solid 2 (unité Scénario)"
+    },
+    {
+      "hash": "0xe36faa00",
+      "table": 1,
+      "text": "Trouvez la photographie de la fille \ndu type du développeur !\nShinta Nojiri \nA travaillé sur les titres suivants : \nMetal Gear Solid 2 (unité Scénario)"
+    },
+    {
+      "hash": "0x40ccce5a",
+      "table": 1,
+      "text": "Trouvez la photographie de la fille \ndu type du développeur !\nYoshikazu Matsuhana \nA travaillé sur les titres suivants : \nPolicenauts, Metal Gear Solid series"
+    },
+    {
+      "hash": "0x4f9aa354",
+      "table": 1,
+      "text": "Trouvez la photographie de la fille \ndu type du développeur !\nYutaka Negishi \nA travaillé sur les titres suivants : \nMetal Gear Solid 2 (directeur artistique)"
+    },
+    {
+      "hash": "0x3a2508c7",
+      "table": 1,
+      "text": "Trova la foto della ragazza che va\na genio allo sviluppatore!\nMasahiro Hinami \nTitolo rappresentativo: Ring of Red"
+    },
+    {
+      "hash": "0x7e72a17e",
+      "table": 1,
+      "text": "Trova la foto della ragazza che va\na genio allo sviluppatore!\nSadaaki Kaneyoshi \nTitoli a cui ha lavorato: serie GuitarFreaks,\nMetal Gear Solid 2 (unità Script)"
+    },
+    {
+      "hash": "0x0b48bc55",
+      "table": 1,
+      "text": "Trova la foto della ragazza che va\na genio allo sviluppatore!\nShinta Nojiri \nTitoli a cui ha lavorato: Metal Gear (GB),\nMetal Gear Solid 2 (unità Script)"
+    },
+    {
+      "hash": "0xe709a65d",
+      "table": 1,
+      "text": "Trova la foto della ragazza che va\na genio allo sviluppatore!\nYoshikazu Matsuhana \nTitoli a cui ha lavorato: Policenauts, \nSnatcher, serie Metal Gear Solid"
+    },
+    {
+      "hash": "0x14ec1798",
+      "table": 1,
+      "text": "Trova la foto della ragazza che va\na genio allo sviluppatore!\nYutaka Negishi \nTitoli a cui ha lavorato: Metal Gear Solid 2\n(direttore artistico sfondi)"
+    },
+    {
+      "hash": "0xf0a11858",
+      "table": 1,
+      "text": "制作者の好みを暴け！\n根岸　豊\n「メ夕ルギアソリッド2」(デザインリーダー)"
+    },
+    {
+      "hash": "0x57544e4f",
+      "table": 1,
+      "text": "制作者の好みを暴け！兼吉完聡\n主な作品は「ギ夕ーフリークス」シリーズ。\n「メ夕ルギアソリッド2」(スクリプト班)"
+    },
+    {
+      "hash": "0x7ca2016f",
+      "table": 1,
+      "text": "制作者の好みを暴け！日並雅宏\n代表作は「リングオブレッド」。"
+    },
+    {
+      "hash": "0xc76fa726",
+      "table": 1,
+      "text": "制作者の好みを暴け！松花賢和\n主な作品は「スナッチャー」「ポリスノーツ」\n「リーサルエンフォーサーズ」\n「メ夕ルギアソリッド」シリーズ。"
+    },
+    {
+      "hash": "0xaf473797",
+      "table": 1,
+      "text": "制作者の好みを暴け！野尻真太\n主な作品は「ゴーストバベル」\n「メ夕ルギアソリッド2」(スクリプト班)"
+    }
+  ]
+}
