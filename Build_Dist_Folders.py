@@ -44,7 +44,6 @@ LOCAL_SYNC_PREFIXES: dict[str, str] = {
 IGNORED_TARGET_PATH_PREFIXES = {
     Path("plugins"),
     Path("logs"),
-    Path("assets/gcx"),
 }
 
 
