@@ -9,6 +9,24 @@
       "table": 1,
       "before": "Cardboard Box 5\nCardboard box to transport\ngame software. The eye design\nis \"eye-catching.\" Equip to\nwear.",
       "after": "Cardboard Box 5\nCardboard box to transport\ngame software. The eye design\nis \"eye-catching.\"\nEquip to wear."
+    },
+    {
+      "hash": "0x42c9bc0e",
+      "table": 1,
+      "before": "#{ペン夕ゼミン、安定剤}#を使えばしばらくの間\n手ぶれを止めることができる。\n精密な狙撃がしやすくなるはずだ。",
+      "after": "#{ペンタゼミン、安定剤}#を使えばしばらくの間\n手ぶれを止めることができる。\n精密な狙撃がしやすくなるはずだ。"
+    },
+    {
+      "hash": "0xfea1ba42",
+      "table": 1,
+      "before": "ペン夕ゼミン|\nベンゾジアゼピン系抗不安薬。|\n抗不安作用以外に筋弛緩作用、|\n自律神経調節作用等もある。|\n#{、決定}#で使用。",
+      "after": "ペンタゼミン|\nベンゾジアゼピン系抗不安薬。|\n抗不安作用以外に筋弛緩作用、|\n自律神経調節作用等もある。|\n#{、決定}#で使用。"
+    },
+    {
+      "hash": "0x4d9c3b1d",
+      "table": 1,
+      "before": "ペン夕ゼミン|\nベンゾジアゼピン系抗不安薬。|\n狙撃銃を構えた時の手ぶれを|\n一定時間止める。ウィンドウで|\n選んで#{、決定}#で服用。",
+      "after": "ペンタゼミン|\nベンゾジアゼピン系抗不安薬。|\n狙撃銃を構えた時の手ぶれを|\n一定時間止める。ウィンドウで|\n選んで#{、決定}#で服用。"
     }
   ],
   "disabled": [
