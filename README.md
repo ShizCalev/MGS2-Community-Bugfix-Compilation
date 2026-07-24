@@ -132,10 +132,6 @@ Recommended Mod Load Order (from first to last):
 
 - Corrected typos on PAN cards (previously said “SECULITY” instead of “SECURITY”.) [2001 SOL]
 
-- Corrected NUMEROUS typos in Snake Tales stories (ie describing Emma as Otacon's sister-in-law/sister of spouse instead of stepsister, and Fatman's body as being “prostate” instead of “prostrate”, “Do you know where is it planted?”.)
-
-- Corrected several typos in “In the Darkness of Shadow Moses” (ie Ocelot having learned torture methods in the cells of Lubianka - which means rural cities in Poland instead of Lubyanka - the KGB HQ in Moscow, Spetznaz instead of Spetsnaz, inconsistent capitalization of SOCOM pistol.)
-
 - Fixed 1 pixel tall banding on the bottom edge of the center floor markings in Arsenal's Rectum, as well as numerous floating screens throughout Arsenal. (w46a_line_05_1, w45a_efct_disp_05_noiz_alp_add_ovl.bmp) [2001 SOL]
 
 - Fixed broken/missing shadowmap on Fatman's shoes.
@@ -203,6 +199,8 @@ Recommended Mod Load Order (from first to last):
 - Fixed dark skinned US Marines in the Holds having light skinned arms. [2001 SOL] (Note: A similar issue is present with the hostages in Shell 1 Core, which is an actual model issue that cannot be resolved at this time.)
 
 - Fixed Emma's id swapping background colors / quality between gameplay and cutscenes. [2001 SOL]
+
+- Fixed dead Marines showing up on Tanker bridge during Snake Tales. [2002 Substance]
 
 <br>
 
