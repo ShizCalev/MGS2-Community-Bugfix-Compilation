@@ -1,0 +1,1120 @@
+===== Table 0 (2 entries) =====
+0x76748c7b : It has more reach and power than
+normal strikes, but you're also
+more open to counterattacks.
+0xbff9be05 : Weigh the pros and cons well.
+===== Table 1 (288 entries) =====
+0x021ae3bc : your range of vision is more limited.
+0x02420058 : Insufficient free space on the
+
+storage device.
+0x02f6745e : Storage device not formatted.|
+
+Format and save?
+0x05868113 : Select the grenade when you take a
+
+peek.
+0x05f0764d : No, it's pretty simple, really.
+0x05f5d1b5 : Make sure you keep doing it until
+
+the door is open.
+0x061b00f5 : ※This message will not be displayed this time
+0x0636cf9c : Find the photograph of the girl of the 
+
+developer's type!
+
+Sadaaki Kaneyoshi 
+
+Titles worked on: 
+
+Metal Gear Solid 2 (Script unit)
+0x06efaac5 : Look, there's no way to save
+
+unless you format the storage device!
+0x070a1bb2 : To throw something, such as a
+
+grenade or a magazine --
+0x08862a15 : Go ahead...try it.
+
+
+0x08c919f8 : Connect the storage device!
+0x0afbedee : In this game, Metal Gear Solid|for the console
+0x0b48bc55 : Find the photograph of the girl of the
+
+developer's type!
+
+Shinta Nojiri 
+
+Titles worked on: Metal Gear (GB),
+
+Metal Gear Solid 2 (Script unit)
+0x0c512580 : "When the recognition enzyme reacts and becomes active, #{FOXDIE、FOXDIE}#
+
+uses macrophage tissue to begin producing
+
+TNF-epsilon."
+
+"What?"
+
+"It's a peptide, a type of cytokine, that induces cell
+
+death. TNF-epsilon travels through the bloodstream to the heart and binds
+
+to receptors on myocardial cells."
+
+"And that causes a heart attack?"
+
+"The stimulated myocardial cells rapidly undergo
+
+apoptosis. And then that person... dies."
+0x0d3c297b : I'm sorry, Jack, but there isn't enough
+
+free space on the storage
+
+device.
+0x0d56f4a2 : Find the photograph of the girl of the
+
+developer's type!
+
+Yutaka Negishi
+
+Titles worked on: Metal Gear Solid 2
+
+(Background Art Director)
+0x0d88e1da : I can't save until you
+
+have a storage device!
+0x0dfc6139 : Raiden, #{SEAL10、SEAL Team 10}# is fighting someone on
+
+the BC Connecting Bridge. The President appears to be with them.
+0x0dfc9fdf : I see you have the bandage equipped.
+
+
+0x0ea31cf5 : ...Maybe...
+
+it's because I'm lucky?
+0x0f59b998 : Insufficient space on the storage device.
+0x11a03423 : Not me|Pick someone else!
+0x11b4dbbd : We had to|hunt him down
+0x12ee2375 : among the picture previews at the
+
+bottom of the screen.
+0x13ccbd74 : Magazine capacity is 30 rounds.
+
+It uses 5.56mm x 45
+
+SS109 ammunition.
+0x140e7a4c : ※This message will not be displayed this time
+0x141bf8f9 : Look, there's no way to save unless
+
+you format the storage device!
+0x14b4bd2b : Destroy Radios
+0x14ec1798 : Find the photograph of the girl of the
+
+developer's type!
+
+Yutaka Negishi 
+
+Titles worked on: Metal Gear Solid 2
+
+(Background Art Director)
+0x1575d0a8 : Error reading the|
+
+storage device.|
+
+At least ?KB of free space is required.|
+
+to save.|
+
+Will you start the game as it is?
+0x15a6acb5 : No storage device was detected.
+0x167df70b : Peek around Corners
+0x16c4e282 : Find the photograph of the girl of the
+
+developer's type!
+
+Titles worked on: 
+
+Metal Gear Solid 2
+
+(Background Art Director)
+0x17c9011f : Do you have any spent handgun or
+
+rifle magazines?
+0x193fd7de : Enemies as Shields
+0x1c2fb5c0 : Connect your storage device right now!
+0x1d637365 : ※This message will not be displayed this time
+0x1e9aa71f : I'm sorry, Jack, but there isn't enough
+
+free space on the storage device.
+0x1f34eca9 : I'm sorry, Jack, but there isn't
+
+enough free space on the
+
+storage device.
+0x219c2837 : Once you have the directional
+
+microphone selected, the screen
+
+will switch to First Person View.
+0x220238e7 :  When I reached Strut D, I received a radio call
+
+from Dolph. It seems he had contacted O'Brien.
+
+To prevent Vamp from getting through, O'Brien sealed
+
+the door from Strut D to the Shell 1-Shell 2 Connecting Bridge.
+
+He had organized the remaining SEALs and fortified
+
+their defenses around Strut G.
+
+"Snake, I want you to join up with the SEALs too.
+
+The enemy is Vamp. Even the SEALs won't be able
+
+to stop him easily."
+
+"But if the Shell 1-Shell 2 Connecting Bridge is closed,
+
+how am I supposed to get to Shell 2?"
+
+"There's another route. Cross the oil fence beneath 'Big Shell.'
+
+You can descend to the oil fence using the ladder
+
+in the basement of Strut E.
+
+Cross it and you should come out at Strut L
+
+in Shell 2."
+
+"Got it."
+
+ I ended the transmission. Vamp should already be heading
+
+toward Shell 2. I have to hurry.#C0
+0x2232aa29 : Storage device not found.
+0x22a271b5 : Hey, there is no storage device.
+0x230c99f4 : ※This message will not be displayed this time
+0x24bb5310 : Find the photograph of the girl of
+
+the developer's type!
+
+Yoshikazu Matsuhana 
+
+Titles worked on: Snatcher, Policenauts,
+
+Lethal Enforcers, Metal Gear Solid series
+0x25c6dff5 : Raiden, go up that ladder to get to
+
+the fire escape on the exterior of
+
+Strut L.
+0x26025e45 : Snake, I couldn't #{record、save}#!
+0x2604b847 : Find the photograph of the girl of the
+
+developer's type!
+
+Sadaaki Kaneyoshi 
+
+Titles worked on: GuitarFreaks series,
+
+Metal Gear Solid 2 (Script unit)
+0x26ae71fa : If you have a weapon selected while
+
+in Corner View,
+0x26d2259d : I can't save until you
+
+format the storage device
+
+!
+0x29c23af2 : Storage device not|
+
+detected. At least|
+
+?KB of free space is required.|
+
+Will you start the game as it is?
+0x2acf6888 : Get some good shots!
+0x2b4c0e51 : You cannot save unless you have
+
+connected a storage device.
+0x2ea6fd2e : To steady your hands when aiming
+
+with a sniper rifle,
+
+
+0x32fe1ffe : Could there be a survivor from #{SEAL10、SEAL Team 10}#?
+0x331fa119 : There is not enough free space on the storage device|
+
+to create a new save file.|
+
+At least ?KB of free space is required to create one.|
+
+Will you start the game as it is?
+0x3332ef15 : You need a storage device
+
+to save.
+0x33691fc6 : Find the photograph of the girl of
+
+the developer's type!
+
+Sadaaki Kaneyoshi 
+
+Titles worked on: GuitarFreaks series,
+
+Metal Gear Solid 2 (Script unit)
+0x3592d95b : Open / Close Lockers
+0x36192b62 : You need a
+
+storage device to save.
+0x36ec73f1 : Colonel, Bravo Team of #{SEAL10、SEAL Team 10}#
+
+has been wiped out....
+0x372cbc40 : Find the photograph of the girl of the
+
+developer's type!
+
+Titles worked on: 
+
+Metal Gear (GB), 
+
+Metal Gear Solid 2 (Script unit)
+0x37bbb117 : you can lower the gun without
+
+firing.
+0x385f09c4 : Insufficient free space|
+
+on the storage device.
+
+At least ?KB of free space is required|
+
+to save.|
+
+Will you start the game as it is?
+0x39a96c1e : Find the photograph of the girl of
+
+the developer's type!
+
+Yutaka Negishi 
+
+Titles worked on: Metal Gear Solid 2
+
+(Background Art Director)
+0x3a2508c7 : Find the photograph of the girl of the
+
+developer's type!
+
+Masahiro Hinami 
+
+Representative title: Ring of Red
+0x3a257bfe : When you're on the surface, you can
+
+swim in corresponding directions
+
+using the up, down,
+0x3bbd25c8 : There is insufficient space|
+
+on the storage device.
+
+At least ?KB of free space|
+
+is needed to save your game.|
+
+Will you start the game as it is?
+0x3cafef16 : Snake, there wasn't enough
+
+space left on the storage device!
+0x3ce25ce0 : No storage device was
+
+detected| At least ?KB of free
+
+space is required to save.
+
+Will you start the game?
+0x3dbc57c6 : Find the photograph of the girl of
+
+the developer's type!
+
+Shinta Nojiri 
+
+Titles worked on: Metal Gear (GB),
+
+Metal Gear Solid 2 (Script unit)
+0x3f94629c : Once you recognize Ames by his
+
+heartbeat, keep the microphone
+
+pointed toward him.
+0x3fa133ac : hiding behind objects during gun fights.
+0x3fc0f616 : Take aim using First Person View and
+
+try to land it where it will lure the
+
+enemy away.
+0x40601fe7 : There is no storage device!
+0x40ccce5a : Find the photograph of the girl 
+
+of the developer's type!
+
+Yoshikazu Matsuhana 
+
+Titles worked on: 
+
+Policenauts, Metal Gear Solid series
+0x41a3b556 : to strafe right and left,
+
+respectively.
+0x423fa817 : There is not enough free space on the storage device.
+0x4261744f : Use an enemy as a shield by strangling him 
+
+and taking him hostage. Other enemies will 
+
+hesitate to shoot. You can escape during 
+
+this moment.
+0x42be9f96 : If you hide under a cardboard box and stay 
+
+still, the enemy will ignore you. lf you move 
+
+when in his sight, you will be found. Blocking 
+
+an enemy's path while in the box will cause
+0x42c9bc0e : Using #{Pentazemin、stabilizer}# will stop
+
+your hands from shaking for a while.
+
+It should make precise sniping easier.
+0x44a0e5d7 : Error detecting the storage device.
+
+Please try again.
+0x4535c329 : Try it if you have time.
+
+
+0x46261252 : Storage device not detected.
+0x470b72e2 : At the same time, because you are
+
+staying in the same position,
+0x47920e81 : There is no storage device!
+0x481a2782 : If you have a weapon selected,
+0x48b538ec : Snake, there wasn't enough
+
+free space on the
+
+storage device!
+0x4a91f07a : ※This message will not be displayed this time
+0x4aa99e18 : Punching is a basic move in
+
+hand-to-hand.
+
+
+0x4b9dc4ac : Oh, no! Snake, there wasn't enough
+
+free space on the storage device
+
+to save the game.
+0x4c74ec69 : The gun should now be loaded with a
+
+fresh magazine.
+0x4d15a4e4 : You need to connect a
+
+storage device.
+0x4d3d3d0b : ※This message will not be displayed this time
+0x4d750d46 : You need a storage device
+
+to save.
+0x4eac31ed : Change your vantage point and
+
+conduct a thorough search.
+0x4f9aa354 : Find the photograph of the girl 
+
+of the developer's type!
+
+Yutaka Negishi 
+
+Titles worked on: 
+
+Metal Gear Solid 2 (Art Director)
+0x5080ccb2 : The enemy may drop an item.
+0x50a334c9 : Just get in close and hit those
+
+controls at the same time.
+0x514089b1 : You will be able to climb over the
+
+railing and Hang down from the
+
+other side.
+0x51afc248 : Find the photograph of the girl 
+
+of the developer's type!
+
+Masahiro Hinami 
+
+Representative title: Ring of Red
+0x52093a20 : Jack, I'm sorry.
+
+It looks like there's no free space.
+0x531ab35b : As long as you have a hold on the
+
+body, you'll be able to drag it.
+0x53abf359 : Oh no, Snake! There wasn't enough 
+
+free space on the storage
+
+device to save the game.
+0x56ad95c8 : Knock on Walls
+0x57544e4f : Expose the developer's type! Sadaaki Kaneyoshi
+
+Main works: the "GuitarFreaks" series.
+
+"Metal Gear Solid 2" (Script unit)
+0x57685ac3 : Error detecting the|
+
+storage device.|
+
+At least ?KB of free space|
+
+is required to save.|
+
+Will you start the game as it is?
+0x57805fea : Change to First Person View with a
+
+weapon selected.
+0x5790c575 : It should come in useful.
+0x57aa7f22 : Contact with Shell 1 Core B1|has been lost
+0x5840df2c : Wait, Raiden. I just intercepted a transmission from
+
+the #{SEAL10、SEAL Team 10}# assault team.
+0x58a923b9 : Storage device not formatted.|
+
+Format and save?
+0x5998376f : once I have the pictures, right?
+0x5aae5780 : If you have the grenade selected
+
+during a peek,
+0x5ad0cee7 : 'G.W.' That's what it's called.
+
+'The Patriots' trump card.
+0x5be0b79e : I can't save unless
+
+you connect a storage device!
+0x5cfe14eb : I can't save unless you have a
+
+storage device!
+0x5ed5dd14 : An error occurred while|
+
+detecting the storage device.|
+
+At least ?KB of free space|
+
+is required to save.|
+
+Will you start the game?
+0x6668cbba : Find the photograph of the girl of the
+
+developer's type!
+
+Yoshikazu Matsuhana 
+
+Titles worked on: Snatcher, Policenauts,
+
+Lethal Enforcers, Metal Gear Solid series
+0x68d329fd : Push left or right to make
+
+90-degree turns in those directions,
+
+and down to make a 180-degree spin.
+0x6916e3b4 : Storage device not detected.
+0x694724d8 : There is insufficient free space on the|
+
+storage device to create a new|
+
+save file.|
+
+At least ?KB of free space is required|
+
+to save.|
+
+Will you start the game as it is?
+0x6bc62975 : You need a storage device.
+0x6bd70c0f : Books
+0x6c1bd409 : Hmm. Snake,
+
+there wasn't enough free space
+
+to #{record、save}#.
+0x6c1da620 : and left and right to slice parallel
+
+to the ground.
+0x6f56447e : In this game, Metal Gear Solid|for the console...
+0x70c68c66 : It is very helpful when you want to
+
+fix your aim quickly.
+0x7174e9be : Hey, no storage device was detected!
+0x73302982 : like the Scope.
+0x745fb136 : No storage device was detected.
+0x74fb3eed : Your USP is equipped with a
+
+flashlight.
+0x75207d2a : You need a
+
+storage device.
+0x75432707 : Wig C
+
+Colored wig. Equip to wear.
+0x76748c7b : It has more reach and power than
+
+normal strikes, but you're also
+
+more open to counterattacks.
+0x76b089ef : Snake, there wasn't enough
+
+free space on the storage device!
+0x77085ae6 : 
+
+		
+0x7769a3a8 : The noise will draw enemy soldiers
+
+toward wherever the magazine lands.
+0x7a4167bf : Shoot a fire extinguisher installed in the facility
+
+and extinguishing agent will spray out. You can use this
+
+to confuse enemies pursuing you.
+0x7ad12b4a : it will be fully reloaded
+
+automatically.
+
+
+0x7b3ec19a : A bomb-disposal
+
+instructor descended with Bravo Team. Under the #{SEAL10、SEAL Team 10}#
+
+plan, he was supposed to remain at Strut C.
+0x7bcd1c43 : Storage device not detected.
+0x7ca2016f : Expose the developer's type! Masahiro Hinami
+
+Representative work: "Ring of Red".
+0x7d943518 : You will be able to peek out from
+
+behind cover and scan that direction.
+0x7e225061 : Pliskin, Bravo Team of #{SEAL10、SEAL Team 10}#
+
+has been wiped out....
+0x7e72a17e : Find the photograph of the girl of the
+
+developer's type!
+
+Sadaaki Kaneyoshi 
+
+Titles worked on: GuitarFreaks series,
+
+Metal Gear Solid 2 (Script unit)
+0x7f0f0756 : Error detecting the
+
+storage device.
+
+Please try again.
+0x80055523 : No storage device|
+
+detected. At least ?KB of free space|
+
+is needed to save your game.|
+
+Will you start the game as it is?
+0x817cf754 : Raiden, the procedure for opening
+
+watertight doors is the same as
+
+when you're on land.
+0x81893209 : You cannot save unless
+
+you connect a
+
+storage device.
+0x823ee31a : You can put him in a chokehold.
+0x8308622f : There is insufficient space on the|
+
+storage device to create a new|
+
+save file. At least ?KB of free space|
+
+is needed to create a new save file.|
+
+Will you start the game as it is?
+0x839a858a : Card Key
+
+Security card Level #1. Opens
+
+security Level #1 doors when
+
+held in inventory.
+0x84028372 : ...Stillman, are you
+
+saying Pliskin really isn't a member
+
+of #{SEAL10、SEAL Team 10}#?
+0x841f5e86 : or the buttons again and again.
+0x84ec032d : I see... You said there was a survivor
+
+from #{SEAL10、SEAL Team 10}#.
+0x8587ae98 : Connect your storage device now!
+0x877870fc : I'm sorry, Jack, but there isn't
+
+enough free space on
+
+the storage device.
+0x87ca5004 : Find the photograph of the girl of
+
+the developer's type!
+
+Yutaka Negishi 
+
+Titles worked on: Metal Gear Solid 2
+
+(Background Art Director)
+0x8816b3ea : You need a storage device
+
+on which to save data.
+0x88347536 : is that you won't expose yourself
+
+to possible enemy fire.
+0x8937bfb1 : or you can jump out with your
+
+weapon ready.
+0x89a61352 : Drag Enemies
+0x8a047e33 : What about the #{SEAL10、SEAL Team 10}# assault team?
+0x8af83a65 : You're going to shoot a hostage!?
+0x8b315845 : Connect your storage device!
+0x8c16953d : In this game, Metal Gear Solid|for the console
+0x8d189145 : Storage device not formatted.|
+
+Format and save?
+0x8d4e4cfe : You will see an array of weapon
+
+icons.
+0x8e526e33 : Throw Enemies
+0x8fc57a7f : Oh no, Snake, there wasn't enough
+
+free space on the storage device to
+
+save the game.
+0x9099a951 : The selected weapon should appear
+
+in the far right.
+0x91177588 : Can you connect a
+
+storage device?
+0x947623b5 : #{SEAL10、SEAL Team 10}# descended onto Struts B and C.
+0x978442f0 : There is no
+
+storage device!
+0x980a2213 : As long as you have no weapons
+
+selected,
+0x993684d7 : There is not enough free space on the storage device.|
+
+At least ?KB of free space is required to save.|
+
+Will you start the game|
+
+as it is?
+0x99de457d : Walk into the open locker and close
+
+the door to hide.
+0x9a77feb6 : Up will take you up, down takes you
+
+lower, left and right to face those
+
+directions.
+0x9b638440 : Keep an eye out for approaching
+
+enemies.
+0x9c457596 : Jack, no storage device was detected.
+0x9c4d6752 : Jump Down from Hanging
+0x9d633fb8 : You can use it on the spot and
+
+regain some LIFE.
+0xa1c371c4 : Error detecting the storage device.
+
+Please try again.
+0xa267a1f3 : No, we haven't heard anything either.
+
+It was probably an independent action by #{SEAL10、SEAL Team 10}#.
+0xa2ad510b : Storage device not formatted.|
+
+Format and save?
+0xa5efc33c : There is not enough space on the|
+
+storage device.|
+
+At least ?KB of free space|
+
+is required to save.|
+
+Will you start the game?
+0xa5fc0e5a : Oh no. Snake, there wasn't enough
+
+space left on the storage device.
+0xa64482b5 : ※This message will not be displayed this time
+0xa76640b5 : This will let you ration your air
+
+supply better and slow the decline
+
+of your O2 Gauge.
+0xa7e77c85 : You need a storage device.
+0xaada73c1 : When you're sure that you have
+
+Ames, keep the microphone
+
+pointed in the same direction,
+0xab2184a3 : You cannot save without a
+
+storage device.
+0xab85e934 : Find the photograph of the girl of the
+
+developer's type!
+
+Titles worked on: Snatcher, 
+
+Policenauts, Lethal Enforcers, 
+
+Metal Gear Solid series
+0xab9d8915 : No storage device was detected.|
+
+At least ?KB of free space is required to save.|
+
+Will you start the game|
+
+as it is?
+0xac434ec4 : Send the photograph
+
+Find out who this is...
+0xad2f89e6 : ※This message will not be displayed this time
+0xae302e07 : Watch out for Solidus' snake arms.
+0xaefa7051 : you can use the momentum to knee
+
+someone.
+0xaf39abb5 : Saving can't be done unless you have
+
+a storage device.
+0xaf473797 : Expose the developer's type! Shinta Nojiri
+
+Main works: "Ghost Babel"
+
+"Metal Gear Solid 2" (Script unit)
+0xaf719a5a : Destroy all targets and head to the
+
+goal! Make good use of moving while
+
+aiming your gun. Destroying the
+
+deduction obstacles (red targets)
+
+will lower your score.
+
+
+0xafc5a512 : Jack, no
+
+storage device was detected.
+0xb2909177 : Cigarettes
+
+Highly addictive and hazardous
+
+to your health.
+0xb4903e94 : Shaver
+
+Electric razor. Smooth and
+
+quick shaving performance.
+
+Nothing is left behind.
+0xb49c99b9 : An error occurred while detecting the storage device|
+
+. To save a save file,|
+
+at least ?KB of free space is required.|
+
+Will you start the game as it is?
+0xb4a25ac8 : What you've got there is an empty
+
+magazine for handguns and
+
+automatic weapons.
+0xb639d96c : Whenever you're bleeding, select
+
+the bandage in the menu display#－
+
+
+
+
+0xb65524c3 : Come up behind an enemy without any
+
+weapons selected,
+0xb6ae26c7 : Oh, no. Snake, there isn't enough space
+
+on the storage device
+
+to save the game.
+0xb7188293 : You can also punch in First Person View.
+0xb87f8c62 : Find the photograph of the girl of the
+
+developer's type!
+
+Shinta Nojiri 
+
+Titles worked on: Metal Gear (GB),
+
+Metal Gear Solid 2 (Script unit)
+0xb988bcff : There was an error detecting|
+
+the storage device.|
+
+At least ?KB of free space is required to save.|
+
+Will you start the game|
+
+as it is?
+0xbd12ebb2 : You have Pentazemin in your
+
+inventory.
+0xbdf32a2c : Jack, no storage device was detected.
+0xbec387df : This is how to do it:
+0xbff9be05 : Weigh the pros and cons well.
+0xc1ac1998 : Hold up Enemies
+0xc210ac50 : Find the photograph of the girl of
+
+the developer's type!
+
+Sadaaki Kaneyoshi 
+
+Titles worked on: GuitarFreaks series,
+
+Metal Gear Solid 2 (Script unit)
+0xc268ee2e : and the photos will be sent.
+0xc33e21d0 : Find the photograph of the girl of
+
+the developer's type!
+
+Shinta Nojiri 
+
+Titles worked on: Metal Gear (GB),
+
+Metal Gear Solid 2 (Script unit)
+0xc3bc2be6 : Look, there's no way to save unless you
+
+format the storage device!
+0xc3f165c5 : No storage device|
+
+detected.|
+
+At least ?KB of free space|
+
+is required to save.|
+
+Will you start the game as it is?
+0xc67d7c74 : Hang from Ledges
+0xc76fa726 : Expose the developer's type! Yoshikazu Matsuhana
+
+Main works: "Snatcher" "Policenauts"
+
+"Lethal Enforcers"
+
+"Metal Gear Solid" series.
+0xc82ba1be : we will refer to it as |Metal Gear Solid for the console.
+0xcaaaccf4 : When you're Hanging, get to the spot
+
+above the pipe, then jump down.
+0xcde61b57 : You can only save with your own storage device.
+0xd07a8499 : the enemy to discover you.
+0xd15de54d : Connect your
+
+storage device now!
+0xd1d68d6d : Cardboard Boxes
+0xd326eaa3 : You don't have a storage device!
+0xd3989a4a : Shake out Items
+0xd4daf2bb : Error detecting the storage device.
+
+Please try again.
+0xd5d607a1 : You need to have a storage device.
+0xd699db35 : Not enough space on the storage device.
+0xd71196b4 : In this game, we will call it |Metal Gear Solid for the console
+0xd72c5de6 : If this happens, your only option
+
+is to rapidly press a button#－
+0xdbe96c80 : Oh, no. Snake, there isn't enough
+
+free space on the
+
+storage device to save the game.
+0xdf017de7 : You can use this to hide bodies and
+
+avoid being found.
+0xe0d3776f : You cannot save without a
+
+storage device ready.
+0xe17f3f91 : I can't save unless you have a
+
+storage device!
+0xe1afbf50 : Find the photograph of the girl of the
+
+developer's type!
+
+Titles worked on: 
+
+GuitarFreaks series, 
+
+Metal Gear Solid 2 (Script unit)
+0xe2470575 : If you haven't connected
+
+a storage device,
+
+I can't save!
+0xe2d49989 : There is not enough free space on the storage device.
+0xe34e7619 : Find the photograph of the girl of the
+
+developer's type!
+
+Representative title: Ring of Red
+0xe36faa00 : Find the photograph of the girl 
+
+of the developer's type!
+
+Shinta Nojiri 
+
+Titles worked on: 
+
+Metal Gear Solid 2 (Script unit)
+0xe45f246d : Hey, no
+
+storage device was detected.
+0xe4cc5775 : See the maintenance hatch on the
+
+floor?
+0xe659b89a : Keep it pushed down if you want to
+
+move around and drag him away with
+
+you.
+0xe709a65d : Find the photograph of the girl of the
+
+developer's type!
+
+Yoshikazu Matsuhana 
+
+Titles worked on: Policenauts, 
+
+Snatcher, Metal Gear Solid series
+0xe7afcdbb : Storage device not detected.
+0xe859e6c0 : and the pictures will be sent to me.
+0xeace723a : ※This message will not be displayed this time
+0xeae9ef8e : Look, it is impossible to save unless
+
+the storage device is
+
+formatted!
+0xeb60ea0e : Radar will not appear at all.
+0xebf9bcc3 : These moves can be useful.
+0xec60e40a : There may be something you can use,
+
+so check the inside thoroughly.
+0xec7e49c4 : Find the photograph of the girl of the
+
+developer's type!
+
+Masahiro Hinami 
+
+Representative title: Ring of Red
+0xecfeb7dd : One other thing... Don't get caught
+
+in its blast.
+0xee8b3c11 : Find the photograph of the girl of
+
+the developer's type!
+
+Masahiro Hinami 
+
+Representative title: Ring of Red
+0xeece71b1 : There was an error when detecting|
+
+the storage device.|
+
+At least ?KB of free space|
+
+is needed to save your game.|
+
+Will you start the game as it is?
+0xf0a11858 : Expose the developer's type!
+
+Yutaka Negishi
+
+"Metal Gear Solid 2" (Design Leader)
+0xf0c9d64b : Sorry, Jack, but you don't have
+
+enough free space
+
+on the storage device.
+0xf15514d5 : The chosen icon will appear in the
+
+lower right.
+0xf190383c : You have the Pentazemin equipped,
+
+huh.
+
+
+0xf197b172 : Safety is an important consideration,
+
+so be sure to use the technique.
+0xf1eb9d45 : Find the photograph of the girl of
+
+the developer's type!
+
+Yoshikazu Matsuhana 
+
+Titles worked on: Snatcher, Policenauts,
+
+Lethal Enforcers, Metal Gear Solid series
+0xf25d7219 : Colonel, Ames didn't seem to know that hostages
+
+had been killed in retaliation for the
+
+#{SEAL10、SEAL Team 10}# assault?
+0xf2659cb8 : Radar in "Sons of Liberty" will not appear at all.
+0xf3d03a8b : Storage device not formatted.|
+
+Format and save?
+0xf3e654d0 : There's no storage device!
+0xf429ff51 : Hey, no storage device was detected.
+0xf44f41fc : Push left and right to turn in
+
+those directions.
+0xf4fba9ef : Take advantage of the different
+
+options.
+0xf64ba020 : Jack, there's no storage device detected
+0xf68291a9 : Chokehold
+0xf7c7ef8b : Hostages were killed in retaliation
+
+for the #{SEAL10、SEAL Team 10}# assault, weren't they?
+0xf7d99825 : ※This message will not be displayed this time
+0xf7e42f01 : Once you remove a weapon from its
+
+equip status,
+
+
+0xf9187857 : Insufficient space on the storage device.
+0xf97a4596 : Hey, no
+
+storage device was detected.
+0xfa80bf39 : Jack, no storage device was detected.
+0xfafee826 : If you have a handgun or an automatic
+
+rifle selected while in Corner View,
+0xfc4c536b : Fire Extinguishers
+0xfd59b7b5 : Push it in rapid succession to swim
+
+faster.
+0xfddeb1fc : According to the #{SEAL10、SEAL Team 10}# radio,
+
+the President was apparently found at Strut B.

@@ -575,12 +575,6 @@
       "after": "ペンタゼミン|\nベンゾジアゼピン系抗不安薬#T{}。|\n狙撃銃を構えた時の手ぶれを|\n一定時間止める#T{}。ウ#T{}ィンドウで|\n選んで##B{}{[CIRCLE]#T{}、決定#T{}}#ボ夕ンで服用#T{}。"
     },
     {
-      "crc": "0x3bbb6613",
-      "lang": "-1",
-      "before": "Stinger\nPortable surface-to-air\nmissile.  Aim in First Person\nView, fire w/ [SQUARE] button. Align\nsight on target to lock on.",
-      "after": "Stinger\nPortable surface-to-air\nmissile. Aim in First Person\nView, fire w/ [SQUARE] button. Align\nsight on target to lock on."
-    },
-    {
       "crc": "0x8467a1f2",
       "lang": "-1",
       "before": "Olga Gurlukovich... La fille du Colonel\nSergei Gurlukovich, ex-GRU et ancien\ncommandant des Spetznaz...\n",

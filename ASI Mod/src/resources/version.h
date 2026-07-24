@@ -6,8 +6,8 @@
 #define PRIMARY_REPO_URL "https://github.com/ShizCalev/MGS2-Community-Bugfix-Compilation"
 #define FALLBACK_REPO_URL "https://gitlab.com/ShizCalev/MGS2-Community-Bugfix-Compilation"
 
-#define VERSION_MAJOR 2
-#define VERSION_MINOR 2
+#define VERSION_MAJOR 3
+#define VERSION_MINOR 0
 #define VERSION_PATCH 0
 
 #define STRINGIFY_HELPER(x) #x
