@@ -180,11 +180,20 @@ Recommended Mod Load Order (from first to last):
 
 - Fixed most nodes having a small, completely detached screen floating above their left side. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
 
+- Fixed a broken voiceline that was supposed to play during the Tanker Deck 2 pipe-falling easter egg cutscene. [2001 SoL]
+
+- Fixed Solidus not being visible after killing a Ray unit ontop of Arsenal. [2011 HDC]
+
+- Fixed broken unique unit numbers on the Metal Gear Ray units in the Arsenal hangars. [2001 SoL] | Feature contributed by [Jacky720](https://github.com/Jacky720) / Space Core, textures by Afevis.
+
+
 <br>
 
 ------------
 
 ### Continuity Fixes:
+
+- Fixed Snake's holster being non-functional / always having an extra gun in it. [2001 SoL]
 
 - Corrected the color of the gloves on Snake's super-high polygon cutscene LOD model (which is only used for close-ups of the hands in ~4 cutscenes - the very first GW bridge cutscene, picking up the USP, Snake pointing to his Bandana, and after Tengu 2, and is also used in First Person View) to match his standard cutscene & gameplay LOD models. [2001 SOL]
 
@@ -194,13 +203,20 @@ Recommended Mod Load Order (from first to last):
 
 - Corrected inconsistent height markings on the legs of Struts. [2001 SOL]
 
-- Updated the Colonel's MG2:SS MSX portrait to accurately reflect his 2004 sprite change. (The bug which causes the sprite to be positioned incorrectly during the relevant codec calls is still present, but I've fixed the texture anyway in the event someone does fix that issue in the future.) [2011 HDC]
+- Fixed dark skinned US Marines in the Holds having light skinned arms. [2001 SOL]
 
-- Fixed dark skinned US Marines in the Holds having light skinned arms. [2001 SOL] (Note: A similar issue is present with the hostages in Shell 1 Core, which is an actual model issue that cannot be resolved at this time.)
+- Fixed some Shell 1 core hostages having incorrectly colored arms. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
 
 - Fixed Emma's id swapping background colors / quality between gameplay and cutscenes. [2001 SOL]
 
 - Fixed dead Marines showing up on Tanker bridge during Snake Tales. [2002 Substance]
+
+- Option to change the Colonel's MSX2 Codec sprite into his Subsistence version.
+
+- Fixed a number of Shell 2's Struts incorrectly saying "Shell 1" when viewed from Shell 1 Connecting Bridges. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
+
+- Fixed Raiden not wearing his disguise when being spied on by Ocelot during a shell 1 core cutscene. [2001 SoL] | Feature contributed by [Jacky720](https://github.com/Jacky720) / Space Core, textures by Afevis.
+
 
 <br>
 
@@ -208,6 +224,8 @@ Recommended Mod Load Order (from first to last):
 
 
 ### Restored Content:
+
+- Restored original title screen's color changing functionality. The title screen's 2 now correctly changes color upon game completion. [2011 HDC]
 
 - Restored original PS2 controller icons (can be selected via MGSHDFix's config tool.) [2011 HDC]
 
