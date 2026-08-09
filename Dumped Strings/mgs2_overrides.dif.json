@@ -2,19 +2,19 @@
   "version": 1,
   "type": "mgs2-string-overrides-dif",
   "sourceFile": "mgs2_string_overrides_dump.txt",
-  "generatedAt": "2026-07-21T04:42:59.901Z",
+  "generatedAt": "2026-08-09T00:12:50.817201600Z",
   "changes": [
-    {
-      "hash": "0x842c1881",
-      "table": 1,
-      "before": "Cardboard Box 5\nCardboard box to transport\ngame software. The eye design\nis \"eye-catching.\" Equip to\nwear.",
-      "after": "Cardboard Box 5\nCardboard box to transport\ngame software. The eye design\nis \"eye-catching.\"\nEquip to wear."
-    },
     {
       "hash": "0x42c9bc0e",
       "table": 1,
       "before": "#{ペン夕ゼミン、安定剤}#を使えばしばらくの間\n手ぶれを止めることができる。\n精密な狙撃がしやすくなるはずだ。",
       "after": "#{ペンタゼミン、安定剤}#を使えばしばらくの間\n手ぶれを止めることができる。\n精密な狙撃がしやすくなるはずだ。"
+    },
+    {
+      "hash": "0x842c1881",
+      "table": 1,
+      "before": "Cardboard Box 5\nCardboard box to transport\ngame software. The eye design\nis \"eye-catching.\" Equip to\nwear.",
+      "after": "Cardboard Box 5\nCardboard box to transport\ngame software. The eye design\nis \"eye-catching.\"\nEquip to wear."
     },
     {
       "hash": "0xfea1ba42",
@@ -30,6 +30,11 @@
     }
   ],
   "disabled": [
+    {
+      "hash": "0x1713d8dc",
+      "table": 1,
+      "text": "Bandana\nSolid Snake's bandana. ∞\n(infinity) symbol is sewn in."
+    },
     {
       "hash": "0x8c16953d",
       "table": 1,
@@ -59,6 +64,11 @@
       "hash": "0x16c4e282",
       "table": 1,
       "text": "Busca la foto del tipo de chica preferida de.\nYutaka Negishi \nJuegos en los que ha trabajado: \nMetal Gear Solid 2\n(Director Artístico del Escenario de Fondo)"
+    },
+    {
+      "hash": "0xb2909177",
+      "table": 1,
+      "text": "Cigarettes\nHighly addictive and hazardous\nto your health."
     },
     {
       "hash": "0x0afbedee",
@@ -146,6 +156,11 @@
       "text": "nos estaremos refiriendo |a Metal Gear Solid para Consola."
     },
     {
+      "hash": "0x8f1a2ec0",
+      "table": 1,
+      "text": "Thermal Goggles\nVisualizes heat source\ndistribution. Allows one to see\nin the dark when equipped.\nClaymores can be seen when used."
+    },
+    {
       "hash": "0x51afc248",
       "table": 1,
       "text": "Trouvez la photographie de la fille \ndu type du développeur !\nMasahiro Hinami \nTitre représentatif : Ring of Red"
@@ -194,6 +209,31 @@
       "hash": "0x14ec1798",
       "table": 1,
       "text": "Trova la foto della ragazza che va\na genio allo sviluppatore!\nYutaka Negishi \nTitoli a cui ha lavorato: Metal Gear Solid 2\n(direttore artistico sfondi)"
+    },
+    {
+      "hash": "0x603666cb",
+      "table": 1,
+      "text": "USP Suppressor\nFiring noise is reduced when\nattached to USP. Equip together\nw/ USP to attach. Unremovable\nonce attached."
+    },
+    {
+      "hash": "0x46b2e509",
+      "table": 1,
+      "text": "Wig A\nBlue wig. Equip to wear."
+    },
+    {
+      "hash": "0xd562105e",
+      "table": 1,
+      "text": "Wig B\nOrange wig. Equip to wear."
+    },
+    {
+      "hash": "0x75432707",
+      "table": 1,
+      "text": "Wig C\nColored wig. Equip to wear."
+    },
+    {
+      "hash": "0x714ad454",
+      "table": 1,
+      "text": "Wig D\nColored wig. Equip to wear.\n\n"
     },
     {
       "hash": "0xf0a11858",
