@@ -11,7 +11,7 @@ SDT Fixes\Music and Decensor Restoration\Vamp vs Seals,dist\us\demo\_bp,false
 
 O2D Fixes\us,dist\assets\o2d\us,false
 
-Model Fixes\HH60 Fix,dist\assets\kms\us\_win,false
+Model Fixes\HH60 Fix\kms,dist\assets\kms\us,false
 Model Fixes\Shell 2 markers,dist\assets\kms\us,false
 HZX fixes\deck 2-port voiceline,dist\assets\hzx\us,false;
 

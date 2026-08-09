@@ -154,7 +154,7 @@ Recommended Mod Load Order (from first to last):
 
 - Replaced a poorly upscaled power generator texture with its higher-quality PS2 version. [2011 HDC]
 
-- Fixed a hole in the top of the HH-60 Helicopters used by the SEALS during the Plant intro. [2001 SoL] | Contributed by [Jacky720](https://github.com/Jacky720) / Space Core
+- Fixed a hole + several other broken parts of geometry & texture UVs with the HH-60 Helicopters used by the SEALS during the Plant intro. [2001 SoL]
 
 - Fixed rogue black pixel on Shell 1 Core doors. (door_b00.bmp) [2011 HDC]
 
