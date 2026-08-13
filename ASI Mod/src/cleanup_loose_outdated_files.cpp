@@ -130,9 +130,43 @@ void CleanupOutdatedModfiles::Check()
             "d5b3ed6453bdd715a4c0d733d4da06a509feb9ad", // MGS2 Community Bugfix Compilation - 4x Upscaled Addon v2.1.0-v2.1.3
             "6953085bfe4c28b70b132031e05b683518f0fb1f"  // MGS2 Community Bugfix Compilation - 4x Upscaled Addon v2.2.0
         };
+
+        constexpr const char* TEXTURES_FLATLIST_OVR_STM_WIN_SNA_HAIR1_ALP_OVL_BMP_CTXR_SHA1S[] =
+        {
+            "7daf7a08fc41da6d2697315db62de1b44a55d84d", // Guyonachair Solid Snake Hair Fix v2 ovr stm
+            "ac57554dd8fd091650c39c6698e551890af7cab1", // Guyonachair Solid Snake Hair Fix-1 ovr stm
+        };
+
+        constexpr const char* TEXTURES_FLATLIST_OVR_STM_WIN_SNA_HAIR2DT_ALP_OVL_BMP_CTXR_SHA1S[] =
+        {
+            "1944c45397ef15c5a4b4d29f7ef34dc43774a958", // Guyonachair Solid Snake Hair Fix v2 ovr stm
+            "862e917ccaf23e9bc9f7f841fe84dda00c70814b", // Guyonachair Solid Snake Hair Fix-1 ovr stm
+
+        };
+
+        constexpr const char* TEXTURES_FLATLIST_OVR_STM_WIN_SNA_HAIR2_ALP_OVL_BMP_CTXR_SHA1S[] =
+        {
+            "3042e939b7900fc0d9afa84a51d13864336c3b52", // Guyonachair Solid Snake Hair Fix v2 ovr stm
+            "68ab590796fd3849d64a7fa2c7c93960f2b89f30", // Guyonachair Solid Snake Hair Fix-1 ovr stm
+
+        };
+
+        constexpr const char* TEXTURES_FLATLIST_OVR_STM_WIN_SNA_HAIR3_BMP_CTXR_SHA1S[] =
+        {
+            "606cbad8a8b3e850b9a8b76f944bc3be25ed5f69", // Guyonachair Solid Snake Hair Fix v2 ovr stm
+            "f8ae30ee716bd43ed7af1e5b8d78a93d32711668", // Guyonachair Solid Snake Hair Fix-1 ovr stm
+        };
+
     
         const Util::RemoveFileEntry outdatedFiles[] =
         {
+
+            {sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "sna_hair1_alp_ovl.bmp.ctxr", TEXTURES_FLATLIST_OVR_STM_WIN_SNA_HAIR1_ALP_OVL_BMP_CTXR_SHA1S },
+            {sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "sna_hair2dt_alp_ovl.bmp.ctxr", TEXTURES_FLATLIST_OVR_STM_WIN_SNA_HAIR2DT_ALP_OVL_BMP_CTXR_SHA1S },
+            {sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "sna_hair2_alp_ovl.bmp.ctxr", TEXTURES_FLATLIST_OVR_STM_WIN_SNA_HAIR2_ALP_OVL_BMP_CTXR_SHA1S },
+            {sExePath / "textures" / "flatlist" / "ovr_stm" / "_win" / "sna_hair3.bmp.ctxr", TEXTURES_FLATLIST_OVR_STM_WIN_SNA_HAIR3_BMP_CTXR_SHA1S },
+
+
             {sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_eu" / "_win" / "sna_hair1_alp_ovl.bmp.ctxr", TEXTURES_FLATLIST_OVR_STM_OVR_EU_WIN_SNA_HAIR1_ALP_OVL_BMP_CTXR_SHA1S },
             {sExePath / "textures" / "flatlist" / "ovr_stm" / "ovr_jp" / "_win" / "sna_hair1_alp_ovl.bmp.ctxr", TEXTURES_FLATLIST_OVR_STM_OVR_JP_WIN_SNA_HAIR1_ALP_OVL_BMP_CTXR_SHA1S },
 

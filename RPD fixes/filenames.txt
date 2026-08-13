@@ -1,0 +1,12 @@
+	assets/row/eu/0038b6a2.row			PAL -> w22a/w22a_paddemo_01_p.row,BE52880C
+	assets/row/eu/0038baa2.row			PAL -> w22a/w22a_paddemo_02_p.row,43B8325B
+	assets/row/eu/005a7eea.row			PAL -> w25a/w25a_pdemo_01_pal.row,652D440D
+	assets/row/eu/005a9862.row			PAL -> w23a/w23a_paddemo_n00_pal.row,E68D866C
+	assets/row/eu/00ca766e.row			PAL -> w13a/w13a_paddemo_00_pal.row,570D7969
+	assets/row/eu/00ca7c6e.row			PAL -> w19a/w19a_paddemo_00_pal.row,AFC87F81
+	assets/row/eu/00ca946e.row			PAL -> w21b/w21a_paddemo_00_pal.row,B2D43B6E
+	assets/row/eu/00cc942f.row			PAL -> w11a/w11a_paddemo_p.row,B719ABB7
+assets/row/eu/w00a_camera.row		PAL -> w00a/w00a_camera.row,BE8D0F2B
+assets/row/eu/w00a_m9.row			PAL -> w00a/w00a_m9.row,A46DAC95
+assets/row/eu/w00a_tobacco.row		PAL -> w00a/w00a_tobacco.row,42796869
+assets/row/eu/w01f_paddemo_1f.row	PAL -> w01f/w01f_paddemo_1f.row,401D3472

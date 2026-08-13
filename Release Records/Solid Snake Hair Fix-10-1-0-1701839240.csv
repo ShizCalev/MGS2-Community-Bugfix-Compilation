@@ -1,0 +1,5 @@
+full_path,relative_path_to_file,filename_with_extension,file_stem,extension,filesize,sha1
+textures/flatlist/_win/sna_hair1_alp_ovl.bmp.ctxr,textures/flatlist/_win,sna_hair1_alp_ovl.bmp.ctxr,sna_hair1_alp_ovl.bmp,ctxr,524448,ac57554dd8fd091650c39c6698e551890af7cab1
+textures/flatlist/_win/sna_hair2dt_alp_ovl.bmp.ctxr,textures/flatlist/_win,sna_hair2dt_alp_ovl.bmp.ctxr,sna_hair2dt_alp_ovl.bmp,ctxr,349920,862e917ccaf23e9bc9f7f841fe84dda00c70814b
+textures/flatlist/_win/sna_hair2_alp_ovl.bmp.ctxr,textures/flatlist/_win,sna_hair2_alp_ovl.bmp.ctxr,sna_hair2_alp_ovl.bmp,ctxr,87744,68ab590796fd3849d64a7fa2c7c93960f2b89f30
+textures/flatlist/_win/sna_hair3.bmp.ctxr,textures/flatlist/_win,sna_hair3.bmp.ctxr,sna_hair3.bmp,ctxr,44064,f8ae30ee716bd43ed7af1e5b8d78a93d32711668
