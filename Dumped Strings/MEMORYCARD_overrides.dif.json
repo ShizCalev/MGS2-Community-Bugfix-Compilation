@@ -1,0 +1,597 @@
+{
+  "version": 3,
+  "type": "mgs2-string-overrides-dif",
+  "sourceFile": "C:\\Development\\Git\\HDFix_Private\\Dumped Strings\\MGS2\\Reextracted-2026-10-18\\StringRemapDB.xml",
+  "generatedAt": "2026-10-19T08:05:04.199373400Z",
+  "changes": [],
+  "disabled": [
+    {
+      "hash": "0x2232aa29",
+      "lang": "-1",
+      "table": 1,
+      "text": "ストレージが見つかりません。"
+    },
+    {
+      "hash": "0x6916e3b4",
+      "lang": "-1",
+      "table": 1,
+      "text": "Storage device not detected."
+    },
+    {
+      "hash": "0x15a6acb5",
+      "lang": "-1",
+      "table": 1,
+      "text": "Aucun périphérique de stockage n'a été détecté."
+    },
+    {
+      "hash": "0x46261252",
+      "lang": "-1",
+      "table": 1,
+      "text": "Speichergerät wurde nicht erkannt."
+    },
+    {
+      "hash": "0x745fb136",
+      "lang": "-1",
+      "table": 1,
+      "text": "No se ha detectado ningún dispositivo de almacenamiento."
+    },
+    {
+      "hash": "0xe7afcdbb",
+      "lang": "-1",
+      "table": 1,
+      "text": "Periferica di memorizzazione non rilevata."
+    },
+    {
+      "hash": "0x423fa817",
+      "lang": "-1",
+      "table": 1,
+      "text": "ストレージの空き容量が足りません。"
+    },
+    {
+      "hash": "0xf9187857",
+      "lang": "-1",
+      "table": 1,
+      "text": "Insufficient space on the storage device."
+    },
+    {
+      "hash": "0x58a923b9",
+      "lang": "-1",
+      "table": 1,
+      "text": "Storage device not formatted.|\r\nFormat and save?"
+    },
+    {
+      "hash": "0x0f59b998",
+      "lang": "-1",
+      "table": 1,
+      "text": "Espace insuffisant sur le périphérique de stockage."
+    },
+    {
+      "hash": "0x02f6745e",
+      "lang": "-1",
+      "table": 1,
+      "text": "Périphérique de stockage non formaté.|\r\nFormater et sauvegarder?"
+    },
+    {
+      "hash": "0x7bcd1c43",
+      "lang": "-1",
+      "table": 1,
+      "text": "Speichergerät wurde nicht erkannt."
+    },
+    {
+      "hash": "0xd699db35",
+      "lang": "-1",
+      "table": 1,
+      "text": "Nicht genug Speicherplatz auf dem Speichergerät."
+    },
+    {
+      "hash": "0xa2ad510b",
+      "lang": "-1",
+      "table": 1,
+      "text": "Speichergerät nicht formatiert.|\r\nFormatieren und speichern?"
+    },
+    {
+      "hash": "0xe2d49989",
+      "lang": "-1",
+      "table": 1,
+      "text": "No hay suficiente espacio libre en el dispositivo de almacenamiento."
+    },
+    {
+      "hash": "0xf3d03a8b",
+      "lang": "-1",
+      "table": 1,
+      "text": "El dispositivo de almacenamiento no está formateado.|\r\n¿Formatear y guardar?"
+    },
+    {
+      "hash": "0x02420058",
+      "lang": "-1",
+      "table": 1,
+      "text": "Spazio libero insufficiente sulla\r\nperiferica di memorizzazione."
+    },
+    {
+      "hash": "0x8d189145",
+      "lang": "-1",
+      "table": 1,
+      "text": "Periferica di memorizzazione non formattata.|\r\nVuoi formattare e salvare?"
+    },
+    {
+      "hash": "0x8308622f",
+      "lang": "-1",
+      "table": 1,
+      "text": "There is insufficient space on the|\r\nstorage device to create a new|\r\nsave file. At least ?KB of free space|\r\nis needed to create a new save file.|\r\nWill you start the game as it is?"
+    },
+    {
+      "hash": "0x80055523",
+      "lang": "-1",
+      "table": 1,
+      "text": "No storage device|\r\ndetected. At least ?KB of free space|\r\nis needed to save your game.|\r\nWill you start the game as it is?"
+    },
+    {
+      "hash": "0xeece71b1",
+      "lang": "-1",
+      "table": 1,
+      "text": "There was an error when detecting|\r\nthe storage device.|\r\nAt least ?KB of free space|\r\nis needed to save your game.|\r\nWill you start the game as it is?"
+    },
+    {
+      "hash": "0xa5efc33c",
+      "lang": "-1",
+      "table": 1,
+      "text": "Il n'y a pas assez d'espace sur le|\r\npériphérique de stockage.|\r\nUn minimum de ?Ko d'espace libre|\r\nest requis pour sauvegarder la partie.|\r\nVoulez-vous commencer à jouer?"
+    },
+    {
+      "hash": "0x3ce25ce0",
+      "lang": "-1",
+      "table": 1,
+      "text": "Aucun périphérique de stockage n'a\r\nété détecté| un minimum de ?ko d'espace\r\nlibre est requis pour sauvegarder la partie.\r\nvoulez-vous commencer à jouer?"
+    },
+    {
+      "hash": "0x5ed5dd14",
+      "lang": "-1",
+      "table": 1,
+      "text": "Une erreur s'est produite pendant|\r\nla détection du périphérique de stockage.|\r\nUn minimum de ?Ko d'espace libre|\r\nest requis pour sauvegarder la partie.|\r\nVoulez-vous commencer à jouer?"
+    },
+    {
+      "hash": "0x385f09c4",
+      "lang": "-1",
+      "table": 1,
+      "text": "Nicht genug Speicherplatz|\r\nauf dem Speichergerät.\r\nZum Speichern sind mind.|\r\n?KB freier Speicherplatz nötig.|\r\nMöchten Sie das Spiel so beginnen?"
+    },
+    {
+      "hash": "0x29c23af2",
+      "lang": "-1",
+      "table": 1,
+      "text": "Speichergerät wurde nicht|\r\nerkannt. Zum Speichern sind mind.|\r\n?KB freier Speicherplatz nötig.|\r\nMöchten Sie das Spiel so beginnen?"
+    },
+    {
+      "hash": "0x1575d0a8",
+      "lang": "-1",
+      "table": 1,
+      "text": "Fehler beim Lesen des|\r\nSpeichergeräts.|\r\nZum Speichern sind mind.|\r\n?KB freier Speicherplatz nötig.|\r\nMöchten Sie das Spiel so beginnen?"
+    },
+    {
+      "hash": "0x993684d7",
+      "lang": "-1",
+      "table": 1,
+      "text": "No hay suficiente espacio libre en el dispositivo de almacenamiento.|\r\nPara guardar el juego necesitas al menos|\r\n?KB libres. ¿Quieres comenzar a jugar|\r\nde todas las formas?"
+    },
+    {
+      "hash": "0xab9d8915",
+      "lang": "-1",
+      "table": 1,
+      "text": "No se ha detectado ningún dispositivo de almacenamiento.|\r\nPara guardar el juego necesitas al menos|\r\n?KB libres. ¿Quieres comenzar a jugar|\r\nde todas las formas?"
+    },
+    {
+      "hash": "0xb988bcff",
+      "lang": "-1",
+      "table": 1,
+      "text": "Ha habido un error al detectar|\r\nel dispositivo de almacenamiento.|\r\nPara guardar el juego necesitas al menos|\r\n?KB libres. ¿Quieres comenzar a jugar|\r\nde todas las formas?"
+    },
+    {
+      "hash": "0x694724d8",
+      "lang": "-1",
+      "table": 1,
+      "text": "Spazio libero insufficiente sulla|\r\nperiferica di memorizzazione per|\r\ncreare un nuovo file di salvataggio.|\r\nPer salvare il gioco occorrono|\r\nalmeno ?KB di spazio libero.|\r\nVuoi iniziare il gioco così com'è?"
+    },
+    {
+      "hash": "0xc3f165c5",
+      "lang": "-1",
+      "table": 1,
+      "text": "Nessun periferica di memorizzazione|\r\nrilevata.|\r\nPer salvare il gioco occorrono|\r\nalmeno ?KB di spazio libero.|\r\nVuoi iniziare il gioco così com'è?"
+    },
+    {
+      "hash": "0x57685ac3",
+      "lang": "-1",
+      "table": 1,
+      "text": "Errore nel rilevamento della|\r\nperiferica di memorizzazione.|\r\nPer salvare il gioco occorrono|\r\nalmeno ?KB di spazio libero.|\r\nVuoi iniziare il gioco così com'è?"
+    },
+    {
+      "hash": "0x3bbd25c8",
+      "lang": "-1",
+      "table": 1,
+      "text": "There is insufficient space|\r\non the storage device.\r\nAt least ?KB of free space|\r\nis needed to save your game.|\r\nWill you start the game as it is?"
+    },
+    {
+      "hash": "0xf64ba020",
+      "lang": "-1",
+      "table": 1,
+      "text": "Jack, there's no storage device detected"
+    },
+    {
+      "hash": "0x3332ef15",
+      "lang": "-1",
+      "table": 1,
+      "text": "You need a storage device\r\nto save."
+    },
+    {
+      "hash": "0xa1c371c4",
+      "lang": "-1",
+      "table": 1,
+      "text": "Error detecting the storage device.\r\nPlease try again."
+    },
+    {
+      "hash": "0x1f34eca9",
+      "lang": "-1",
+      "table": 1,
+      "text": "I'm sorry, Jack, but there isn't\r\nenough free space on the\r\nstorage device."
+    },
+    {
+      "hash": "0xfa80bf39",
+      "lang": "-1",
+      "table": 1,
+      "text": "Jack, es wurde kein Speichergerät erkannt."
+    },
+    {
+      "hash": "0x4d750d46",
+      "lang": "-1",
+      "table": 1,
+      "text": "Du benötigst ein Speichergerät,\r\num speichern zu können."
+    },
+    {
+      "hash": "0xd4daf2bb",
+      "lang": "-1",
+      "table": 1,
+      "text": "Fehler beim Erkennen des Speichergeräts.\r\nBitte erneut versuchen."
+    },
+    {
+      "hash": "0xf0c9d64b",
+      "lang": "-1",
+      "table": 1,
+      "text": "Sorry, Jack, aber Du hast\r\nnicht genug freien Speicherplatz\r\nauf dem Speichergerät."
+    },
+    {
+      "hash": "0x9c457596",
+      "lang": "-1",
+      "table": 1,
+      "text": "Jack, aucun périphérique de stockage n'a été détecté."
+    },
+    {
+      "hash": "0xab2184a3",
+      "lang": "-1",
+      "table": 1,
+      "text": "Tu ne peux pas enregistrer sans\r\npériphérique de stockage."
+    },
+    {
+      "hash": "0x91177588",
+      "lang": "-1",
+      "table": 1,
+      "text": "Est- ce que tu peux connecter un\r\npériphérique de stockage ?"
+    },
+    {
+      "hash": "0x877870fc",
+      "lang": "-1",
+      "table": 1,
+      "text": "Je regrette, Jack, mais il n'y a\r\npas assez d'espace libre sur\r\nle périphérique de stockage."
+    },
+    {
+      "hash": "0xbdf32a2c",
+      "lang": "-1",
+      "table": 1,
+      "text": "Jack, no se ha detectado ningún dispositivo de almacenamiento."
+    },
+    {
+      "hash": "0x36192b62",
+      "lang": "-1",
+      "table": 1,
+      "text": "Para guardar necesitas\r\nun dispositivo de almacenamiento."
+    },
+    {
+      "hash": "0x44a0e5d7",
+      "lang": "-1",
+      "table": 1,
+      "text": "Error al detectar el dispositivo de almacenamiento.\r\nInténtalo de nuevo."
+    },
+    {
+      "hash": "0x1e9aa71f",
+      "lang": "-1",
+      "table": 1,
+      "text": "Lo siento Jack, pero no hay suficiente\r\nespacio libre en el dispositivo de almacenamiento."
+    },
+    {
+      "hash": "0xafc5a512",
+      "lang": "-1",
+      "table": 1,
+      "text": "Jack, non è stata rilevata alcuna\r\nperiferica di memorizzazione."
+    },
+    {
+      "hash": "0x8816b3ea",
+      "lang": "-1",
+      "table": 1,
+      "text": "Ti serve una periferica di memorizzazione\r\nsu cui salvare i dati."
+    },
+    {
+      "hash": "0x7f0f0756",
+      "lang": "-1",
+      "table": 1,
+      "text": "Errore nel rilevamento della\r\nperiferica di memorizzazione.\r\nRiprova."
+    },
+    {
+      "hash": "0x0d3c297b",
+      "lang": "-1",
+      "table": 1,
+      "text": "Mi spiace, Jack, ma non c'è abbastanza\r\nspazio disponibile sulla periferica di\r\nmemorizzazione."
+    },
+    {
+      "hash": "0x22a271b5",
+      "lang": "-1",
+      "table": 1,
+      "text": "Hey, there is no storage device."
+    },
+    {
+      "hash": "0xaf39abb5",
+      "lang": "-1",
+      "table": 1,
+      "text": "Saving can't be done unless you have\r\na storage device."
+    },
+    {
+      "hash": "0xd5d607a1",
+      "lang": "-1",
+      "table": 1,
+      "text": "You need to have a storage device."
+    },
+    {
+      "hash": "0xa5fc0e5a",
+      "lang": "-1",
+      "table": 1,
+      "text": "Oh no. Snake, there wasn't enough\r\nspace left on the storage device."
+    },
+    {
+      "hash": "0xf3e654d0",
+      "lang": "-1",
+      "table": 1,
+      "text": "There's no storage device!"
+    },
+    {
+      "hash": "0x5cfe14eb",
+      "lang": "-1",
+      "table": 1,
+      "text": "I can't save unless you have a\r\nstorage device!"
+    },
+    {
+      "hash": "0x8b315845",
+      "lang": "-1",
+      "table": 1,
+      "text": "Connect your storage device!"
+    },
+    {
+      "hash": "0x3cafef16",
+      "lang": "-1",
+      "table": 1,
+      "text": "Snake, there wasn't enough\r\nspace left on the storage device!"
+    },
+    {
+      "hash": "0x06efaac5",
+      "lang": "-1",
+      "table": 1,
+      "text": "Look, there's no way to save\r\nunless you format the storage device!"
+    },
+    {
+      "hash": "0x7174e9be",
+      "lang": "-1",
+      "table": 1,
+      "text": "Hé, aucun périphérique de stockage n'a été détecté !"
+    },
+    {
+      "hash": "0x2b4c0e51",
+      "lang": "-1",
+      "table": 1,
+      "text": "Il est impossible de sauvegarder si tu n'as\r\npas connecté de périphérique de stockage."
+    },
+    {
+      "hash": "0x6bc62975",
+      "lang": "-1",
+      "table": 1,
+      "text": "Il te faut un périphérique de stockage."
+    },
+    {
+      "hash": "0x4b9dc4ac",
+      "lang": "-1",
+      "table": 1,
+      "text": "Oh, non ! Snake, il n'y avait plus assez\r\nd'espace libre sur le périphérique de stockage\r\npour sauvegarder la partie."
+    },
+    {
+      "hash": "0x40601fe7",
+      "lang": "-1",
+      "table": 1,
+      "text": "Il n'y a pas de périphérique de stockage !"
+    },
+    {
+      "hash": "0xe2470575",
+      "lang": "-1",
+      "table": 1,
+      "text": "Si tu n'as pas connecté\r\nde périphérique de stockage,\r\nje ne peux pas sauvegarder, moi !"
+    },
+    {
+      "hash": "0x1c2fb5c0",
+      "lang": "-1",
+      "table": 1,
+      "text": "Connecte ton périphérique de stockage tout de suite !"
+    },
+    {
+      "hash": "0xeae9ef8e",
+      "lang": "-1",
+      "table": 1,
+      "text": "Ecoute, il est impossible de sauvegarder si\r\nle périphérique de stockage n'est pas\r\nformaté !"
+    },
+    {
+      "hash": "0xf429ff51",
+      "lang": "-1",
+      "table": 1,
+      "text": "He, es wurde kein Speichergerät erkannt."
+    },
+    {
+      "hash": "0xcde61b57",
+      "lang": "-1",
+      "table": 1,
+      "text": "Du kannst nur mit einem eigenen Speichergerät speichern."
+    },
+    {
+      "hash": "0xa7e77c85",
+      "lang": "-1",
+      "table": 1,
+      "text": "Du benötigst ein Speichergerät."
+    },
+    {
+      "hash": "0x8fc57a7f",
+      "lang": "-1",
+      "table": 1,
+      "text": "Oh nein, Snake, es war nicht genug\r\nSpeicherplatz auf dem Speichergerät, um den Spielstand zu\r\nspeichern."
+    },
+    {
+      "hash": "0xd326eaa3",
+      "lang": "-1",
+      "table": 1,
+      "text": "Du hast kein Speichergerät!"
+    },
+    {
+      "hash": "0x0d88e1da",
+      "lang": "-1",
+      "table": 1,
+      "text": "Ich kann erst speichern, wenn du\r\nein Speichergerät hast!"
+    },
+    {
+      "hash": "0x8587ae98",
+      "lang": "-1",
+      "table": 1,
+      "text": "Schließe jetzt dein Speichergerät an!"
+    },
+    {
+      "hash": "0x76b089ef",
+      "lang": "-1",
+      "table": 1,
+      "text": "Snake, es war nicht genug\r\nSpeicherplatz auf dem Speichergerät!"
+    },
+    {
+      "hash": "0x26d2259d",
+      "lang": "-1",
+      "table": 1,
+      "text": "Ich kann erst speichern, wenn Du das\r\nSpeichergerät formatiert\r\nhast!"
+    },
+    {
+      "hash": "0xf97a4596",
+      "lang": "-1",
+      "table": 1,
+      "text": "¡Eh!, no se ha detectado ningún\r\ndispositivo de almacenemiento."
+    },
+    {
+      "hash": "0x81893209",
+      "lang": "-1",
+      "table": 1,
+      "text": "No puedes guardar a menos\r\nque conectes un\r\ndispositivo de almacenamiento."
+    },
+    {
+      "hash": "0x4d15a4e4",
+      "lang": "-1",
+      "table": 1,
+      "text": "Necesitas conectar un\r\ndispositivo de almacenamiento."
+    },
+    {
+      "hash": "0xb6ae26c7",
+      "lang": "-1",
+      "table": 1,
+      "text": "Oh, no. Snake, no hay espacio suficiente\r\nen el dispositivo de almacenamiento\r\npara guardar la partida."
+    },
+    {
+      "hash": "0x47920e81",
+      "lang": "-1",
+      "table": 1,
+      "text": "¡No hay ningún dispositivo de almacenamiento!"
+    },
+    {
+      "hash": "0x5be0b79e",
+      "lang": "-1",
+      "table": 1,
+      "text": "¡No puedo guardar a menos que\r\nconectes un dispositivo de almacenamiento!"
+    },
+    {
+      "hash": "0x08c919f8",
+      "lang": "-1",
+      "table": 1,
+      "text": "¡Conecta el dispositivo de almacenamiento!"
+    },
+    {
+      "hash": "0xdbe96c80",
+      "lang": "-1",
+      "table": 1,
+      "text": "Oh, no. Snake, no hay espacio\r\nsuficiente en el dispositivo de\r\nalmacenamiento para guardar la partida."
+    },
+    {
+      "hash": "0x141bf8f9",
+      "lang": "-1",
+      "table": 1,
+      "text": "¡Mira, no hay forma de guardar a menos\r\nque fomatees el dispositivo de almacenamiento!"
+    },
+    {
+      "hash": "0xe45f246d",
+      "lang": "-1",
+      "table": 1,
+      "text": "Ehi, non è stata rilevata alcuna\r\nperiferica di memorizzazione."
+    },
+    {
+      "hash": "0xe0d3776f",
+      "lang": "-1",
+      "table": 1,
+      "text": "Non puoi salvare senza avere una\r\nperiferica di memorizzazione pronta."
+    },
+    {
+      "hash": "0x75207d2a",
+      "lang": "-1",
+      "table": 1,
+      "text": "Devi avere una\r\nperiferica di memorizzazione."
+    },
+    {
+      "hash": "0x53abf359",
+      "lang": "-1",
+      "table": 1,
+      "text": "Oh no, Snake! Non avevi abbastanza \r\nspazio disponibile sulla periferica di\r\nmemorizzazione per salvare il gioco."
+    },
+    {
+      "hash": "0x978442f0",
+      "lang": "-1",
+      "table": 1,
+      "text": "Non c'è alcuna periferica\r\ndi memorizzazione!"
+    },
+    {
+      "hash": "0xe17f3f91",
+      "lang": "-1",
+      "table": 1,
+      "text": "Non posso salvare se non hai una\r\nperiferica di memorizzazione!"
+    },
+    {
+      "hash": "0xd15de54d",
+      "lang": "-1",
+      "table": 1,
+      "text": "Collega subito la tua \r\nperiferica di memorizzazione!"
+    },
+    {
+      "hash": "0x48b538ec",
+      "lang": "-1",
+      "table": 1,
+      "text": "Snake, non c'era abbastanza\r\nspazio disponibile sulla\r\nperiferica di memorizzazione!"
+    },
+    {
+      "hash": "0xc3bc2be6",
+      "lang": "-1",
+      "table": 1,
+      "text": "Senti, non c'è modo di salvare se non\r\nformatti la periferica di memorizzazione!"
+    }
+  ]
+}
